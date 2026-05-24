@@ -45,7 +45,10 @@ The first implementation packaged that answer into `my-harness-next-action`, the
 - If the SOP is already closed, it must say `当前 SOP 已闭环。` and provide the full status table instead of starting a new office-hours loop.
 - The next-action table must include all 15 steps and use the agreed emoji status markers.
 - Recommended prompts must be standalone fenced `text` blocks.
-- `my-harness-writing-design` creates design-governance scaffolding and may call Pencil/Ant Design tools when available.
+- `my-harness-writing-design` creates design-governance scaffolding and may call Pencil plus selected UI framework tools when available.
+- `my-harness-writing-design` supports only Ant Design and shadcn/ui: no explicit preference means Ant Design default style; explicit shadcn preference selects the shadcn/ui template; other UI framework preferences are refused.
+- For zero-to-one Admin Console work, `my-harness-writing-design` defaults Ant Design projects to Ant Design Pro layout/style, and shadcn/ui projects to tweakcn theme/style.
+- Theme colors, websites, logos, screenshots, or brand assets must be parsed into safe admin-console theme tokens instead of copied as marketing-page visuals.
 - `my-harness-autopilot-slice` is only for small, bounded work after office-hours is finalized.
 - Autopilot loops `design-review`, `qa`, and `review` until clear, accepted, blocked, or 10 iterations.
-- Autopilot must summarize every key step and loop metric whether it completes or hands off.
+- Autopilot must summarize every key step whether it completes or hands off, with loop metrics folded into a single `执行情况概要` column instead of separate numeric columns; skipped steps must still be listed with the skip reason.

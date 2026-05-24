@@ -7,7 +7,7 @@ description: Use when a project needs initial design requirements, a DESIGN.md b
 
 ## Purpose
 
-Create the design-governance starting point for the current project before product/UI implementation begins. The default baseline is an Ant Design-compatible Admin Console style derived from `feishu-iam`.
+Create the design-governance starting point for the current project before product/UI implementation begins. The default baseline is an Ant Design-compatible Admin Console style using Ant Design's default visual style.
 
 ## Before Editing
 
@@ -27,19 +27,50 @@ Pencil dependencies:
 - Use the Pencil CLI when the task needs a generated `.pen` file or exported image and CLI auth is available.
 - Do not treat a blank starter `.pen` as an approved prototype. It is only a placeholder until generated or reviewed through Pencil.
 
-Ant Design dependencies:
+UI framework selection:
+
+- Supported UI frameworks are only `ant-design` and `shadcn`.
+- If the user does not explicitly prefer a UI framework, choose `ant-design`.
+- If the user explicitly prefers Ant Design, antd, or Ant, choose `ant-design`.
+- If the user explicitly prefers shadcn or shadcn/ui, choose `shadcn`.
+- If the user explicitly asks for any other frontend UI framework, directly refuse that framework request and say this skill currently supports only Ant Design and shadcn/ui.
+- Do not silently map unsupported preferences such as Material UI, Chakra UI, Arco Design, Element Plus, Bootstrap, Tailwind UI, Radix-only, or a custom design system into either supported framework.
+- For a zero-to-one Admin Console with no strong user preference, choose `ant-design` and use Ant Design Pro as the default admin framework/layout/style reference.
+- If the user explicitly chooses shadcn/ui for a zero-to-one Admin Console but gives no strong theme preference, use tweakcn as the default shadcn theme/style reference.
+
+Ant Design dependencies and style:
 
 - Use Ant Design as the default component and interaction baseline for Admin Console / enterprise backend projects.
+- Preserve Ant Design default style by default: use Ant Design Pro's admin layout/page-template style, official token system, and default blue primary direction unless the project already has a confirmed brand theme.
 - If an Ant Design skill, CLI helper, design-system checker, or project-local Ant Design guideline exists, invoke it before finalizing component mappings.
 - If no local Ant Design helper exists, use the project's installed Ant Design version, existing code, or official Ant Design documentation as the source for component names and patterns.
 - Do not invent a custom design system when Ant Design has a standard component that fits the pattern.
+
+shadcn/ui dependencies and style:
+
+- Use shadcn/ui only when the user explicitly chooses it.
+- Treat shadcn/ui as open component code plus a code-distribution workflow, not as a sealed component library.
+- Preserve shadcn/ui beautiful defaults and use tweakcn as the default theme/style source for zero-to-one Admin Console work when no stronger brand direction exists.
+- Use the project's existing shadcn/ui setup if present. If no setup exists, reference official shadcn/ui docs for component names, token conventions, and CLI install patterns.
+- Do not combine shadcn/ui with Ant Design or another UI framework in the same design baseline unless the user explicitly asks for a migration/interop plan.
+
+Theme and brand inference:
+
+- If the user names a theme color, provides a website, uploads a logo, shares screenshots, or links brand material, analyze that material before finalizing the design baseline.
+- Extract dominant colors, accent colors, neutral/background direction, saturation, contrast, typography mood, density, and any obvious industry/brand tone.
+- For Ant Design, map the result to Ant Design token decisions such as `colorPrimary`, functional colors, page background, border/radius direction, and whether to stay on Ant Design Pro default blue.
+- For shadcn/ui, map the result to a tweakcn-compatible theme decision: use an appropriate preset family when it fits, or define a custom CSS-variable token set when no preset is a good match.
+- If the material is visually noisy or unsuitable for backend work, keep the admin console conservative and use only the strongest safe brand accent.
+- Always record the theme source and decision in `DESIGN.md` or `design/pencil-input-<stage>.md`.
 
 Recommended order:
 
 1. Read project governance and existing design assets.
 2. Check Pencil availability (`pencil-design` skill, Pencil MCP, or Pencil CLI) if `.pen` assets are needed.
-3. Check Ant Design availability (project dependency, local guideline, skill, CLI, or docs) before writing component mappings.
-4. Create or update `DESIGN.md`, `design/`, Pencil starter/assets, and governance links.
+3. Resolve UI framework preference using the supported-framework rule above.
+4. Check selected framework availability (project dependency, local guideline, skill, CLI, or docs) before writing component mappings.
+5. Inspect theme/color/material inputs if provided, including websites, logos, screenshots, or explicit color names.
+6. Create or update `DESIGN.md`, `design/`, Pencil starter/assets, and governance links.
 
 ## Required Outputs
 
@@ -81,13 +112,14 @@ Useful options:
 ```bash
 python3 /Users/wenzhewang/.codex/skills/my-harness-writing-design/scripts/harness_write_design.py --stage v0.1.0 --phase admin-console
 python3 /Users/wenzhewang/.codex/skills/my-harness-writing-design/scripts/harness_write_design.py --project-name feishu-iam --stage v0.1.0 --phase admin-console
+python3 /Users/wenzhewang/.codex/skills/my-harness-writing-design/scripts/harness_write_design.py --ui-framework shadcn --stage v0.1.0 --phase admin-console
 ```
 
 The script is conservative: it creates missing files and appends a design-governance section to `AGENTS.md`; it does not overwrite existing `DESIGN.md` or `.pen` files unless explicitly extended later.
 
 ## DESIGN.md Baseline
 
-Use `templates/DESIGN.admin-console.md` as the default content. Adapt these fields before finalizing:
+Use `templates/DESIGN.admin-console.md` as the default Ant Design content. Use `templates/DESIGN.shadcn-admin-console.md` only when the user explicitly prefers shadcn/ui. Adapt these fields before finalizing:
 
 - project name
 - product type
@@ -97,12 +129,26 @@ Use `templates/DESIGN.admin-console.md` as the default content. Adapt these fiel
 - role/permission examples
 - technology stack if already chosen
 
-Keep the core principles unless the project clearly is not an enterprise backend tool:
+Keep the selected framework's core principles unless the project clearly is not an enterprise backend tool.
+
+Ant Design default principles:
 
 - table-first CRUD
+- Ant Design Pro admin console layout/style for zero-to-one projects
 - Ant Design component mapping
 - compact enterprise information density
 - complete states: loading, empty, error, no permission, validation, confirmation
+- Pencil prototype as implementation input
+- Playwright visual QA before claiming frontend completion
+
+shadcn/ui selected principles:
+
+- open-code component ownership
+- tweakcn as the default shadcn theme/style reference for zero-to-one Admin Console projects
+- composition-first UI built from shadcn/ui primitives and project-level wrappers
+- Tailwind CSS variables and semantic tokens
+- clean minimal beautiful defaults instead of heavy enterprise chrome
+- explicit accessibility, focus, keyboard, empty/loading/error states
 - Pencil prototype as implementation input
 - Playwright visual QA before claiming frontend completion
 
@@ -135,7 +181,10 @@ Before reporting done:
 - `test -f DESIGN.md`
 - `find design -maxdepth 1 -name '*.pen' -print`
 - `rg -n "DESIGN.md|design/" AGENTS.md`
-- Record whether Pencil tooling and Ant Design references were available and used.
+- Record which UI framework was selected and why.
+- Record which admin layout/style reference was selected: Ant Design Pro for Ant Design, tweakcn for shadcn/ui.
+- Record theme/material source and inferred theme decision when the user provides colors, logo, website, screenshots, or brand material.
+- Record whether Pencil tooling and selected-framework references were available and used.
 - If `CLAUDE.md` exists and is expected to mirror `AGENTS.md`, verify the design section is present there too.
 
 ## Common Mistakes
@@ -144,6 +193,11 @@ Before reporting done:
 - Overwriting existing governance files instead of merging.
 - Creating screenshots without a `.pen` source.
 - Hand-editing or guessing around Pencil when Pencil-specific tools are available.
-- Writing Ant Design component mappings without checking project dependencies, existing code, or available Ant Design references.
+- Accepting unsupported UI framework preferences instead of refusing them.
+- Defaulting to shadcn/ui when the user has not explicitly asked for it.
+- Writing component mappings without checking project dependencies, existing code, or selected-framework references.
+- Mixing Ant Design and shadcn/ui in a single baseline without explicit migration/interop scope.
+- Ignoring user-provided theme colors, websites, logos, screenshots, or brand assets.
+- Copying a brand website's marketing layout into an Admin Console instead of extracting safe color/token direction.
 - Starting frontend implementation before design requirements and prototype scope are written.
 - Copying `feishu-iam` domain rules, such as Feishu-only auth, into unrelated projects. Reuse its UI/UX baseline, not its product-specific identity rules.

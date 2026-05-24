@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+- Updated `my-harness-writing-design` to support a strict UI framework choice between Ant Design and shadcn/ui.
+- Kept Ant Design as the default when no explicit user preference is provided, using Ant Design default style.
+- Added a shadcn/ui `DESIGN.md` template and script support for `--ui-framework shadcn`.
+- Documented refusal behavior for unsupported UI framework preferences.
+- Added Ant Design Pro and tweakcn as backend-management style references in their respective design templates.
+- Clarified zero-to-one Admin Console defaults: Ant Design uses Ant Design Pro layout/style, shadcn/ui uses tweakcn theme/style.
+- Added theme-material inference rules for explicit colors, websites, logos, screenshots, and brand assets.
+
 ## 0.1.0 - 2026-05-24
 
 - Initial public project structure for `my-harness`.

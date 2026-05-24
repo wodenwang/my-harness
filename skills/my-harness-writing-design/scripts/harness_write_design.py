@@ -11,7 +11,24 @@ from pathlib import Path
 
 
 SKILL_DIR = Path(__file__).resolve().parents[1]
-TEMPLATE_PATH = SKILL_DIR / "templates" / "DESIGN.admin-console.md"
+TEMPLATE_PATHS = {
+    "ant-design": SKILL_DIR / "templates" / "DESIGN.admin-console.md",
+    "shadcn": SKILL_DIR / "templates" / "DESIGN.shadcn-admin-console.md",
+}
+FRAMEWORK_LABELS = {
+    "ant-design": "Ant Design",
+    "shadcn": "shadcn/ui",
+}
+FRAMEWORK_ALIASES = {
+    "ant": "ant-design",
+    "antd": "ant-design",
+    "ant-design": "ant-design",
+    "ant design": "ant-design",
+    "shadcn": "shadcn",
+    "shadcn ui": "shadcn",
+    "shadcn/ui": "shadcn",
+    "shadcn-ui": "shadcn",
+}
 
 
 def run(cmd: list[str], cwd: Path) -> str:
@@ -67,9 +84,25 @@ def infer_phase(explicit: str | None) -> str:
     return explicit or "design-baseline"
 
 
-def render_template(project_name: str, stage: str) -> str:
-    template = TEMPLATE_PATH.read_text(encoding="utf-8")
-    return template.replace("{{PROJECT_NAME}}", project_name).replace("{{STAGE}}", stage)
+def normalize_ui_framework(explicit: str | None) -> str:
+    if not explicit:
+        return "ant-design"
+
+    value = explicit.strip().lower()
+    framework = FRAMEWORK_ALIASES.get(value)
+    if not framework:
+        allowed = ", ".join(sorted(FRAMEWORK_LABELS))
+        raise ValueError(f"unsupported UI framework: {explicit!r}; supported values: {allowed}")
+    return framework
+
+
+def render_template(project_name: str, stage: str, ui_framework: str) -> str:
+    template = TEMPLATE_PATHS[ui_framework].read_text(encoding="utf-8")
+    return (
+        template.replace("{{PROJECT_NAME}}", project_name)
+        .replace("{{STAGE}}", stage)
+        .replace("{{UI_FRAMEWORK}}", FRAMEWORK_LABELS[ui_framework])
+    )
 
 
 def create_blank_pen(path: Path, project_name: str, stage: str) -> bool:
@@ -98,9 +131,30 @@ def create_blank_pen(path: Path, project_name: str, stage: str) -> bool:
     return True
 
 
-def create_pencil_input(path: Path, project_name: str, stage: str, phase: str) -> bool:
+def create_pencil_input(
+    path: Path,
+    project_name: str,
+    stage: str,
+    phase: str,
+    ui_framework: str,
+    theme_source: str | None,
+) -> bool:
     if path.exists():
         return False
+
+    framework_label = FRAMEWORK_LABELS[ui_framework]
+    component_mapping_label = (
+        "Ant Design component mapping"
+        if ui_framework == "ant-design"
+        else "shadcn/ui component composition"
+    )
+    design_direction = (
+        "从零到一默认沿用 Ant Design Pro 的后台 Admin Console 布局风格；无品牌素材时保持 Ant Design 默认蓝与默认 token，不做营销页或装饰性 Dashboard。"
+        if ui_framework == "ant-design"
+        else "从零到一默认以 tweakcn 作为 shadcn/ui 主题与后台视觉参考；以 Tailwind CSS variables 和可组合组件实现，不引入第三方 UI 框架。"
+    )
+    admin_style_reference = "Ant Design Pro" if ui_framework == "ant-design" else "tweakcn"
+    theme_source_text = theme_source or "未提供；使用所选框架的默认后台主题方向。"
 
     content = f"""# {project_name} {stage} Pencil 原型输入文档
 
@@ -108,12 +162,16 @@ def create_pencil_input(path: Path, project_name: str, stage: str, phase: str) -
 适用阶段：{stage}
 设计对象：{phase}
 界面类型：企业级后台管理系统 / Admin Console
+UI 框架：{framework_label}
+后台风格参考：{admin_style_reference}
+主题/品牌素材来源：{theme_source_text}
 
 ## 1. 设计目标
 
 - 说明本阶段要跑通的主路径。
 - 说明目标用户、关键操作和成功标准。
-- 保持 Ant Design-compatible，不做营销页或装饰性 Dashboard。
+- {design_direction}
+- 如用户提供官网、logo、截图、主题色或品牌素材，先解析主色、辅助色、背景倾向、对比度、饱和度和品牌气质，再选择合适主题模板。
 
 ## 2. 页面范围
 
@@ -132,7 +190,7 @@ def create_pencil_input(path: Path, project_name: str, stage: str, phase: str) -
 每个页面必须写清：
 
 - 页面用途
-- Ant Design component mapping
+- {component_mapping_label}
 - Table columns
 - Filter fields
 - Toolbar actions
@@ -141,17 +199,19 @@ def create_pencil_input(path: Path, project_name: str, stage: str, phase: str) -
 - Form fields
 - Permission rules
 - Loading / Empty / Error states
+- Theme token decision
+- Brand/material interpretation
 - Implementation notes
 """
     path.write_text(content, encoding="utf-8")
     return True
 
 
-def ensure_design_doc(root: Path, project_name: str, stage: str) -> bool:
+def ensure_design_doc_with_framework(root: Path, project_name: str, stage: str, ui_framework: str) -> bool:
     path = root / "DESIGN.md"
     if path.exists():
         return False
-    path.write_text(render_template(project_name, stage), encoding="utf-8")
+    path.write_text(render_template(project_name, stage, ui_framework), encoding="utf-8")
     return True
 
 
@@ -175,12 +235,25 @@ def main() -> int:
     parser.add_argument("--project-name", help="Project display name. Default: directory name.")
     parser.add_argument("--stage", help="Project phase/version, such as v0.1.0.")
     parser.add_argument("--phase", help="Design phase slug, such as admin-console.")
+    parser.add_argument(
+        "--ui-framework",
+        default="ant-design",
+        help="UI framework preference. Supported: ant-design, shadcn. Default: ant-design.",
+    )
+    parser.add_argument(
+        "--theme-source",
+        help="Optional theme or brand source note, such as a color, logo, website, or screenshot reference.",
+    )
     args = parser.parse_args()
 
     root = Path(args.root).resolve()
     project_name = infer_project_name(root, args.project_name)
     stage = infer_stage(root, args.stage)
     phase = infer_phase(args.phase)
+    try:
+        ui_framework = normalize_ui_framework(args.ui_framework)
+    except ValueError as exc:
+        parser.error(str(exc))
 
     design_dir = root / "design"
     design_dir.mkdir(exist_ok=True)
@@ -193,11 +266,11 @@ def main() -> int:
     input_path = design_dir / f"pencil-input-{stage_slug}.md"
 
     changes = []
-    if ensure_design_doc(root, project_name, stage):
+    if ensure_design_doc_with_framework(root, project_name, stage, ui_framework):
         changes.append("created DESIGN.md")
     if create_blank_pen(pen_path, project_name, stage):
         changes.append(f"created {pen_path.relative_to(root)}")
-    if create_pencil_input(input_path, project_name, stage, phase):
+    if create_pencil_input(input_path, project_name, stage, phase, ui_framework, args.theme_source):
         changes.append(f"created {input_path.relative_to(root)}")
     if ensure_agents_link(root / "AGENTS.md"):
         changes.append("updated AGENTS.md")
@@ -219,6 +292,8 @@ def main() -> int:
     print(f"- pen_file={pen_path}")
     print(f"- pencil_input={input_path}")
     print(f"- agents={root / 'AGENTS.md'}")
+    print(f"- ui_framework={FRAMEWORK_LABELS[ui_framework]}")
+    print(f"- theme_source={args.theme_source or 'default'}")
     return 0
 
 

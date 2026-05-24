@@ -121,14 +121,15 @@ Include:
 
 - final outcome: completed, refused, handed off, blocked, or authorization required
 - current stopping point
-- one row for each relevant harness step
-- review-loop metrics for `design-review`, `qa`, and `review`, even if the count is zero or not reached
+- one row for each relevant harness step, including skipped or inapplicable steps
+- a concise execution summary for each row
+- review-loop metrics for `design-review`, `qa`, and `review` folded into the execution summary text, even if the count is zero or not reached
 - verification commands/tools run and their results
 - files or artifacts created/changed
 - Git state and authorization-sensitive actions that were not taken
 - next human action, if any
 
-Use `0` and `未执行` explicitly instead of omitting a step.
+Use `未执行`, `跳过`, `无需`, or short plain-language summaries instead of numeric placeholder columns. Do not include separate columns for iterations, findings discovered, fixed count, or handoff count. When a step is skipped or inapplicable, still include the row; set status to `跳过` or `无需`, and explain why in `执行情况概要`.
 
 ## Required Output On Handoff Or Completion
 
@@ -141,12 +142,13 @@ Use this format:
 - ...
 
 关键步骤汇总：
-| 步骤 | Harness 动作 | 状态 | 循环次数 | 发现问题 | 已解决 | 遗留/交给人工 | 证据 |
-|---:|---|---|---:|---:|---:|---:|---|
-| 1 | gstack /office-hours | 已完成/未执行/无需/阻塞 | 0 | 0 | 0 | 0 | ... |
-| 10 | gstack /design-review | 已清零/未执行/阻塞 | 0 | 0 | 0 | 0 | ... |
-| 11 | gstack /qa | 已清零/未执行/阻塞 | 0 | 0 | 0 | 0 | ... |
-| 12 | gstack /review | 已清零/未执行/阻塞 | 0 | 0 | 0 | 0 | ... |
+| 步骤 | Harness 动作 | 状态 | 执行情况概要 | 证据 |
+|---:|---|---|---|---|
+| 1 | gstack /office-hours | 已完成/未执行/无需/阻塞 | 范围已锁定为 ...；无循环。 | ... |
+| 3 | Pencil prototype | 跳过 | 当前切片不涉及 UI；已有规则允许跳过 Pencil 原型。 | ... |
+| 10 | gstack /design-review | 已清零/未执行/阻塞 | 循环 1 次，发现 0 个阻塞问题，无需修复。 | ... |
+| 11 | gstack /qa | 已清零/未执行/阻塞 | 循环 1 次，发现 2 个问题，已修复 2 个，无遗留。 | ... |
+| 12 | gstack /review | 已清零/未执行/阻塞 | 循环 2 次，首轮发现 2 个 finding，已修复并复查通过。 | ... |
 
 验证与证据：
 - ...
@@ -181,6 +183,8 @@ The slice is complete only when:
 - Running autopilot on a large, unclear version.
 - Treating Pencil starter files as approved design.
 - Letting review/QA loops run indefinitely.
-- Omitting loop statistics when stopping early or completing successfully.
+- Expanding the final summary into separate numeric columns for loop statistics. Keep those details in `执行情况概要`.
+- Omitting loop statistics from `执行情况概要` when stopping early or completing successfully.
+- Omitting skipped steps from the final table. Include them with status `跳过` or `无需` and a short reason.
 - Expanding beyond the first vertical slice.
 - Continuing through push/merge/release/deploy without explicit authorization.

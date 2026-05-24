@@ -17,6 +17,7 @@ This is the router skill for the user's personal project-delivery harness. It gr
 | User needs the next gstack / Superpowers / Pencil / browser verification / Git action and a prompt | `my-harness-next-action` |
 | Project needs design governance before UI work | `my-harness-writing-design` |
 | Project needs `DESIGN.md`, `design/`, a Pencil starter, or AGENTS design links | `my-harness-writing-design` |
+| Project needs Ant Design vs shadcn/ui design-template selection | `my-harness-writing-design` |
 | User wants a clear small slice to run through the whole SOP automatically after office-hours is finalized | `my-harness-autopilot-slice` |
 | User wants to add another recurring harness helper | Create a new focused skill under this plugin, then update this routing table |
 
