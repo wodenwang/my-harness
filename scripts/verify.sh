@@ -11,6 +11,7 @@ fail() {
 
 python3 - <<'PY'
 import json
+import re
 from pathlib import Path
 
 root = Path.cwd()
@@ -28,14 +29,23 @@ if data["name"] != "my-harness":
 if data["skills"] != "./skills/":
     raise SystemExit("manifest skills path must be ./skills/")
 
+version = data["version"]
+semver = r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$"
+if not re.match(semver, version):
+    raise SystemExit(f"manifest version must be semver-compatible, got {version}")
+
 print("manifest ok")
 PY
+
+[[ -x scripts/install.sh ]] || fail "scripts/install.sh must exist and be executable"
+[[ -x scripts/upgrade.sh ]] || fail "scripts/upgrade.sh must exist and be executable"
 
 required_skills=(
   "my-harness"
   "my-harness-next-action"
   "my-harness-writing-design"
   "my-harness-autopilot-slice"
+  "my-harness-upgrade"
 )
 
 for skill in "${required_skills[@]}"; do

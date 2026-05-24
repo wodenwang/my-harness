@@ -121,15 +121,29 @@ Include:
 
 - final outcome: completed, refused, handed off, blocked, or authorization required
 - current stopping point
-- one row for each relevant harness step, including skipped or inapplicable steps
-- a concise execution summary for each row
-- review-loop metrics for `design-review`, `qa`, and `review` folded into the execution summary text, even if the count is zero or not reached
+- the same `流程执行情况一览：` table shape used by `my-harness-next-action`
+- one row for all 15 canonical harness steps, including skipped or inapplicable steps
+- exactly one status icon per row, using the `my-harness-next-action` meanings
+- a concise execution summary in `证据/原因` for each row
+- review-loop metrics for `design-review`, `qa`, and `review` folded into the `证据/原因` text, even if the count is zero or not reached
 - verification commands/tools run and their results
 - files or artifacts created/changed
 - Git state and authorization-sensitive actions that were not taken
 - next human action, if any
 
-Use `未执行`, `跳过`, `无需`, or short plain-language summaries instead of numeric placeholder columns. Do not include separate columns for iterations, findings discovered, fixed count, or handoff count. When a step is skipped or inapplicable, still include the row; set status to `跳过` or `无需`, and explain why in `执行情况概要`.
+Use these table statuses exactly:
+
+| Icon | Judgment | Autopilot meaning |
+|---|---|---|
+| ✅ | 前置已完成 | Concrete evidence proves this step was already complete or was completed by this autopilot run. |
+| ⏭️ | 前置无需进行 | This step is explicitly unnecessary, inapplicable, or intentionally skipped for this slice. |
+| 🎯 | 当前下一步 | This is where autopilot stopped; it is the next action for handoff, blocker resolution, or required authorization. |
+| ⚠️ | 证据不足 | The step is claimed or implied, but evidence is missing, stale, conflicting, or failed verification. |
+| ⏳ | 待执行 | This step comes after the stopping point and was not reached. |
+
+If the outcome is `completed` and all applicable gates are closed, do not mark any row as `🎯 当前下一步`; mark completed rows as `✅ 前置已完成` and inapplicable rows as `⏭️ 前置无需进行`, then state that the current slice is closed.
+
+Do not use the older `关键步骤汇总` table. Do not include separate columns for iterations, findings discovered, fixed count, or handoff count. When a step is skipped or inapplicable, still include the row; mark it `⏭️ 前置无需进行`, and explain why in `证据/原因`.
 
 ## Required Output On Handoff Or Completion
 
@@ -141,14 +155,24 @@ Use this format:
 停止点 / 完成点：
 - ...
 
-关键步骤汇总：
-| 步骤 | Harness 动作 | 状态 | 执行情况概要 | 证据 |
-|---:|---|---|---|---|
-| 1 | gstack /office-hours | 已完成/未执行/无需/阻塞 | 范围已锁定为 ...；无循环。 | ... |
-| 3 | Pencil prototype | 跳过 | 当前切片不涉及 UI；已有规则允许跳过 Pencil 原型。 | ... |
-| 10 | gstack /design-review | 已清零/未执行/阻塞 | 循环 1 次，发现 0 个阻塞问题，无需修复。 | ... |
-| 11 | gstack /qa | 已清零/未执行/阻塞 | 循环 1 次，发现 2 个问题，已修复 2 个，无遗留。 | ... |
-| 12 | gstack /review | 已清零/未执行/阻塞 | 循环 2 次，首轮发现 2 个 finding，已修复并复查通过。 | ... |
+流程执行情况一览：
+| 状态 | 步骤 | Harness 动作 | 判断 | 证据/原因 |
+|---|---:|---|---|---|
+| ✅ | 1 | gstack `/office-hours` | 前置已完成 | 范围已锁定为 ...；无循环。 |
+| ⏭️ | 2 | gstack `/plan-design-review` | 前置无需进行 | 当前切片不涉及新增产品/交互方向，按已批准范围执行。 |
+| ⏭️ | 3 | Pencil App prototype | 前置无需进行 | 当前切片不涉及 UI；已有规则允许跳过 Pencil 原型。 |
+| ⏭️ | 4 | gstack `/plan-design-review` on prototype | 前置无需进行 | 未创建新原型，因此无需原型复审。 |
+| ✅ | 5 | gstack `/plan-eng-review` | 前置已完成 | 工程边界和测试策略已在 ... 锁定。 |
+| ✅ | 6 | Superpowers `writing-plans` | 前置已完成 | `IMPLEMENTATION_PLAN.md` 覆盖文件路径、任务、测试和完成标准。 |
+| ✅ | 7 | Superpowers `executing-plans` or `subagent-driven-development` | 前置已完成 | 已完成第一个 vertical slice，未扩展后续切片。 |
+| ✅ | 8 | Superpowers `verification-before-completion` | 前置已完成 | 已运行 ...，结果通过。 |
+| ✅ | 9 | gstack `/browse` verification, optional `open-gstack-browser`, Playwright fallback | 前置已完成 | 已运行 ...，覆盖主路径和关键状态。 |
+| ✅ | 10 | gstack `/design-review` | 前置已完成 | 循环 1 次，发现 0 个阻塞问题，无需修复。 |
+| ✅ | 11 | gstack `/qa` | 前置已完成 | 循环 1 次，发现 2 个问题，已修复 2 个，无遗留。 |
+| 🎯 | 12 | gstack `/review` | 当前下一步 | 循环 10 次后仍有 1 个高风险 finding，需要人工判断是否接受。 |
+| ⏳ | 13 | Git closeout | 待执行 | 停止点之后，未执行。 |
+| ⏳ | 14 | gstack `/ship` | 待执行 | 停止点之后，未执行；未执行 push/PR/tag/release。 |
+| ⏳ | 15 | gstack `/land-and-deploy` | 待执行 | 停止点之后，未执行；未执行 merge/release/deploy。 |
 
 验证与证据：
 - ...
@@ -183,8 +207,9 @@ The slice is complete only when:
 - Running autopilot on a large, unclear version.
 - Treating Pencil starter files as approved design.
 - Letting review/QA loops run indefinitely.
-- Expanding the final summary into separate numeric columns for loop statistics. Keep those details in `执行情况概要`.
-- Omitting loop statistics from `执行情况概要` when stopping early or completing successfully.
-- Omitting skipped steps from the final table. Include them with status `跳过` or `无需` and a short reason.
+- Using the older `关键步骤汇总` table instead of the `my-harness-next-action` style `流程执行情况一览`.
+- Expanding the final summary into separate numeric columns for loop statistics. Keep those details in `证据/原因`.
+- Omitting loop statistics from `证据/原因` when stopping early or completing successfully.
+- Omitting skipped steps from the final table. Include them with `⏭️ 前置无需进行` and a short reason.
 - Expanding beyond the first vertical slice.
 - Continuing through push/merge/release/deploy without explicit authorization.

@@ -88,7 +88,7 @@ Use this shape:
 ```markdown
 当前判断：第 N 步「...」已完成/未完成；现在应执行第 M 步「...」。
 
-流程一览：
+流程执行情况一览：
 | 状态 | 步骤 | Harness 动作 | 判断 | 证据/原因 |
 |---|---:|---|---|---|
 | ✅ | 1 | gstack `/office-hours` | 前置已完成 | ... |
@@ -111,7 +111,7 @@ Use this shape:
 - ...
 ```
 
-The overview table is mandatory whenever the user asks what to do next through this skill. It must cover all 15 canonical steps, not only the current step. Clearly distinguish `✅ 前置已完成` from `⏭️ 前置无需进行`.
+The overview table is mandatory whenever the user asks what to do next through this skill. Use the section title `流程执行情况一览：`. It must cover all 15 canonical steps, not only the current step. Clearly distinguish `✅ 前置已完成` from `⏭️ 前置无需进行`.
 
 If the SOP is already closed, use the same overview-table format but replace the next-action section with:
 

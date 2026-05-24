@@ -58,13 +58,59 @@ After installation, confirm the symlinks:
 ls -l ~/.codex/skills/my-harness*
 ```
 
+## Upgrade Workflow
+
+Online updates are handled by `my-harness-upgrade` plus `scripts/upgrade.sh`.
+
+Version terms must stay consistent:
+
+- Current version: installed plugin `.codex-plugin/plugin.json`.
+- Target ref: GitHub tag, branch, or commit; omitted means latest GitHub Release/tag.
+- Target version: downloaded target archive `.codex-plugin/plugin.json`.
+- Version iteration: current version to target version.
+
+Check without changing local files:
+
+```bash
+~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh --check
+```
+
+Apply the latest stable update:
+
+```bash
+~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
+```
+
+Apply a pinned update:
+
+```bash
+MY_HARNESS_REF=<tag-or-branch> ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
+```
+
+After an update, always verify:
+
+```bash
+~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/verify.sh
+ls -l ~/.codex/skills/my-harness*
+```
+
 ## Release Checklist
 
 Before a public release:
 
 1. Update `.codex-plugin/plugin.json` version.
 2. Update `CHANGELOG.md`.
-3. Run `./scripts/verify.sh`.
-4. Run `./scripts/install-local.sh` and smoke test in a fresh Codex session.
-5. Commit the release.
-6. Push only after explicit authorization.
+3. Update `README.md`, including dependencies, constraints, install methods, skill usage, and version history.
+4. Check `scripts/install.sh` defaults to the intended public ref.
+5. Check `scripts/upgrade.sh --check` reports the expected current and target version terms.
+6. Run `./scripts/verify.sh`.
+7. Run `./scripts/install-local.sh` and smoke test in a fresh Codex session.
+8. Run a temporary-home installer smoke test:
+
+   ```bash
+   CODEX_HOME="$(mktemp -d)" MY_HARNESS_REF=<tag-or-branch> bash scripts/install.sh
+   ```
+
+9. Run a temporary-home upgrade smoke test against the intended archive or ref.
+10. Commit the release.
+11. Push, tag, and create GitHub Release only after explicit authorization.

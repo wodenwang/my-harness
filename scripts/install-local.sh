@@ -9,7 +9,7 @@ MARKETPLACE_FILE="$MARKETPLACE_ROOT/.agents/plugins/marketplace.json"
 
 mkdir -p "$PLUGIN_ROOT" "$(dirname "$MARKETPLACE_FILE")" "$CODEX_HOME/skills"
 
-rsync -a --delete \
+rsync -a --delete --delete-excluded \
   --exclude='.git' \
   --exclude='__pycache__' \
   --exclude='*.pyc' \

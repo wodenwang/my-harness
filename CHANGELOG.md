@@ -1,7 +1,12 @@
 # Changelog
 
-## Unreleased
+## 1.0.0-beta - 2026-05-24
 
+- Added public one-liner installation through `scripts/install.sh`.
+- Added `my-harness-upgrade` for checking and applying online plugin updates.
+- Added `scripts/upgrade.sh` with current version, target ref, target version, version-iteration output, backup creation, verification, and symlink readback.
+- Reworked `README.md` with purpose, install methods, dependencies, constraints, skill usage, SOP, maintenance, and version history.
+- Updated plugin metadata to `1.0.0-beta`.
 - Updated `my-harness-writing-design` to support a strict UI framework choice between Ant Design and shadcn/ui.
 - Kept Ant Design as the default when no explicit user preference is provided, using Ant Design default style.
 - Added a shadcn/ui `DESIGN.md` template and script support for `--ui-framework shadcn`.

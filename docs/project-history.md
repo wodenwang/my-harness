@@ -18,6 +18,7 @@ The first implementation packaged that answer into `my-harness-next-action`, the
 - The next-action skill is `my-harness-next-action`.
 - The design-governance skill is `my-harness-writing-design`.
 - The bounded closed-loop execution skill is `my-harness-autopilot-slice`.
+- The online update skill is `my-harness-upgrade`.
 
 ## Canonical Flow
 
@@ -51,4 +52,7 @@ The first implementation packaged that answer into `my-harness-next-action`, the
 - Theme colors, websites, logos, screenshots, or brand assets must be parsed into safe admin-console theme tokens instead of copied as marketing-page visuals.
 - `my-harness-autopilot-slice` is only for small, bounded work after office-hours is finalized.
 - Autopilot loops `design-review`, `qa`, and `review` until clear, accepted, blocked, or 10 iterations.
-- Autopilot must summarize every key step whether it completes or hands off, with loop metrics folded into a single `执行情况概要` column instead of separate numeric columns; skipped steps must still be listed with the skip reason.
+- Autopilot must summarize completion, refusal, handoff, blocker, and authorization-required exits with the same `流程执行情况一览` table style as `my-harness-next-action`: all 15 steps, fixed emoji statuses, and loop metrics folded into `证据/原因` instead of separate numeric columns; skipped steps must still be listed with `⏭️ 前置无需进行` and the skip reason.
+- `my-harness-upgrade` must distinguish current version, target ref, target version, and version iteration before applying updates.
+- Plugin updates use `scripts/upgrade.sh`; the skill coordinates checks, applies user-requested updates, and verifies manifest plus `~/.codex/skills/my-harness*` symlinks afterward.
+- Stable updates default to the latest GitHub Release/tag. Updating from `main` requires explicit `MY_HARNESS_REF=main` or an equivalent user instruction.

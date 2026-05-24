@@ -19,6 +19,7 @@ This is the router skill for the user's personal project-delivery harness. It gr
 | Project needs `DESIGN.md`, `design/`, a Pencil starter, or AGENTS design links | `my-harness-writing-design` |
 | Project needs Ant Design vs shadcn/ui design-template selection | `my-harness-writing-design` |
 | User wants a clear small slice to run through the whole SOP automatically after office-hours is finalized | `my-harness-autopilot-slice` |
+| User wants to update, upgrade, version-check, or refresh the installed `my-harness` plugin from GitHub | `my-harness-upgrade` |
 | User wants to add another recurring harness helper | Create a new focused skill under this plugin, then update this routing table |
 
 ## Current Harness Loop
@@ -46,7 +47,7 @@ Add a new harness skill when the helper has a distinct job, trigger, artifacts, 
 Preferred naming:
 
 - `my-harness-<verb>-<object>`
-- Examples: `my-harness-next-action`, `my-harness-writing-design`, `my-harness-autopilot-slice`, `my-harness-release-closeout`, `my-harness-checkpoint`
+- Examples: `my-harness-next-action`, `my-harness-writing-design`, `my-harness-autopilot-slice`, `my-harness-upgrade`, `my-harness-release-closeout`, `my-harness-checkpoint`
 
 Each new skill should include:
 

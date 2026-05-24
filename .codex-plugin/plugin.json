@@ -1,7 +1,7 @@
 {
   "name": "my-harness",
-  "version": "0.1.0",
-  "description": "Personal project-delivery harness skills for coordinating gstack, Superpowers, Pencil, Playwright, Git, ship, land, and deploy workflows.",
+  "version": "1.0.0-beta",
+  "description": "Personal project-delivery harness skills for coordinating gstack, Superpowers, Pencil, Playwright, Git, ship, land, deploy, and plugin update workflows.",
   "author": {
     "name": "Wenzhe Wang"
   },
@@ -23,7 +23,7 @@
   "interface": {
     "displayName": "My Harness",
     "shortDescription": "Personal project workflow harness",
-    "longDescription": "My Harness groups personal workflow skills for deciding the next project action, creating design governance, and extending a gstack + Superpowers + Pencil + Playwright + Git delivery loop.",
+    "longDescription": "My Harness groups personal workflow skills for deciding the next project action, creating design governance, updating the harness plugin, and extending a gstack + Superpowers + Pencil + Playwright + Git delivery loop.",
     "developerName": "Wenzhe Wang",
     "category": "Coding",
     "capabilities": [
@@ -33,7 +33,8 @@
     ],
     "defaultPrompt": [
       "我现在项目推进到哪一步了，下一步该做什么？",
-      "为这个项目初始化设计规范和 Pencil 原型目录"
+      "为这个项目初始化设计规范和 Pencil 原型目录",
+      "检查 my-harness 是否有新版本，并说明当前版本到目标版本的迭代"
     ],
     "brandColor": "#1677FF",
     "screenshots": []
