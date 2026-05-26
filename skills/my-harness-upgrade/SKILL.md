@@ -9,7 +9,10 @@ description: Use when updating the local my-harness Codex plugin from GitHub, ch
 
 Update the installed `my-harness` plugin from its GitHub source while making the version iteration explicit.
 
-This skill coordinates the upgrade. The actual file replacement must use the bundled `scripts/upgrade.sh` so the process stays deterministic and verifiable.
+This skill coordinates the upgrade. The actual file replacement must use the bundled platform script so the process stays deterministic and verifiable:
+
+- macOS / Linux: `scripts/upgrade.sh`
+- Windows PowerShell: `scripts/upgrade.ps1`
 
 ## Version Model
 
@@ -21,8 +24,8 @@ This skill coordinates the upgrade. The actual file replacement must use the bun
 
 Default target policy:
 
-- If the user does not specify a target, use the latest GitHub Release or newest tag resolved by `scripts/upgrade.sh`.
-- If the user asks for preview, latest check, or version comparison, run `scripts/upgrade.sh --check`.
+- If the user does not specify a target, use the latest GitHub Release or newest tag resolved by the upgrade script.
+- If the user asks for preview, latest check, or version comparison, run `scripts/upgrade.sh --check` or `scripts/upgrade.ps1 -Check`.
 - If the user explicitly names `main`, a branch, tag, or commit, set `MY_HARNESS_REF=<ref>`.
 - Do not silently switch from a stable release/tag to `main`.
 
@@ -40,10 +43,18 @@ print(json.loads(path.read_text())["version"])
 PY
    ```
 
-2. Show the user the planned version iteration before applying changes:
+2. Show the user the planned version iteration before applying changes.
+
+   macOS / Linux:
 
    ```bash
    ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh --check
+   ```
+
+   Windows PowerShell:
+
+   ```powershell
+   & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1" -Check
    ```
 
    If the install shape is different, locate the installed plugin root from the symlink:
@@ -52,7 +63,9 @@ PY
    realpath ~/.codex/skills/my-harness-upgrade
    ```
 
-3. If the user already asked to upgrade, apply the update after the check:
+3. If the user already asked to upgrade, apply the update after the check.
+
+   macOS / Linux:
 
    ```bash
    ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
@@ -62,6 +75,14 @@ PY
 
    ```bash
    MY_HARNESS_REF=v1.0.1 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
+   ```
+
+   Windows PowerShell:
+
+   ```powershell
+   & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
+   $env:MY_HARNESS_REF = "v1.0.1"
+   & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
    ```
 
 4. Verify fresh installed artifacts after the script finishes:
@@ -77,6 +98,13 @@ PY
    ls -l ~/.codex/skills/my-harness*
    ```
 
+   Windows PowerShell:
+
+   ```powershell
+   Get-Content "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\.codex-plugin\plugin.json" -Raw | ConvertFrom-Json | Select-Object -ExpandProperty version
+   Get-ChildItem "$HOME\.codex\skills" -Filter "my-harness*"
+   ```
+
 ## Output Contract
 
 Always report:
@@ -86,8 +114,8 @@ Always report:
 - 目标版本：`<target version>`
 - 版本迭代：`<current> -> <target>` or `版本号未变化`
 - 更新来源：GitHub Release/tag/branch/commit or explicit archive override
-- 验证证据：`scripts/verify.sh` result and symlink readback
-- 备份路径：the backup path printed by `scripts/upgrade.sh` when an update was applied
+- 验证证据：`scripts/verify.sh` result when available and skill entry readback
+- 备份路径：the backup path printed by the upgrade script when an update was applied
 
 If only checking, say clearly that no files changed.
 
@@ -95,13 +123,13 @@ If only checking, say clearly that no files changed.
 
 - Do not edit `~/.codex/config.toml` manually unless the script reports a failure that requires repair.
 - Do not run `git push`, create tags, create GitHub Releases, or publish marketplace updates.
-- Do not claim the plugin was updated until the installed manifest version and `~/.codex/skills/my-harness*` symlinks have been read back.
+- Do not claim the plugin was updated until the installed manifest version and `~/.codex/skills/my-harness*` entries have been read back.
 - If the local installed version equals the target version, tell the user it may still refresh files from the selected ref, but there is no semantic version iteration.
 - If the downloaded target fails `scripts/verify.sh`, stop and keep the existing installation in place.
 
 ## Common Mistakes
 
 - Treating `main` as the default stable channel.
-- Reporting success from `curl` or `rsync` output without manifest and symlink verification.
+- Reporting success from download or copy output without manifest and skill-entry verification.
 - Updating a copied skill directory instead of the plugin source under `~/.codex/plugins/local/my-harness/plugins/my-harness`.
 - Forgetting that `.codex-plugin/plugin.json` is the version source of truth.

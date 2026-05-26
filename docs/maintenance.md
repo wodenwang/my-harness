@@ -60,7 +60,10 @@ ls -l ~/.codex/skills/my-harness*
 
 ## Upgrade Workflow
 
-Online updates are handled by `my-harness-upgrade` plus `scripts/upgrade.sh`.
+Online updates are handled by `my-harness-upgrade` plus the platform script:
+
+- macOS / Linux: `scripts/upgrade.sh`
+- Windows PowerShell: `scripts/upgrade.ps1`
 
 Version terms must stay consistent:
 
@@ -87,6 +90,14 @@ Apply a pinned update:
 MY_HARNESS_REF=<tag-or-branch> ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
 ```
 
+Windows PowerShell examples:
+
+```powershell
+& "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1" -Check
+$env:MY_HARNESS_REF = "v1.0.1"
+& "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
+```
+
 After an update, always verify:
 
 ```bash
@@ -101,8 +112,8 @@ Before a public release:
 1. Update `.codex-plugin/plugin.json` version.
 2. Update `CHANGELOG.md`.
 3. Update `README.md`, including dependencies, constraints, install methods, skill usage, and version history.
-4. Check `scripts/install.sh` defaults to the intended public ref.
-5. Check `scripts/upgrade.sh --check` reports the expected current and target version terms.
+4. Check `scripts/install.sh` and `scripts/install.ps1` default to the intended public ref.
+5. Check `scripts/upgrade.sh --check` and `scripts/upgrade.ps1 -Check` report the expected current and target version terms where the platform is available.
 6. Run `./scripts/verify.sh`.
 7. Run `./scripts/install-local.sh` and smoke test in a fresh Codex session.
 8. Run a temporary-home installer smoke test:

@@ -104,15 +104,21 @@ Examples:
 From the project root, run:
 
 ```bash
-python3 /Users/wenzhewang/.codex/skills/my-harness-writing-design/scripts/harness_write_design.py
+python3 ~/.codex/skills/my-harness-writing-design/scripts/harness_write_design.py
+```
+
+Windows PowerShell:
+
+```powershell
+python "$HOME\.codex\skills\my-harness-writing-design\scripts\harness_write_design.py"
 ```
 
 Useful options:
 
 ```bash
-python3 /Users/wenzhewang/.codex/skills/my-harness-writing-design/scripts/harness_write_design.py --stage v0.1.0 --phase admin-console
-python3 /Users/wenzhewang/.codex/skills/my-harness-writing-design/scripts/harness_write_design.py --project-name feishu-iam --stage v0.1.0 --phase admin-console
-python3 /Users/wenzhewang/.codex/skills/my-harness-writing-design/scripts/harness_write_design.py --ui-framework shadcn --stage v0.1.0 --phase admin-console
+python3 ~/.codex/skills/my-harness-writing-design/scripts/harness_write_design.py --stage v0.1.0 --phase admin-console
+python3 ~/.codex/skills/my-harness-writing-design/scripts/harness_write_design.py --project-name feishu-iam --stage v0.1.0 --phase admin-console
+python3 ~/.codex/skills/my-harness-writing-design/scripts/harness_write_design.py --ui-framework shadcn --stage v0.1.0 --phase admin-console
 ```
 
 The script is conservative: it creates missing files and appends a design-governance section to `AGENTS.md`; it does not overwrite existing `DESIGN.md` or `.pen` files unless explicitly extended later.

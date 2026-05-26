@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.1 - 2026-05-26
+
+- Added Windows PowerShell installer `scripts/install.ps1`.
+- Added Windows PowerShell upgrader `scripts/upgrade.ps1`.
+- Updated `scripts/install.sh` to default to `v1.0.1`.
+- Reworked `README.md` into a shorter public entry document.
+- Updated verification to require Windows scripts and a changelog section for the current manifest version.
+
 ## 1.0.0-beta - 2026-05-24
 
 - Added public one-liner installation through `scripts/install.sh`.

@@ -39,6 +39,9 @@ PY
 
 [[ -x scripts/install.sh ]] || fail "scripts/install.sh must exist and be executable"
 [[ -x scripts/upgrade.sh ]] || fail "scripts/upgrade.sh must exist and be executable"
+[[ -f scripts/install.ps1 ]] || fail "scripts/install.ps1 must exist for Windows installs"
+[[ -f scripts/upgrade.ps1 ]] || fail "scripts/upgrade.ps1 must exist for Windows upgrades"
+rg -n "^## ${version//./\\.}\\b" CHANGELOG.md >/dev/null || fail "CHANGELOG.md must contain section for $version"
 
 required_skills=(
   "my-harness"

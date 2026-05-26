@@ -1,7 +1,7 @@
 {
   "name": "my-harness",
-  "version": "1.0.0-beta",
-  "description": "Personal project-delivery harness skills for coordinating gstack, Superpowers, Pencil, Playwright, Git, ship, land, deploy, and plugin update workflows.",
+  "version": "1.0.1",
+  "description": "Personal project-delivery harness skills for coordinating gstack, Superpowers, Pencil, browser checks, Git, release closeout, and cross-platform plugin updates.",
   "author": {
     "name": "Wenzhe Wang"
   },

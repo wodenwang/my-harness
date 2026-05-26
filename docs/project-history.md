@@ -54,5 +54,5 @@ The first implementation packaged that answer into `my-harness-next-action`, the
 - Autopilot loops `design-review`, `qa`, and `review` until clear, accepted, blocked, or 10 iterations.
 - Autopilot must summarize completion, refusal, handoff, blocker, and authorization-required exits with the same `流程执行情况一览` table style as `my-harness-next-action`: all 15 steps, fixed emoji statuses, and loop metrics folded into `证据/原因` instead of separate numeric columns; skipped steps must still be listed with `⏭️ 前置无需进行` and the skip reason.
 - `my-harness-upgrade` must distinguish current version, target ref, target version, and version iteration before applying updates.
-- Plugin updates use `scripts/upgrade.sh`; the skill coordinates checks, applies user-requested updates, and verifies manifest plus `~/.codex/skills/my-harness*` symlinks afterward.
+- Plugin updates use `scripts/upgrade.sh` on macOS/Linux and `scripts/upgrade.ps1` on Windows; the skill coordinates checks, applies user-requested updates, and verifies manifest plus `~/.codex/skills/my-harness*` entries afterward.
 - Stable updates default to the latest GitHub Release/tag. Updating from `main` requires explicit `MY_HARNESS_REF=main` or an equivalent user instruction.
