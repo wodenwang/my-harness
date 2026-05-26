@@ -17,9 +17,9 @@
 UI 框架选择：
 
 - 当前模板：shadcn/ui。
-- 使用条件：只有用户明确倾向 shadcn 或 shadcn/ui 时才选择本模板。
-- 默认规则：用户没有明确 UI 框架倾向时，不使用本模板，改用 Ant Design 默认模板。
-- 从零到一规则：如果用户明确选择 shadcn/ui，但没有明确后台主题倾向，默认采用 tweakcn 作为主题框架、整体视觉和后台 layout 风格参考。
+- 使用条件：用户没有明确 UI 框架倾向，或明确倾向 shadcn / shadcn/ui 时，选择本模板。
+- 默认规则：用户没有明确 UI 框架倾向时，必须选择 shadcn/ui。
+- 从零到一规则：如果没有明确后台主题倾向，默认采用 tweakcn 作为主题框架、整体视觉和后台 layout 风格参考。
 - 拒绝规则：本 harness 目前只支持 Ant Design 与 shadcn/ui。如果用户要求 Material UI、Chakra UI、Arco Design、Element Plus、Bootstrap、Tailwind UI、Radix-only 或自定义大型 Design System，应拒绝并要求用户在 Ant Design 与 shadcn/ui 中二选一。
 - 混用规则：不要把 Ant Design 和 shadcn/ui 混在同一套设计基线中，除非当前任务明确是迁移或过渡方案。
 

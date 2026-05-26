@@ -86,7 +86,7 @@ def infer_phase(explicit: str | None) -> str:
 
 def normalize_ui_framework(explicit: str | None) -> str:
     if not explicit:
-        return "ant-design"
+        return "shadcn"
 
     value = explicit.strip().lower()
     framework = FRAMEWORK_ALIASES.get(value)
@@ -237,8 +237,8 @@ def main() -> int:
     parser.add_argument("--phase", help="Design phase slug, such as admin-console.")
     parser.add_argument(
         "--ui-framework",
-        default="ant-design",
-        help="UI framework preference. Supported: ant-design, shadcn. Default: ant-design.",
+        default="shadcn",
+        help="UI framework preference. Supported: ant-design, shadcn. Default: shadcn.",
     )
     parser.add_argument(
         "--theme-source",

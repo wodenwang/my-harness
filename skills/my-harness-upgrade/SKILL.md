@@ -74,14 +74,14 @@ PY
    For a pinned target:
 
    ```bash
-   MY_HARNESS_REF=v1.0.1 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
+   MY_HARNESS_REF=v1.0.2 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
    ```
 
    Windows PowerShell:
 
    ```powershell
    & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
-   $env:MY_HARNESS_REF = "v1.0.1"
+   $env:MY_HARNESS_REF = "v1.0.2"
    & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
    ```
 

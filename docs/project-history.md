@@ -47,7 +47,7 @@ The first implementation packaged that answer into `my-harness-next-action`, the
 - The next-action table must include all 15 steps and use the agreed emoji status markers.
 - Recommended prompts must be standalone fenced `text` blocks.
 - `my-harness-writing-design` creates design-governance scaffolding and may call Pencil plus selected UI framework tools when available.
-- `my-harness-writing-design` supports only Ant Design and shadcn/ui: no explicit preference means Ant Design default style; explicit shadcn preference selects the shadcn/ui template; other UI framework preferences are refused.
+- `my-harness-writing-design` supports only Ant Design and shadcn/ui: no explicit preference means shadcn/ui default style; explicit Ant Design preference selects the Ant Design template; other UI framework preferences are refused.
 - For zero-to-one Admin Console work, `my-harness-writing-design` defaults Ant Design projects to Ant Design Pro layout/style, and shadcn/ui projects to tweakcn theme/style.
 - Theme colors, websites, logos, screenshots, or brand assets must be parsed into safe admin-console theme tokens instead of copied as marketing-page visuals.
 - `my-harness-autopilot-slice` is only for small, bounded work after office-hours is finalized.

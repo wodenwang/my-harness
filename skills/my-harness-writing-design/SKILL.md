@@ -7,7 +7,7 @@ description: Use when a project needs initial design requirements, a DESIGN.md b
 
 ## Purpose
 
-Create the design-governance starting point for the current project before product/UI implementation begins. The default baseline is an Ant Design-compatible Admin Console style using Ant Design's default visual style.
+Create the design-governance starting point for the current project before product/UI implementation begins. The default baseline is a shadcn/ui-compatible Admin Console style using tweakcn as the default theme/style reference.
 
 ## Before Editing
 
@@ -30,17 +30,17 @@ Pencil dependencies:
 UI framework selection:
 
 - Supported UI frameworks are only `ant-design` and `shadcn`.
-- If the user does not explicitly prefer a UI framework, choose `ant-design`.
+- If the user does not explicitly prefer a UI framework, choose `shadcn`.
 - If the user explicitly prefers Ant Design, antd, or Ant, choose `ant-design`.
 - If the user explicitly prefers shadcn or shadcn/ui, choose `shadcn`.
 - If the user explicitly asks for any other frontend UI framework, directly refuse that framework request and say this skill currently supports only Ant Design and shadcn/ui.
 - Do not silently map unsupported preferences such as Material UI, Chakra UI, Arco Design, Element Plus, Bootstrap, Tailwind UI, Radix-only, or a custom design system into either supported framework.
-- For a zero-to-one Admin Console with no strong user preference, choose `ant-design` and use Ant Design Pro as the default admin framework/layout/style reference.
-- If the user explicitly chooses shadcn/ui for a zero-to-one Admin Console but gives no strong theme preference, use tweakcn as the default shadcn theme/style reference.
+- For a zero-to-one Admin Console with no strong user preference, choose `shadcn` and use tweakcn as the default shadcn theme/style reference.
+- If the user explicitly chooses Ant Design for a zero-to-one Admin Console but gives no strong theme preference, use Ant Design Pro as the default admin framework/layout/style reference.
 
 Ant Design dependencies and style:
 
-- Use Ant Design as the default component and interaction baseline for Admin Console / enterprise backend projects.
+- Use Ant Design when the user explicitly chooses it as the component and interaction baseline for Admin Console / enterprise backend projects.
 - Preserve Ant Design default style by default: use Ant Design Pro's admin layout/page-template style, official token system, and default blue primary direction unless the project already has a confirmed brand theme.
 - If an Ant Design skill, CLI helper, design-system checker, or project-local Ant Design guideline exists, invoke it before finalizing component mappings.
 - If no local Ant Design helper exists, use the project's installed Ant Design version, existing code, or official Ant Design documentation as the source for component names and patterns.
@@ -48,7 +48,7 @@ Ant Design dependencies and style:
 
 shadcn/ui dependencies and style:
 
-- Use shadcn/ui only when the user explicitly chooses it.
+- Use shadcn/ui by default unless the user explicitly chooses Ant Design.
 - Treat shadcn/ui as open component code plus a code-distribution workflow, not as a sealed component library.
 - Preserve shadcn/ui beautiful defaults and use tweakcn as the default theme/style source for zero-to-one Admin Console work when no stronger brand direction exists.
 - Use the project's existing shadcn/ui setup if present. If no setup exists, reference official shadcn/ui docs for component names, token conventions, and CLI install patterns.
@@ -125,7 +125,7 @@ The script is conservative: it creates missing files and appends a design-govern
 
 ## DESIGN.md Baseline
 
-Use `templates/DESIGN.admin-console.md` as the default Ant Design content. Use `templates/DESIGN.shadcn-admin-console.md` only when the user explicitly prefers shadcn/ui. Adapt these fields before finalizing:
+Use `templates/DESIGN.shadcn-admin-console.md` as the default shadcn/ui content. Use `templates/DESIGN.admin-console.md` only when the user explicitly prefers Ant Design. Adapt these fields before finalizing:
 
 - project name
 - product type
@@ -200,7 +200,7 @@ Before reporting done:
 - Creating screenshots without a `.pen` source.
 - Hand-editing or guessing around Pencil when Pencil-specific tools are available.
 - Accepting unsupported UI framework preferences instead of refusing them.
-- Defaulting to shadcn/ui when the user has not explicitly asked for it.
+- Defaulting to Ant Design when the user has not explicitly asked for it.
 - Writing component mappings without checking project dependencies, existing code, or selected-framework references.
 - Mixing Ant Design and shadcn/ui in a single baseline without explicit migration/interop scope.
 - Ignoring user-provided theme colors, websites, logos, screenshots, or brand assets.

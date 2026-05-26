@@ -135,7 +135,7 @@ Replace bracketed fields before use.
 | -: | - |
 | 1 | `请使用 gstack /office-hours 帮我澄清 [项目/版本/功能]：目标用户、核心痛点、约束、最小可行切片、是否值得做，并输出可进入设计评审的结论。` |
 | 2 | `请使用 gstack /plan-design-review 审视 [项目/功能] 的早期产品和交互方向，指出关键体验风险、信息架构、主路径、空/错/加载状态，并给出进入 Pencil 原型前的修改建议。` |
-| 3 | `请使用 Pencil App 为 [项目/功能] 产出 Ant Design 风格原型，保存 .pen 源文件、导出关键页面截图，并写一份简短设计说明到 design/。` |
+| 3 | `请使用 Pencil App 为 [项目/功能] 产出 shadcn/ui 风格原型，保存 .pen 源文件、导出关键页面截图，并写一份简短设计说明到 design/。` |
 | 4 | `请使用 gstack /plan-design-review 审查 design/ 中的 Pencil 原型和截图，按阻塞/重要/可选分类给出问题，并迭代到没有关键设计阻塞。` |
 | 5 | `请使用 gstack /plan-eng-review 评审 [项目/功能] 的工程方案，锁定架构、数据流、边界条件、测试策略、性能风险、权限/安全边界和发布风险。` |
 | 6 | `请使用 Superpowers writing-plans 为 [项目/功能] 生成 IMPLEMENTATION_PLAN.md，包含明确文件路径、任务拆分、测试命令、预期输出和完成标准。` |

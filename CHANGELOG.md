@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.2 - 2026-05-26
+
+- Changed `my-harness-writing-design` to default to shadcn/ui when no UI framework preference is provided.
+- Updated installer defaults to `v1.0.2`.
+
 ## 1.0.1 - 2026-05-26
 
 - Added Windows PowerShell installer `scripts/install.ps1`.

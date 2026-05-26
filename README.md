@@ -13,13 +13,13 @@
 macOS / Linux:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wodenwang/my-harness/v1.0.1/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/wodenwang/my-harness/v1.0.2/scripts/install.sh | bash
 ```
 
 Windows PowerShell:
 
 ```powershell
-irm https://raw.githubusercontent.com/wodenwang/my-harness/v1.0.1/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/wodenwang/my-harness/v1.0.2/scripts/install.ps1 | iex
 ```
 
 默认安装到：
@@ -66,11 +66,11 @@ irm https://raw.githubusercontent.com/wodenwang/my-harness/main/scripts/install.
 更新到指定 ref:
 
 ```bash
-MY_HARNESS_REF=v1.0.1 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
+MY_HARNESS_REF=v1.0.2 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
 ```
 
 ```powershell
-$env:MY_HARNESS_REF = "v1.0.1"
+$env:MY_HARNESS_REF = "v1.0.2"
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
 ```
 
@@ -93,7 +93,7 @@ $env:MY_HARNESS_REF = "v1.0.1"
 ```
 
 ```text
-为当前项目初始化设计治理，默认 Ant Design 后台风格。
+为当前项目初始化设计治理，默认 shadcn/ui 后台风格。
 ```
 
 ```text
@@ -137,6 +137,11 @@ $env:MY_HARNESS_REF = "v1.0.1"
 远端 push、tag、GitHub Release 或发布动作必须有明确授权。
 
 ## 版本历史
+
+### v1.0.2
+
+- `my-harness-writing-design` 无显式框架偏好时默认选择 shadcn/ui，而不是 Ant Design。
+- `scripts/install.sh` 和 `scripts/install.ps1` 默认稳定版本更新为 `v1.0.2`。
 
 ### v1.0.1
 

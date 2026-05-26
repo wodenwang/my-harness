@@ -94,7 +94,7 @@ Windows PowerShell examples:
 
 ```powershell
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1" -Check
-$env:MY_HARNESS_REF = "v1.0.1"
+$env:MY_HARNESS_REF = "v1.0.2"
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
 ```
 
