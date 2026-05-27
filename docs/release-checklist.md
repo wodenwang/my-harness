@@ -13,6 +13,7 @@ Use this checklist before publishing a new version.
 | Public upgrader is executable | `test -x scripts/upgrade.sh` |
 | Windows installer exists | `test -f scripts/install.ps1` |
 | Windows upgrader exists | `test -f scripts/upgrade.ps1` |
+| Release lineage is ready | `./scripts/check-release-lineage.sh --pre-release` |
 | Local plugin install works | `./scripts/install-local.sh` |
 | Public installer works in temporary Codex home | `CODEX_HOME="$(mktemp -d)" MY_HARNESS_REF=<tag-or-branch> bash scripts/install.sh` |
 | Windows scripts parse | `pwsh -NoProfile -Command '[scriptblock]::Create((Get-Content -Raw scripts/install.ps1)) > $null; [scriptblock]::Create((Get-Content -Raw scripts/upgrade.ps1)) > $null'`, when PowerShell is available |
@@ -22,5 +23,6 @@ Use this checklist before publishing a new version.
 | Changelog updated | `CHANGELOG.md` |
 | Git state reviewed | `git status --short --branch` |
 | Tag does not already exist | `git tag -l <tag>` and `git ls-remote --tags origin <tag>` |
+| Published lineage is valid | `./scripts/check-release-lineage.sh --post-release` after tag and GitHub Release |
 
 Do not push, tag, create releases, or publish marketplace updates without explicit user authorization.

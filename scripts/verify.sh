@@ -9,6 +9,7 @@ fail() {
   exit 1
 }
 
+MANIFEST_VERSION="$(
 python3 - <<'PY'
 import json
 import re
@@ -34,14 +35,31 @@ semver = r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-
 if not re.match(semver, version):
     raise SystemExit(f"manifest version must be semver-compatible, got {version}")
 
-print("manifest ok")
+print(version)
 PY
+)" || fail "manifest validation failed"
+MANIFEST_REF="v$MANIFEST_VERSION"
+
+echo "manifest ok ($MANIFEST_VERSION)"
 
 [[ -x scripts/install.sh ]] || fail "scripts/install.sh must exist and be executable"
 [[ -x scripts/upgrade.sh ]] || fail "scripts/upgrade.sh must exist and be executable"
+[[ -x scripts/check-release-lineage.sh ]] || fail "scripts/check-release-lineage.sh must exist and be executable"
 [[ -f scripts/install.ps1 ]] || fail "scripts/install.ps1 must exist for Windows installs"
 [[ -f scripts/upgrade.ps1 ]] || fail "scripts/upgrade.ps1 must exist for Windows upgrades"
-rg -n "^## ${version//./\\.}\\b" CHANGELOG.md >/dev/null || fail "CHANGELOG.md must contain section for $version"
+
+CHANGELOG_PATTERN="^## ${MANIFEST_VERSION//./\\.}\\b"
+rg -n "$CHANGELOG_PATTERN" CHANGELOG.md >/dev/null || fail "CHANGELOG.md must contain section for $MANIFEST_VERSION"
+
+grep -Fq "DEFAULT_REF=\"$MANIFEST_REF\"" scripts/install.sh || fail "scripts/install.sh DEFAULT_REF must be $MANIFEST_REF"
+grep -Fq "\$DefaultRef = \"$MANIFEST_REF\"" scripts/install.ps1 || fail "scripts/install.ps1 DefaultRef must be $MANIFEST_REF"
+grep -Fq "MY_HARNESS_REF=$MANIFEST_REF scripts/upgrade.sh" scripts/upgrade.sh || fail "scripts/upgrade.sh help example must use $MANIFEST_REF"
+
+grep -Fq "raw.githubusercontent.com/wodenwang/my-harness/$MANIFEST_REF/scripts/install.sh" README.md || fail "README macOS/Linux install example must use $MANIFEST_REF"
+grep -Fq "raw.githubusercontent.com/wodenwang/my-harness/$MANIFEST_REF/scripts/install.ps1" README.md || fail "README Windows install example must use $MANIFEST_REF"
+grep -Fq "MY_HARNESS_REF=$MANIFEST_REF ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh" README.md || fail "README Bash pinned upgrade example must use $MANIFEST_REF"
+grep -Fq "\$env:MY_HARNESS_REF = \"$MANIFEST_REF\"" README.md || fail "README PowerShell pinned upgrade example must use $MANIFEST_REF"
+grep -Fq "### $MANIFEST_REF" README.md || fail "README version history must contain $MANIFEST_REF"
 
 required_skills=(
   "my-harness"

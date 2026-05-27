@@ -13,13 +13,13 @@
 macOS / Linux:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wodenwang/my-harness/v1.0.3/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/wodenwang/my-harness/v1.0.4/scripts/install.sh | bash
 ```
 
 Windows PowerShell:
 
 ```powershell
-irm https://raw.githubusercontent.com/wodenwang/my-harness/v1.0.3/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/wodenwang/my-harness/v1.0.4/scripts/install.ps1 | iex
 ```
 
 默认安装到：
@@ -66,11 +66,11 @@ irm https://raw.githubusercontent.com/wodenwang/my-harness/main/scripts/install.
 更新到指定 ref:
 
 ```bash
-MY_HARNESS_REF=v1.0.3 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
+MY_HARNESS_REF=v1.0.4 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
 ```
 
 ```powershell
-$env:MY_HARNESS_REF = "v1.0.3"
+$env:MY_HARNESS_REF = "v1.0.4"
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
 ```
 
@@ -137,6 +137,13 @@ $env:MY_HARNESS_REF = "v1.0.3"
 远端 push、tag、GitHub Release 或发布动作必须有明确授权。
 
 ## 版本历史
+
+### v1.0.4
+
+- 将已发布的 `v1.0.3` 基线收敛回 `main`，修复发布事实源不一致。
+- 修复并强化 `scripts/verify.sh`，自动检查 manifest、changelog、installer 默认 ref 和 README 安装示例。
+- 新增 `scripts/check-release-lineage.sh`，用于发布前后检查 main/tag/Release 关系。
+- `scripts/install.sh` 和 `scripts/install.ps1` 默认稳定版本更新为 `v1.0.4`。
 
 ### v1.0.3
 

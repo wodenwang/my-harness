@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.4 - 2026-05-28
+
+- Reconciled the release lineage so `main` can advance from `v1.0.1` to the already published `v1.0.3` baseline before this patch release.
+- Fixed `scripts/verify.sh` to read the manifest version into shell checks instead of relying on an unset shell variable.
+- Added release consistency checks for installer defaults, README examples, changelog sections, and release-lineage pre/post gates.
+- Updated installer defaults to `v1.0.4`.
+
 ## 1.0.3 - 2026-05-27
 
 - Changed the first harness step from a fixed `gstack /office-hours` action to a Discovery / Brainstorm gate.
