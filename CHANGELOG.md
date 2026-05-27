@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.3 - 2026-05-27
+
+- Changed the first harness step from a fixed `gstack /office-hours` action to a Discovery / Brainstorm gate.
+- Kept `gstack /office-hours` as the default for new product or scope discovery, while allowing Superpowers `brainstorming` when the value and target are already clear and the work needs candidate design/spec convergence.
+- Updated `my-harness-next-action` and `my-harness-autopilot-slice` evidence rules, prompt templates, and start gates for the new first-step semantics.
+- Updated installer defaults to `v1.0.3`.
+
 ## 1.0.2 - 2026-05-26
 
 - Changed `my-harness-writing-design` to default to shadcn/ui when no UI framework preference is provided.

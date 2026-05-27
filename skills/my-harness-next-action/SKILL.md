@@ -30,7 +30,7 @@ If evidence conflicts, trust newest concrete artifacts over older plans. If a st
 3. If not satisfied, recommend finishing that same step.
 4. If satisfied, recommend the next step in the sequence.
 5. Mark every canonical step with a status icon before answering.
-6. If all applicable steps are complete, report that the SOP is closed and do not recommend restarting at office-hours.
+6. If all applicable steps are complete, report that the SOP is closed and do not recommend restarting the Discovery / Brainstorm gate.
 7. Include no more than one optional catch-up action unless a blocker makes it necessary.
 
 ## Status Icons
@@ -53,7 +53,7 @@ If the evidence shows all applicable SOP steps are complete, or the project has 
 
 - Say clearly: `当前 SOP 已闭环。`
 - Do not mark any step as `🎯 当前下一步`.
-- Do not recommend `gstack /office-hours` to start a new loop.
+- Do not recommend `gstack /office-hours` or Superpowers `brainstorming` to start a new loop.
 - Still provide the full 15-step overview table.
 - Mark completed steps as `✅ 前置已完成`.
 - Mark intentionally skipped or inapplicable steps as `⏭️ 前置无需进行`.
@@ -65,7 +65,7 @@ If the evidence shows all applicable SOP steps are complete, or the project has 
 
 | Step | Harness action | Completion evidence |
 | -: | - | - |
-| 1 | gstack `/office-hours` | clarified goal, user, constraints, smallest worthwhile slice |
+| 1 | Discovery / Brainstorm gate: gstack `/office-hours` or Superpowers `brainstorming` | clarified target user, problem, constraints, smallest worthwhile slice, candidate approach, and questions for later review; use `office-hours` by default for new product/scope discovery, and use `brainstorming` when value and target are already clear but the candidate design/spec needs convergence |
 | 2 | gstack `/plan-design-review` | early product/interaction direction reviewed |
 | 3 | Pencil App prototype | `.pen` source, screenshot/export, design notes |
 | 4 | gstack `/plan-design-review` on prototype | prototype review findings resolved or accepted |
@@ -91,7 +91,7 @@ Use this shape:
 流程执行情况一览：
 | 状态 | 步骤 | Harness 动作 | 判断 | 证据/原因 |
 |---|---:|---|---|---|
-| ✅ | 1 | gstack `/office-hours` | 前置已完成 | ... |
+| ✅ | 1 | Discovery / Brainstorm gate | 前置已完成 | ... |
 | ⏭️ | 2 | gstack `/plan-design-review` | 前置无需进行 | ... |
 | 🎯 | 3 | Pencil App prototype | 当前下一步 | ... |
 | ⏳ | 4 | gstack `/plan-design-review` on prototype | 待执行 | ... |
@@ -133,7 +133,7 @@ Replace bracketed fields before use.
 
 | Next step | Suggested prompt |
 | -: | - |
-| 1 | `请使用 gstack /office-hours 帮我澄清 [项目/版本/功能]：目标用户、核心痛点、约束、最小可行切片、是否值得做，并输出可进入设计评审的结论。` |
+| 1 | `请执行 Discovery / Brainstorm gate 帮我澄清 [项目/版本/功能]：如果还不确定是否值得做、用户是谁或范围多大，默认使用 gstack /office-hours；如果目标和价值已经明确、需要候选方案或 spec 收敛，使用 Superpowers brainstorming。输出目标用户、核心问题、约束、最小可行切片、候选方案、是否值得做，以及后续 plan-design-review 和 plan-eng-review 需要挑战的问题。` |
 | 2 | `请使用 gstack /plan-design-review 审视 [项目/功能] 的早期产品和交互方向，指出关键体验风险、信息架构、主路径、空/错/加载状态，并给出进入 Pencil 原型前的修改建议。` |
 | 3 | `请使用 Pencil App 为 [项目/功能] 产出 shadcn/ui 风格原型，保存 .pen 源文件、导出关键页面截图，并写一份简短设计说明到 design/。` |
 | 4 | `请使用 gstack /plan-design-review 审查 design/ 中的 Pencil 原型和截图，按阻塞/重要/可选分类给出问题，并迭代到没有关键设计阻塞。` |
@@ -152,6 +152,7 @@ Replace bracketed fields before use.
 ## Common Mistakes
 
 - Recommending step 1 because the conversation lacks context while the repo has artifacts. Inspect the repo first.
+- Treating Superpowers `brainstorming` output as approved design. Step 1 produces candidate input; later `plan-design-review`, Pencil review, and `plan-eng-review` still challenge it.
 - Treating a written plan as implementation. Step 6 does not imply step 7.
 - Using `subagent-driven-development` before `IMPLEMENTATION_PLAN.md` has clear task boundaries, ownership, and non-overlapping write scopes.
 - Treating implementation as completion without fresh verification. Step 7 must flow into step 8.

@@ -3,7 +3,7 @@ param()
 $ErrorActionPreference = "Stop"
 
 $PluginName = "my-harness"
-$DefaultRef = "v1.0.2"
+$DefaultRef = "v1.0.3"
 $RepoSlug = "wodenwang/my-harness"
 
 function Fail($Message) {

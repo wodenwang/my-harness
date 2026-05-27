@@ -18,13 +18,13 @@ This is the router skill for the user's personal project-delivery harness. It gr
 | Project needs design governance before UI work | `my-harness-writing-design` |
 | Project needs `DESIGN.md`, `design/`, a Pencil starter, or AGENTS design links | `my-harness-writing-design` |
 | Project needs Ant Design vs shadcn/ui design-template selection | `my-harness-writing-design` |
-| User wants a clear small slice to run through the whole SOP automatically after office-hours is finalized | `my-harness-autopilot-slice` |
+| User wants a clear small slice to run through the whole SOP automatically after Discovery / Brainstorm gate is finalized | `my-harness-autopilot-slice` |
 | User wants to update, upgrade, version-check, or refresh the installed `my-harness` plugin from GitHub | `my-harness-upgrade` |
 | User wants to add another recurring harness helper | Create a new focused skill under this plugin, then update this routing table |
 
 ## Current Harness Loop
 
-1. gstack `/office-hours`
+1. Discovery / Brainstorm gate: gstack `/office-hours` by default, or Superpowers `brainstorming` when value and target are already clear and the work needs candidate design/spec convergence
 2. gstack `/plan-design-review`
 3. Pencil prototype
 4. gstack `/plan-design-review` on prototype

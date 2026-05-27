@@ -13,13 +13,13 @@
 macOS / Linux:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wodenwang/my-harness/v1.0.2/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/wodenwang/my-harness/v1.0.3/scripts/install.sh | bash
 ```
 
 Windows PowerShell:
 
 ```powershell
-irm https://raw.githubusercontent.com/wodenwang/my-harness/v1.0.2/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/wodenwang/my-harness/v1.0.3/scripts/install.ps1 | iex
 ```
 
 默认安装到：
@@ -66,11 +66,11 @@ irm https://raw.githubusercontent.com/wodenwang/my-harness/main/scripts/install.
 更新到指定 ref:
 
 ```bash
-MY_HARNESS_REF=v1.0.2 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
+MY_HARNESS_REF=v1.0.3 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
 ```
 
 ```powershell
-$env:MY_HARNESS_REF = "v1.0.2"
+$env:MY_HARNESS_REF = "v1.0.3"
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
 ```
 
@@ -81,9 +81,9 @@ $env:MY_HARNESS_REF = "v1.0.2"
 | Skill | 用途 |
 |---|---|
 | `my-harness` | 路由入口，判断该使用哪个 harness helper。 |
-| `my-harness-next-action` | 读取项目证据，输出 15 步 SOP 状态表和下一步提示词。 |
+| `my-harness-next-action` | 读取项目证据，输出 15 步 SOP 状态表和下一步提示词；第 1 步支持 `office-hours` 或 Superpowers `brainstorming`。 |
 | `my-harness-writing-design` | 初始化 `DESIGN.md`、`design/`、Pencil starter；只支持 Ant Design 和 shadcn/ui。 |
-| `my-harness-autopilot-slice` | 在 `office-hours` 已定稿后推进一个小切片，并在人工门禁处停止。 |
+| `my-harness-autopilot-slice` | 在 Discovery / Brainstorm gate 已定稿后推进一个小切片，并在人工门禁处停止。 |
 | `my-harness-upgrade` | 检查或更新已安装插件，并回读版本、备份和 skill 入口。 |
 
 常用提示词：
@@ -137,6 +137,13 @@ $env:MY_HARNESS_REF = "v1.0.2"
 远端 push、tag、GitHub Release 或发布动作必须有明确授权。
 
 ## 版本历史
+
+### v1.0.3
+
+- 将第 1 步从固定 `gstack /office-hours` 改为 Discovery / Brainstorm gate。
+- 第 1 步默认仍使用 `gstack /office-hours`，但允许在目标和价值已明确时使用 Superpowers `brainstorming` 收敛候选方案/spec。
+- 更新 `my-harness-next-action` 和 `my-harness-autopilot-slice` 的证据判断、提示词和启动门禁。
+- `scripts/install.sh` 和 `scripts/install.ps1` 默认稳定版本更新为 `v1.0.3`。
 
 ### v1.0.2
 

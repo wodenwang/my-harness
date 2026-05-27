@@ -45,7 +45,7 @@
 
 当前标准闭环为：
 
-1. gstack `/office-hours`
+1. Discovery / Brainstorm gate：默认使用 gstack `/office-hours`；如果项目价值和目标已经明确、需要方案或 spec 收敛，可使用 Superpowers `brainstorming`
 2. gstack `/plan-design-review`
 3. Pencil prototype
 4. gstack `/plan-design-review` on prototype

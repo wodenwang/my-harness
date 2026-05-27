@@ -24,7 +24,7 @@ The first implementation packaged that answer into `my-harness-next-action`, the
 
 | Step | Harness action |
 |---:|---|
-| 1 | gstack `/office-hours` |
+| 1 | Discovery / Brainstorm gate: gstack `/office-hours` or Superpowers `brainstorming` |
 | 2 | gstack `/plan-design-review` |
 | 3 | Pencil prototype |
 | 4 | gstack `/plan-design-review` on prototype |
@@ -43,14 +43,16 @@ The first implementation packaged that answer into `my-harness-next-action`, the
 ## Important Behavior Contracts
 
 - `my-harness-next-action` must inspect artifacts before recommending step 1.
-- If the SOP is already closed, it must say `当前 SOP 已闭环。` and provide the full status table instead of starting a new office-hours loop.
+- Step 1 is a Discovery / Brainstorm gate: default to gstack `/office-hours` for new product, version, or opportunity discovery; accept Superpowers `brainstorming` evidence when value and target are already clear and the work needs candidate design/spec convergence.
+- Step 1 output is a candidate input for later review, not an approved design. `plan-design-review` and `plan-eng-review` still challenge the product, interaction, and engineering assumptions.
+- If the SOP is already closed, it must say `当前 SOP 已闭环。` and provide the full status table instead of starting a new Discovery / Brainstorm loop.
 - The next-action table must include all 15 steps and use the agreed emoji status markers.
 - Recommended prompts must be standalone fenced `text` blocks.
 - `my-harness-writing-design` creates design-governance scaffolding and may call Pencil plus selected UI framework tools when available.
 - `my-harness-writing-design` supports only Ant Design and shadcn/ui: no explicit preference means shadcn/ui default style; explicit Ant Design preference selects the Ant Design template; other UI framework preferences are refused.
 - For zero-to-one Admin Console work, `my-harness-writing-design` defaults Ant Design projects to Ant Design Pro layout/style, and shadcn/ui projects to tweakcn theme/style.
 - Theme colors, websites, logos, screenshots, or brand assets must be parsed into safe admin-console theme tokens instead of copied as marketing-page visuals.
-- `my-harness-autopilot-slice` is only for small, bounded work after office-hours is finalized.
+- `my-harness-autopilot-slice` is only for small, bounded work after the Discovery / Brainstorm gate is finalized.
 - Autopilot loops `design-review`, `qa`, and `review` until clear, accepted, blocked, or 10 iterations.
 - Autopilot must summarize completion, refusal, handoff, blocker, and authorization-required exits with the same `流程执行情况一览` table style as `my-harness-next-action`: all 15 steps, fixed emoji statuses, and loop metrics folded into `证据/原因` instead of separate numeric columns; skipped steps must still be listed with `⏭️ 前置无需进行` and the skip reason.
 - `my-harness-upgrade` must distinguish current version, target ref, target version, and version iteration before applying updates.

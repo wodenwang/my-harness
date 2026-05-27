@@ -2,7 +2,7 @@
 set -euo pipefail
 
 PLUGIN_NAME="my-harness"
-DEFAULT_REF="v1.0.2"
+DEFAULT_REF="v1.0.3"
 REPO_SLUG="wodenwang/my-harness"
 
 MY_HARNESS_REF="${MY_HARNESS_REF:-$DEFAULT_REF}"

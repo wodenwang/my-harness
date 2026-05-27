@@ -1,6 +1,6 @@
 ---
 name: my-harness-autopilot-slice
-description: Use when a small, clearly bounded project slice should be advanced through the user's harness loop after office-hours scope has already been finalized
+description: Use when a small, clearly bounded project slice should be advanced through the user's harness loop after Discovery or Brainstorm scope has already been finalized
 ---
 
 # My Harness Autopilot Slice
@@ -15,7 +15,7 @@ This is an autopilot for narrow execution, not a replacement for product judgmen
 
 Refuse to start unless all are true:
 
-1. `gstack /office-hours` is already finalized for this task or version slice.
+1. Discovery / Brainstorm gate is already finalized for this task or version slice through `gstack /office-hours`, Superpowers `brainstorming`, or equivalent project evidence.
 2. The current slice has a clear boundary, success criteria, and non-goals.
 3. The task is small enough to finish without repeated product decisions.
 4. Project governance is readable: `AGENTS.md`, `CLAUDE.md`, README, or equivalent docs.
@@ -26,14 +26,14 @@ Refuse if any are true:
 - The request is a large version, unclear product direction, broad redesign, multi-subsystem project, or ambiguous roadmap item.
 - The implementation likely needs frequent human decisions.
 - The task requires external credentials, production authorization, paid services, manual UI design approval, or unavailable tools before meaningful progress can continue.
-- The first required action is still office-hours, product definition, or open-ended design discovery.
+- The first required action is still Discovery / Brainstorm gate, product definition, opportunity validation, or open-ended design discovery.
 
 When refusing, state the blocking reason and recommend `my-harness-next-action` or the specific missing planning step.
 
 ## Workflow
 
 1. Read project governance and existing artifacts.
-2. Confirm office-hours evidence and scope clarity.
+2. Confirm Discovery / Brainstorm evidence and scope clarity.
 3. Invoke/apply `my-harness-next-action` to classify current state.
 4. Execute exactly the recommended next harness action.
 5. Re-run `my-harness-next-action`.
@@ -104,7 +104,7 @@ Respect authorization boundaries:
 
 Stop immediately and hand off when:
 
-- office-hours evidence is missing
+- Discovery / Brainstorm evidence is missing
 - scope is too large or ambiguous
 - Pencil/design confirmation is needed
 - a required tool/credential/service is unavailable
@@ -158,7 +158,7 @@ Use this format:
 流程执行情况一览：
 | 状态 | 步骤 | Harness 动作 | 判断 | 证据/原因 |
 |---|---:|---|---|---|
-| ✅ | 1 | gstack `/office-hours` | 前置已完成 | 范围已锁定为 ...；无循环。 |
+| ✅ | 1 | Discovery / Brainstorm gate | 前置已完成 | 范围已通过 ... 锁定为 ...；无循环。 |
 | ⏭️ | 2 | gstack `/plan-design-review` | 前置无需进行 | 当前切片不涉及新增产品/交互方向，按已批准范围执行。 |
 | ⏭️ | 3 | Pencil App prototype | 前置无需进行 | 当前切片不涉及 UI；已有规则允许跳过 Pencil 原型。 |
 | ⏭️ | 4 | gstack `/plan-design-review` on prototype | 前置无需进行 | 未创建新原型，因此无需原型复审。 |
@@ -203,7 +203,7 @@ The slice is complete only when:
 
 ## Common Mistakes
 
-- Starting before `office-hours` has fixed the target.
+- Starting before the Discovery / Brainstorm gate has fixed the target.
 - Running autopilot on a large, unclear version.
 - Treating Pencil starter files as approved design.
 - Letting review/QA loops run indefinitely.
