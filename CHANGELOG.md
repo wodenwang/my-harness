@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.5 - 2026-05-28
+
+- Clarified that Superpowers `brainstorming` output is candidate input only and must not jump directly to Superpowers `writing-plans`.
+- Required `plan-design-review`, Pencil prototype planning when needed, and `plan-eng-review` after a brainstorming gate unless the request is extremely simple.
+- Updated installer defaults to `v1.0.5`.
+
 ## 1.0.4 - 2026-05-28
 
 - Reconciled the release lineage so `main` can advance from `v1.0.1` to the already published `v1.0.3` baseline before this patch release.

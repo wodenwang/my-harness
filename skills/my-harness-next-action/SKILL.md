@@ -33,6 +33,20 @@ If evidence conflicts, trust newest concrete artifacts over older plans. If a st
 6. If all applicable steps are complete, report that the SOP is closed and do not recommend restarting the Discovery / Brainstorm gate.
 7. Include no more than one optional catch-up action unless a blocker makes it necessary.
 
+### Brainstorm Gate Rule
+
+If step 1 was completed with Superpowers `brainstorming`, do not jump directly to step 6 `writing-plans`. A completed brainstorm is only candidate input for later reviews, even when it already contains frontend, backend, or end-to-end implementation ideas.
+
+After a Superpowers `brainstorming` gate, the next required actions are:
+
+1. step 2 `gstack /plan-design-review` to challenge product, interaction, frontend approach, information architecture, and state design;
+2. step 3 Pencil prototype planning when the scope needs UI or interaction evidence;
+3. step 4 prototype review when a Pencil prototype was created;
+4. step 5 `gstack /plan-eng-review` to challenge architecture, data flow, boundaries, tests, performance, permissions, and release risk;
+5. only then step 6 Superpowers `writing-plans`.
+
+Mark steps 2 and 5 as `⏭️ 前置无需进行` only when the current request is extremely simple, has no meaningful product/interaction ambiguity, and has no engineering architecture or risk decisions to challenge. In that case, state the skip reason explicitly in the table. "The brainstorm already proposed an implementation plan" is not a valid skip reason.
+
 ## Status Icons
 
 Use these exact icons in the overview table:
@@ -66,10 +80,10 @@ If the evidence shows all applicable SOP steps are complete, or the project has 
 | Step | Harness action | Completion evidence |
 | -: | - | - |
 | 1 | Discovery / Brainstorm gate: gstack `/office-hours` or Superpowers `brainstorming` | clarified target user, problem, constraints, smallest worthwhile slice, candidate approach, and questions for later review; use `office-hours` by default for new product/scope discovery, and use `brainstorming` when value and target are already clear but the candidate design/spec needs convergence |
-| 2 | gstack `/plan-design-review` | early product/interaction direction reviewed |
+| 2 | gstack `/plan-design-review` | early product/interaction/frontend direction reviewed; required after Superpowers `brainstorming` unless the request is extremely simple |
 | 3 | Pencil App prototype | `.pen` source, screenshot/export, design notes |
 | 4 | gstack `/plan-design-review` on prototype | prototype review findings resolved or accepted |
-| 5 | gstack `/plan-eng-review` | architecture, data flow, risks, test strategy locked |
+| 5 | gstack `/plan-eng-review` | architecture, data flow, risks, test strategy locked; required after Superpowers `brainstorming` unless the request is extremely simple |
 | 6 | Superpowers `writing-plans` | `IMPLEMENTATION_PLAN.md` with paths, tasks, tests, done criteria |
 | 7 | Superpowers `executing-plans` or `subagent-driven-development` | first vertical slice implemented end to end; use `subagent-driven-development` only when the slice has clear independent tasks and non-overlapping file boundaries |
 | 8 | Superpowers `verification-before-completion` | fresh tests/build/lint/manual evidence |
@@ -133,8 +147,8 @@ Replace bracketed fields before use.
 
 | Next step | Suggested prompt |
 | -: | - |
-| 1 | `请执行 Discovery / Brainstorm gate 帮我澄清 [项目/版本/功能]：如果还不确定是否值得做、用户是谁或范围多大，默认使用 gstack /office-hours；如果目标和价值已经明确、需要候选方案或 spec 收敛，使用 Superpowers brainstorming。输出目标用户、核心问题、约束、最小可行切片、候选方案、是否值得做，以及后续 plan-design-review 和 plan-eng-review 需要挑战的问题。` |
-| 2 | `请使用 gstack /plan-design-review 审视 [项目/功能] 的早期产品和交互方向，指出关键体验风险、信息架构、主路径、空/错/加载状态，并给出进入 Pencil 原型前的修改建议。` |
+| 1 | `请执行 Discovery / Brainstorm gate 帮我澄清 [项目/版本/功能]：如果还不确定是否值得做、用户是谁或范围多大，默认使用 gstack /office-hours；如果目标和价值已经明确、需要候选方案或 spec 收敛，使用 Superpowers brainstorming。输出目标用户、核心问题、约束、最小可行切片、候选方案、是否值得做，以及后续 plan-design-review 和 plan-eng-review 需要挑战的问题。注意：brainstorming 即便产出前后端实现方案，也只是候选输入，除非需求极其简单，否则下一步不得直接进入 writing-plans。` |
+| 2 | `请使用 gstack /plan-design-review 审视 [项目/功能] 的早期产品、交互和前端方案，指出关键体验风险、信息架构、主路径、空/错/加载状态，并给出进入 Pencil 原型前的修改建议。若上一步使用了 Superpowers brainstorming，请重新挑战其中的方案，不要把 brainstorm 输出当作已批准设计。` |
 | 3 | `请使用 Pencil App 为 [项目/功能] 产出 shadcn/ui 风格原型，保存 .pen 源文件、导出关键页面截图，并写一份简短设计说明到 design/。` |
 | 4 | `请使用 gstack /plan-design-review 审查 design/ 中的 Pencil 原型和截图，按阻塞/重要/可选分类给出问题，并迭代到没有关键设计阻塞。` |
 | 5 | `请使用 gstack /plan-eng-review 评审 [项目/功能] 的工程方案，锁定架构、数据流、边界条件、测试策略、性能风险、权限/安全边界和发布风险。` |
@@ -152,7 +166,8 @@ Replace bracketed fields before use.
 ## Common Mistakes
 
 - Recommending step 1 because the conversation lacks context while the repo has artifacts. Inspect the repo first.
-- Treating Superpowers `brainstorming` output as approved design. Step 1 produces candidate input; later `plan-design-review`, Pencil review, and `plan-eng-review` still challenge it.
+- Treating Superpowers `brainstorming` output as approved design or as permission to skip directly to `writing-plans`. Step 1 produces candidate input; later `plan-design-review`, Pencil review when needed, and `plan-eng-review` still challenge it unless the request is extremely simple.
+- Marking `plan-design-review` or `plan-eng-review` unnecessary after `brainstorming` because the brainstorm already proposed frontend/backend implementation details.
 - Treating a written plan as implementation. Step 6 does not imply step 7.
 - Using `subagent-driven-development` before `IMPLEMENTATION_PLAN.md` has clear task boundaries, ownership, and non-overlapping write scopes.
 - Treating implementation as completion without fresh verification. Step 7 must flow into step 8.

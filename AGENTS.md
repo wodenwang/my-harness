@@ -60,3 +60,7 @@
 13. Git closeout
 14. gstack `/ship`
 15. gstack `/land-and-deploy`
+
+如果第 1 步使用了 Superpowers `brainstorming`，完成该门禁后不能直接进入 Superpowers `writing-plans`。除非当前需求极其简单、简单到无需设计评审和工程评审，否则必须先使用 `plan-design-review` 挑战产品、交互和前端方案，必要时使用 Pencil 策划原型，再使用 `plan-eng-review` 挑战工程方案，最后才能进入 `writing-plans`。
+
+即便 Superpowers `brainstorming` 已经产出前后端实现方案，也只把它当作候选输入，后续仍要用 `plan-design-review` 和 `plan-eng-review` 重新挑战并打磨最佳方案。

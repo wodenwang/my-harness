@@ -41,6 +41,8 @@ When refusing, state the blocking reason and recommend `my-harness-next-action` 
 
 Do not skip gates. Do not compress multiple harness steps into one undocumented leap.
 
+If the Discovery / Brainstorm evidence came from Superpowers `brainstorming`, do not treat that as permission to start at `writing-plans` or implementation. The loop must still pass through `plan-design-review`, Pencil planning when needed, and `plan-eng-review` before `writing-plans`, unless the slice is extremely simple and the skip reasons for both review gates are explicit.
+
 ## Step-Specific Rules
 
 ### Design And Pencil Gates

@@ -26,7 +26,7 @@ Environment:
 
 Examples:
   scripts/upgrade.sh --check
-  MY_HARNESS_REF=v1.0.4 scripts/upgrade.sh
+  MY_HARNESS_REF=v1.0.5 scripts/upgrade.sh
   MY_HARNESS_REF=main scripts/upgrade.sh
 EOF
   exit 0

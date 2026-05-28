@@ -40,6 +40,10 @@ This is the router skill for the user's personal project-delivery harness. It gr
 14. gstack `/ship`
 15. gstack `/land-and-deploy`
 
+When step 1 used Superpowers `brainstorming`, completing that gate does not make the work ready for Superpowers `writing-plans`. The next action must still move through `plan-design-review`, Pencil prototype planning when needed, and `plan-eng-review` before step 6, unless the current request is extremely simple enough that both design and engineering plan reviews are genuinely unnecessary.
+
+Even if the brainstorming output already includes frontend and backend implementation ideas, treat them as candidate inputs. Use `plan-design-review` and `plan-eng-review` to challenge and improve the product, frontend, and engineering plan before writing `IMPLEMENTATION_PLAN.md`.
+
 ## Extension Rule
 
 Add a new harness skill when the helper has a distinct job, trigger, artifacts, and completion check. Do not merge unrelated phases into one skill just because they share the harness name.
