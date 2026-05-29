@@ -7,7 +7,7 @@ description: Use when a project needs initial design requirements, a DESIGN.md b
 
 ## Purpose
 
-Create the design-governance starting point for the current project before product/UI implementation begins. The default baseline is a shadcn/ui-compatible Admin Console style using tweakcn as the default theme/style reference.
+Create the design-governance starting point for the current project before product/UI implementation begins. The default and only active Admin Console baseline is a shadcn/ui-compatible style using tweakcn as the default theme/style reference.
 
 ## Before Editing
 
@@ -29,36 +29,32 @@ Pencil dependencies:
 
 UI framework selection:
 
-- Supported UI frameworks are only `ant-design` and `shadcn`.
+- Supported UI framework is `shadcn` / shadcn/ui only.
 - If the user does not explicitly prefer a UI framework, choose `shadcn`.
-- If the user explicitly prefers Ant Design, antd, or Ant, choose `ant-design`.
 - If the user explicitly prefers shadcn or shadcn/ui, choose `shadcn`.
-- If the user explicitly asks for any other frontend UI framework, directly refuse that framework request and say this skill currently supports only Ant Design and shadcn/ui.
-- Do not silently map unsupported preferences such as Material UI, Chakra UI, Arco Design, Element Plus, Bootstrap, Tailwind UI, Radix-only, or a custom design system into either supported framework.
+- If the user explicitly asks for Ant Design, antd, Ant, or any other frontend UI framework, directly refuse that framework request and say this skill currently supports only shadcn/ui.
+- Do not silently map unsupported preferences such as Ant Design, Material UI, Chakra UI, Arco Design, Element Plus, Bootstrap, Tailwind UI, Radix-only, or a custom design system into shadcn/ui.
 - For a zero-to-one Admin Console with no strong user preference, choose `shadcn` and use tweakcn as the default shadcn theme/style reference.
-- If the user explicitly chooses Ant Design for a zero-to-one Admin Console but gives no strong theme preference, use Ant Design Pro as the default admin framework/layout/style reference.
-
-Ant Design dependencies and style:
-
-- Use Ant Design when the user explicitly chooses it as the component and interaction baseline for Admin Console / enterprise backend projects.
-- Preserve Ant Design default style by default: use Ant Design Pro's admin layout/page-template style, official token system, and default blue primary direction unless the project already has a confirmed brand theme.
-- If an Ant Design skill, CLI helper, design-system checker, or project-local Ant Design guideline exists, invoke it before finalizing component mappings.
-- If no local Ant Design helper exists, use the project's installed Ant Design version, existing code, or official Ant Design documentation as the source for component names and patterns.
-- Do not invent a custom design system when Ant Design has a standard component that fits the pattern.
 
 shadcn/ui dependencies and style:
 
-- Use shadcn/ui by default unless the user explicitly chooses Ant Design.
+- Use shadcn/ui by default and for all new Admin Console design baselines.
 - Treat shadcn/ui as open component code plus a code-distribution workflow, not as a sealed component library.
 - Preserve shadcn/ui beautiful defaults and use tweakcn as the default theme/style source for zero-to-one Admin Console work when no stronger brand direction exists.
 - Use the project's existing shadcn/ui setup if present. If no setup exists, reference official shadcn/ui docs for component names, token conventions, and CLI install patterns.
-- Do not combine shadcn/ui with Ant Design or another UI framework in the same design baseline unless the user explicitly asks for a migration/interop plan.
+- Do not combine shadcn/ui with Ant Design or another UI framework in the same design baseline unless the user explicitly asks for a migration/interop plan outside this skill's normal baseline.
+
+Button design rules:
+
+- List pages may use icon-only buttons for table row actions, toolbar utilities, dense action columns, or similarly compact layouts.
+- Any page area with genuinely narrow space may use icon-only buttons, but each icon-only button must have an accessible label and a tooltip when the icon is not universally obvious.
+- In all other cases, buttons must use icon + text.
+- Button text must not wrap. If a button would need wrapping, treat the area as space-constrained and switch to an icon-only button or redesign the surrounding layout.
 
 Theme and brand inference:
 
 - If the user names a theme color, provides a website, uploads a logo, shares screenshots, or links brand material, analyze that material before finalizing the design baseline.
 - Extract dominant colors, accent colors, neutral/background direction, saturation, contrast, typography mood, density, and any obvious industry/brand tone.
-- For Ant Design, map the result to Ant Design token decisions such as `colorPrimary`, functional colors, page background, border/radius direction, and whether to stay on Ant Design Pro default blue.
 - For shadcn/ui, map the result to a tweakcn-compatible theme decision: use an appropriate preset family when it fits, or define a custom CSS-variable token set when no preset is a good match.
 - If the material is visually noisy or unsuitable for backend work, keep the admin console conservative and use only the strongest safe brand accent.
 - Always record the theme source and decision in `DESIGN.md` or `design/pencil-input-<stage>.md`.
@@ -67,8 +63,8 @@ Recommended order:
 
 1. Read project governance and existing design assets.
 2. Check Pencil availability (`pencil-design` skill, Pencil MCP, or Pencil CLI) if `.pen` assets are needed.
-3. Resolve UI framework preference using the supported-framework rule above.
-4. Check selected framework availability (project dependency, local guideline, skill, CLI, or docs) before writing component mappings.
+3. Resolve UI framework preference using the shadcn/ui-only rule above.
+4. Check shadcn/ui availability (project dependency, local guideline, skill, CLI, or docs) before writing component mappings.
 5. Inspect theme/color/material inputs if provided, including websites, logos, screenshots, or explicit color names.
 6. Create or update `DESIGN.md`, `design/`, Pencil starter/assets, and governance links.
 
@@ -125,7 +121,7 @@ The script is conservative: it creates missing files and appends a design-govern
 
 ## DESIGN.md Baseline
 
-Use `templates/DESIGN.shadcn-admin-console.md` as the default shadcn/ui content. Use `templates/DESIGN.admin-console.md` only when the user explicitly prefers Ant Design. Adapt these fields before finalizing:
+Use `templates/DESIGN.shadcn-admin-console.md` as the default and only Admin Console content. Adapt these fields before finalizing:
 
 - project name
 - product type
@@ -137,16 +133,6 @@ Use `templates/DESIGN.shadcn-admin-console.md` as the default shadcn/ui content.
 
 Keep the selected framework's core principles unless the project clearly is not an enterprise backend tool.
 
-Ant Design default principles:
-
-- table-first CRUD
-- Ant Design Pro admin console layout/style for zero-to-one projects
-- Ant Design component mapping
-- compact enterprise information density
-- complete states: loading, empty, error, no permission, validation, confirmation
-- Pencil prototype as implementation input
-- Playwright visual QA before claiming frontend completion
-
 shadcn/ui selected principles:
 
 - open-code component ownership
@@ -154,9 +140,14 @@ shadcn/ui selected principles:
 - composition-first UI built from shadcn/ui primitives and project-level wrappers
 - Tailwind CSS variables and semantic tokens
 - clean minimal beautiful defaults instead of heavy enterprise chrome
-- explicit accessibility, focus, keyboard, empty/loading/error states
+- standard Admin Console shell: `AppShell`, `Sidebar`, `TopBar`, `PageHeader`, `FilterBar`, `DataTable`, `Dialog`, `Sheet`, and detail pages
+- table-first CRUD with stable status/time/action columns, long text and long ID handling, responsive fallback, and no complex forms inside list cells
+- Dialog / Sheet / detail-page selection by interaction complexity; narrow Sheets must not carry heavy workflows such as multi-tab, tree selection, batch binding, or complex permission editing
+- button rules: icon-only only for list pages or narrow compact spaces; icon-only buttons need accessible labels and tooltip/title; otherwise use icon + text; no wrapped button labels
+- explicit accessibility, focus, keyboard, loading/empty/error/forbidden/success/disabled/pending/readonly states
+- design review checks for backend density, stable columns, no button wrapping, no heavy Sheet misuse, no layout overflow, clean console, and no unexpected Network failures
 - Pencil prototype as implementation input
-- Playwright visual QA before claiming frontend completion
+- Playwright visual QA across desktop/tablet/mobile before claiming frontend completion
 
 ## AGENTS.md Link
 
@@ -188,7 +179,7 @@ Before reporting done:
 - `find design -maxdepth 1 -name '*.pen' -print`
 - `rg -n "DESIGN.md|design/" AGENTS.md`
 - Record which UI framework was selected and why.
-- Record which admin layout/style reference was selected: Ant Design Pro for Ant Design, tweakcn for shadcn/ui.
+- Record that shadcn/ui was selected and tweakcn was used as the Admin Console layout/style reference.
 - Record theme/material source and inferred theme decision when the user provides colors, logo, website, screenshots, or brand material.
 - Record whether Pencil tooling and selected-framework references were available and used.
 - If `CLAUDE.md` exists and is expected to mirror `AGENTS.md`, verify the design section is present there too.
@@ -200,7 +191,12 @@ Before reporting done:
 - Creating screenshots without a `.pen` source.
 - Hand-editing or guessing around Pencil when Pencil-specific tools are available.
 - Accepting unsupported UI framework preferences instead of refusing them.
-- Defaulting to Ant Design when the user has not explicitly asked for it.
+- Using the retired Ant Design template or recommending Ant Design for new Admin Console work.
+- Allowing button labels to wrap instead of treating the space as compact and changing the control pattern.
+- Letting table action buttons resize rows, wrap, or lose a stable operation-column width.
+- Putting long URLs, JSON, permission lists, errors, or IDs directly into tables without truncation, tooltip, copy, or detail placement.
+- Using a narrow Sheet for heavy configuration, multi-tab editing, tree selection, batch binding, or complex permission workflows.
+- Treating a page as complete without checking 390px mobile, console errors, unexpected Network failures, and responsive overflow.
 - Writing component mappings without checking project dependencies, existing code, or selected-framework references.
 - Mixing Ant Design and shadcn/ui in a single baseline without explicit migration/interop scope.
 - Ignoring user-provided theme colors, websites, logos, screenshots, or brand assets.

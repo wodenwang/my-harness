@@ -13,13 +13,13 @@
 macOS / Linux:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wodenwang/my-harness/v1.0.6/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/wodenwang/my-harness/v1.1.0/scripts/install.sh | bash
 ```
 
 Windows PowerShell:
 
 ```powershell
-irm https://raw.githubusercontent.com/wodenwang/my-harness/v1.0.6/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/wodenwang/my-harness/v1.1.0/scripts/install.ps1 | iex
 ```
 
 默认安装到：
@@ -66,11 +66,11 @@ irm https://raw.githubusercontent.com/wodenwang/my-harness/main/scripts/install.
 更新到指定 ref:
 
 ```bash
-MY_HARNESS_REF=v1.0.6 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
+MY_HARNESS_REF=v1.1.0 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
 ```
 
 ```powershell
-$env:MY_HARNESS_REF = "v1.0.6"
+$env:MY_HARNESS_REF = "v1.1.0"
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
 ```
 
@@ -82,7 +82,7 @@ $env:MY_HARNESS_REF = "v1.0.6"
 |---|---|
 | `my-harness` | 路由入口，判断该使用哪个 harness helper。 |
 | `my-harness-next-action` | 读取项目证据，输出 15 步 SOP 状态表和下一步提示词；提示词会要求执行完成后继续输出进度表和下一步提示词，便于只复制末尾提示词持续推进；第 1 步支持 `office-hours` 或 Superpowers `brainstorming`，但 `brainstorming` 后默认仍需经过 `plan-design-review` 和 `plan-eng-review` 才能进入 `writing-plans`。 |
-| `my-harness-writing-design` | 初始化 `DESIGN.md`、`design/`、Pencil starter；只支持 Ant Design 和 shadcn/ui。 |
+| `my-harness-writing-design` | 初始化 `DESIGN.md`、`design/`、Pencil starter；Admin Console 统一使用 shadcn/ui + tweakcn，并生成包含布局、导航、表格、按钮、状态、响应式和 QA 门禁的后台 UI 规范。 |
 | `my-harness-autopilot-slice` | 在 Discovery / Brainstorm gate 已定稿后推进一个小切片，并在人工门禁处停止。 |
 | `my-harness-upgrade` | 检查或更新已安装插件，并回读版本、备份和 skill 入口。 |
 
@@ -137,6 +137,14 @@ $env:MY_HARNESS_REF = "v1.0.6"
 远端 push、tag、GitHub Release 或发布动作必须有明确授权。
 
 ## 版本历史
+
+### v1.1.0
+
+- 废除 `my-harness-writing-design` 的 Ant Design 模板；未来 Admin Console 设计基线统一使用 shadcn/ui + tweakcn。
+- `DESIGN.md` 模板扩展为更完整的后台 UI 验收基线：覆盖 `AppShell`、左侧导航、DataTable 列宽与长 ID、Dialog / Sheet / 独立页选择、表单错误、状态文案、390px mobile、可访问性、design review 和 Playwright QA。
+- 设计规范新增按钮规则：列表页或空间较窄场景可使用纯 icon 按钮，其余按钮使用 icon + 文字，纯 icon 按钮必须有可访问标签和 tooltip/title，按钮文案不得换行。
+- `my-harness-next-action` 的推荐提示词模板改为分段纯文本，便于阅读和复制。
+- `scripts/install.sh` 和 `scripts/install.ps1` 默认稳定版本更新为 `v1.1.0`。
 
 ### v1.0.6
 
