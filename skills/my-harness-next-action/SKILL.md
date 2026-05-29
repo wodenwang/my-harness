@@ -119,6 +119,8 @@ Use this shape:
 推荐提示词：
 ```text
 请使用 ...
+
+执行完毕后，请按照 my-harness 规定的流程输出 `流程执行情况一览：` 15 步进度表，并在末尾继续给出下一步可直接复制执行的 `推荐提示词`。这个末尾提示词必须同时包含本句要求，让用户后续只需要复制末尾提示词继续推进，不需要重新询问 next action。
 ```
 
 注意：
@@ -140,6 +142,13 @@ The recommended prompt must be easy to copy in one action:
 - Put only the prompt inside that code block; do not include bullets, explanations, quotes, or surrounding prose inside it.
 - Resolve bracketed placeholders from project evidence when possible.
 - If two prompt variants are genuinely needed, use two separate `text` code blocks with short labels outside the blocks.
+- The prompt itself must be self-chaining: besides naming the immediate next harness action, it must require the executor to output the `流程执行情况一览：` 15-step progress table after finishing and to place the next copyable `推荐提示词` at the end.
+- The final sentence of every recommended prompt must preserve this handoff requirement so the user can keep copying the last prompt after each step without asking `my-harness-next-action` again.
+- Use this exact suffix unless the SOP is already closed:
+
+```text
+执行完毕后，请按照 my-harness 规定的流程输出 `流程执行情况一览：` 15 步进度表，并在末尾继续给出下一步可直接复制执行的 `推荐提示词`。这个末尾提示词必须同时包含本句要求，让用户后续只需要复制末尾提示词继续推进，不需要重新询问 next action。
+```
 
 ## Prompt Templates
 

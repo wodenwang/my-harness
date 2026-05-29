@@ -1,6 +1,6 @@
 {
   "name": "my-harness",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Personal project-delivery harness skills for coordinating gstack, Superpowers, Pencil, browser checks, Git, release closeout, and cross-platform plugin updates.",
   "author": {
     "name": "Wenzhe Wang"

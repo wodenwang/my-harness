@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.6 - 2026-05-29
+
+- Required `my-harness-next-action` recommended prompts to be self-chaining: after the next action is executed, the executor must output the 15-step `流程执行情况一览：` table and another copyable final prompt.
+- Documented the self-chaining next-action prompt contract in README and project history.
+- Updated installer defaults to `v1.0.6`.
+
 ## 1.0.5 - 2026-05-28
 
 - Clarified that Superpowers `brainstorming` output is candidate input only and must not jump directly to Superpowers `writing-plans`.

@@ -50,6 +50,7 @@ The first implementation packaged that answer into `my-harness-next-action`, the
 - If the SOP is already closed, it must say `当前 SOP 已闭环。` and provide the full status table instead of starting a new Discovery / Brainstorm loop.
 - The next-action table must include all 15 steps and use the agreed emoji status markers.
 - Recommended prompts must be standalone fenced `text` blocks.
+- Recommended prompts must be self-chaining: after naming the immediate action, they must require the executor to output the `流程执行情况一览：` 15-step table and a new copyable final prompt after finishing, so the user can keep copying the last prompt without asking next-action again.
 - `my-harness-writing-design` creates design-governance scaffolding and may call Pencil plus selected UI framework tools when available.
 - `my-harness-writing-design` supports only Ant Design and shadcn/ui: no explicit preference means shadcn/ui default style; explicit Ant Design preference selects the Ant Design template; other UI framework preferences are refused.
 - For zero-to-one Admin Console work, `my-harness-writing-design` defaults Ant Design projects to Ant Design Pro layout/style, and shadcn/ui projects to tweakcn theme/style.
