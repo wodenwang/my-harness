@@ -12,18 +12,12 @@ from pathlib import Path
 
 SKILL_DIR = Path(__file__).resolve().parents[1]
 TEMPLATE_PATHS = {
-    "ant-design": SKILL_DIR / "templates" / "DESIGN.admin-console.md",
     "shadcn": SKILL_DIR / "templates" / "DESIGN.shadcn-admin-console.md",
 }
 FRAMEWORK_LABELS = {
-    "ant-design": "Ant Design",
     "shadcn": "shadcn/ui",
 }
 FRAMEWORK_ALIASES = {
-    "ant": "ant-design",
-    "antd": "ant-design",
-    "ant-design": "ant-design",
-    "ant design": "ant-design",
     "shadcn": "shadcn",
     "shadcn ui": "shadcn",
     "shadcn/ui": "shadcn",
@@ -91,7 +85,7 @@ def normalize_ui_framework(explicit: str | None) -> str:
     value = explicit.strip().lower()
     framework = FRAMEWORK_ALIASES.get(value)
     if not framework:
-        allowed = ", ".join(sorted(FRAMEWORK_LABELS))
+        allowed = ", ".join(FRAMEWORK_LABELS.values())
         raise ValueError(f"unsupported UI framework: {explicit!r}; supported values: {allowed}")
     return framework
 
@@ -143,17 +137,9 @@ def create_pencil_input(
         return False
 
     framework_label = FRAMEWORK_LABELS[ui_framework]
-    component_mapping_label = (
-        "Ant Design component mapping"
-        if ui_framework == "ant-design"
-        else "shadcn/ui component composition"
-    )
-    design_direction = (
-        "从零到一默认沿用 Ant Design Pro 的后台 Admin Console 布局风格；无品牌素材时保持 Ant Design 默认蓝与默认 token，不做营销页或装饰性 Dashboard。"
-        if ui_framework == "ant-design"
-        else "从零到一默认以 tweakcn 作为 shadcn/ui 主题与后台视觉参考；以 Tailwind CSS variables 和可组合组件实现，不引入第三方 UI 框架。"
-    )
-    admin_style_reference = "Ant Design Pro" if ui_framework == "ant-design" else "tweakcn"
+    component_mapping_label = "shadcn/ui component composition"
+    design_direction = "从零到一默认以 tweakcn 作为 shadcn/ui 主题与后台视觉参考；以 Tailwind CSS variables 和可组合组件实现，不引入第三方 UI 框架。"
+    admin_style_reference = "tweakcn"
     theme_source_text = theme_source or "未提供；使用所选框架的默认后台主题方向。"
 
     content = f"""# {project_name} {stage} Pencil 原型输入文档
@@ -172,6 +158,7 @@ UI 框架：{framework_label}
 - 说明目标用户、关键操作和成功标准。
 - {design_direction}
 - 如用户提供官网、logo、截图、主题色或品牌素材，先解析主色、辅助色、背景倾向、对比度、饱和度和品牌气质，再选择合适主题模板。
+- 按钮默认使用 icon + 文字；仅列表页或空间较窄的紧凑区域可使用纯 icon 按钮，并补充可访问标签和必要 tooltip；按钮文字不得换行。
 
 ## 2. 页面范围
 
@@ -238,7 +225,7 @@ def main() -> int:
     parser.add_argument(
         "--ui-framework",
         default="shadcn",
-        help="UI framework preference. Supported: ant-design, shadcn. Default: shadcn.",
+        help="UI framework preference. Supported: shadcn. Default: shadcn.",
     )
     parser.add_argument(
         "--theme-source",

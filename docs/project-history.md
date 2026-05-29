@@ -52,8 +52,10 @@ The first implementation packaged that answer into `my-harness-next-action`, the
 - Recommended prompts must be standalone fenced `text` blocks.
 - Recommended prompts must be self-chaining: after naming the immediate action, they must require the executor to output the `流程执行情况一览：` 15-step table and a new copyable final prompt after finishing, so the user can keep copying the last prompt without asking next-action again.
 - `my-harness-writing-design` creates design-governance scaffolding and may call Pencil plus selected UI framework tools when available.
-- `my-harness-writing-design` supports only Ant Design and shadcn/ui: no explicit preference means shadcn/ui default style; explicit Ant Design preference selects the Ant Design template; other UI framework preferences are refused.
-- For zero-to-one Admin Console work, `my-harness-writing-design` defaults Ant Design projects to Ant Design Pro layout/style, and shadcn/ui projects to tweakcn theme/style.
+- From `v1.1.0`, `my-harness-writing-design` no longer uses the Ant Design template. New Admin Console design baselines use shadcn/ui with tweakcn as the default style reference.
+- Unsupported UI framework preferences, including Ant Design, Material UI, Chakra UI, Arco Design, Element Plus, Bootstrap, Tailwind UI, Radix-only, and custom large design systems, are refused by this skill instead of being silently mapped.
+- From `v1.1.0`, the shadcn/ui design baseline is an executable Admin Console UI checklist: it covers `AppShell`, sidebar hierarchy, PageHeader, FilterBar, DataTable column stability, long ID handling, Dialog / Sheet / detail-page selection, form errors, state coverage, responsive checks, accessibility, design review, and Playwright QA.
+- Button rules are part of the design baseline: list pages or genuinely narrow compact layouts may use icon-only buttons; icon-only buttons require accessible labels and tooltip/title; all other buttons use icon + text; button labels must not wrap.
 - Theme colors, websites, logos, screenshots, or brand assets must be parsed into safe admin-console theme tokens instead of copied as marketing-page visuals.
 - `my-harness-autopilot-slice` is only for small, bounded work after the Discovery / Brainstorm gate is finalized.
 - Autopilot loops `design-review`, `qa`, and `review` until clear, accepted, blocked, or 10 iterations.

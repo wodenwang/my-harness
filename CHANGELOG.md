@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0 - 2026-05-29
+
+- Retired the `my-harness-writing-design` Ant Design template; new Admin Console design baselines now use shadcn/ui + tweakcn only.
+- Expanded the shadcn/ui Admin Console `DESIGN.md` baseline with executable UI rules for AppShell layout, sidebar navigation, DataTable columns, long IDs, Dialog/Sheet/detail-page selection, form errors, state coverage, responsive checks, accessibility, design review, and Playwright QA.
+- Added design baseline button rules: list pages or narrow compact areas may use icon-only buttons, other buttons use icon + text, icon-only buttons require accessible labels and tooltip/title, and button labels must not wrap.
+- Reformatted `my-harness-next-action` prompt templates into readable plain-text paragraphs.
+- Updated installer defaults to `v1.1.0`.
+
 ## 1.0.6 - 2026-05-29
 
 - Required `my-harness-next-action` recommended prompts to be self-chaining: after the next action is executed, the executor must output the 15-step `流程执行情况一览：` table and another copyable final prompt.

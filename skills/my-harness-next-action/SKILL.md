@@ -120,7 +120,9 @@ Use this shape:
 ```text
 请使用 ...
 
-执行完毕后，请按照 my-harness 规定的流程输出 `流程执行情况一览：` 15 步进度表，并在末尾继续给出下一步可直接复制执行的 `推荐提示词`。这个末尾提示词必须同时包含本句要求，让用户后续只需要复制末尾提示词继续推进，不需要重新询问 next action。
+执行完毕后，请按照 my-harness 规定的流程输出 `流程执行情况一览：` 15 步进度表，并在末尾继续给出下一步可直接复制执行的 `推荐提示词`。
+
+这个末尾提示词必须同时包含本句要求，让用户后续只需要复制末尾提示词继续推进，不需要重新询问 next action。
 ```
 
 注意：
@@ -143,34 +145,156 @@ The recommended prompt must be easy to copy in one action:
 - Resolve bracketed placeholders from project evidence when possible.
 - If two prompt variants are genuinely needed, use two separate `text` code blocks with short labels outside the blocks.
 - The prompt itself must be self-chaining: besides naming the immediate next harness action, it must require the executor to output the `流程执行情况一览：` 15-step progress table after finishing and to place the next copyable `推荐提示词` at the end.
-- The final sentence of every recommended prompt must preserve this handoff requirement so the user can keep copying the last prompt after each step without asking `my-harness-next-action` again.
+- Format the prompt as readable plain text with short paragraphs and line breaks. Do not add complex Markdown structure, headings, bold text, tables, or nested bullets inside the prompt block.
+- The final paragraph of every recommended prompt must preserve this handoff requirement so the user can keep copying the last prompt after each step without asking `my-harness-next-action` again.
 - Use this exact suffix unless the SOP is already closed:
 
 ```text
-执行完毕后，请按照 my-harness 规定的流程输出 `流程执行情况一览：` 15 步进度表，并在末尾继续给出下一步可直接复制执行的 `推荐提示词`。这个末尾提示词必须同时包含本句要求，让用户后续只需要复制末尾提示词继续推进，不需要重新询问 next action。
+执行完毕后，请按照 my-harness 规定的流程输出 `流程执行情况一览：` 15 步进度表，并在末尾继续给出下一步可直接复制执行的 `推荐提示词`。
+
+这个末尾提示词必须同时包含本句要求，让用户后续只需要复制末尾提示词继续推进，不需要重新询问 next action。
 ```
 
 ## Prompt Templates
 
 Replace bracketed fields before use.
 
-| Next step | Suggested prompt |
-| -: | - |
-| 1 | `请执行 Discovery / Brainstorm gate 帮我澄清 [项目/版本/功能]：如果还不确定是否值得做、用户是谁或范围多大，默认使用 gstack /office-hours；如果目标和价值已经明确、需要候选方案或 spec 收敛，使用 Superpowers brainstorming。输出目标用户、核心问题、约束、最小可行切片、候选方案、是否值得做，以及后续 plan-design-review 和 plan-eng-review 需要挑战的问题。注意：brainstorming 即便产出前后端实现方案，也只是候选输入，除非需求极其简单，否则下一步不得直接进入 writing-plans。` |
-| 2 | `请使用 gstack /plan-design-review 审视 [项目/功能] 的早期产品、交互和前端方案，指出关键体验风险、信息架构、主路径、空/错/加载状态，并给出进入 Pencil 原型前的修改建议。若上一步使用了 Superpowers brainstorming，请重新挑战其中的方案，不要把 brainstorm 输出当作已批准设计。` |
-| 3 | `请使用 Pencil App 为 [项目/功能] 产出 shadcn/ui 风格原型，保存 .pen 源文件、导出关键页面截图，并写一份简短设计说明到 design/。` |
-| 4 | `请使用 gstack /plan-design-review 审查 design/ 中的 Pencil 原型和截图，按阻塞/重要/可选分类给出问题，并迭代到没有关键设计阻塞。` |
-| 5 | `请使用 gstack /plan-eng-review 评审 [项目/功能] 的工程方案，锁定架构、数据流、边界条件、测试策略、性能风险、权限/安全边界和发布风险。` |
-| 6 | `请使用 Superpowers writing-plans 为 [项目/功能] 生成 IMPLEMENTATION_PLAN.md，包含明确文件路径、任务拆分、测试命令、预期输出和完成标准。` |
-| 7 | `请使用 Superpowers executing-plans 或 subagent-driven-development 实现 IMPLEMENTATION_PLAN.md 的第一个 vertical slice：如果任务强耦合或文件边界不清晰，用 executing-plans；如果已拆成可并行、边界清晰、互不踩代码的任务，用 subagent-driven-development。无论哪种方式，都只完成第一个 vertical slice，要求可运行、可验证、端到端闭环，不展开后续切片。` |
-| 8 | `请使用 Superpowers verification-before-completion 对当前 vertical slice 做完成门禁，运行新鲜的测试/构建/lint/手动验证，并整理证据；没有证据不要声称完成。` |
-| 9 | `请优先使用 gstack /browse 验证当前实现，覆盖关键页面、主路径、空/错/加载状态和桌面/移动视口；如果需要可视化实时观察、侧边栏活动流或人工跟看操作过程，补充使用 gstack open-gstack-browser；记录 console/network 问题、保留截图，并在需要脚本化回归时补 Playwright 检查。` |
-| 10 | `请使用 gstack /design-review 对已实现界面做视觉和交互 QA，重点检查层级、间距、响应式、文案、状态和可访问性，并修复高优先级问题。` |
-| 11 | `请使用 gstack /qa 对当前功能做系统化功能 QA，按风险优先级记录问题、修复、重新验证，并输出可复核结果。` |
-| 12 | `请使用 gstack /review 做落地前代码审查，检查 diff 风险、测试缺口、数据/权限/安全边界和可维护性问题，先列 finding 再给总结。` |
-| 13 | `请做 Git 收口：检查 git status、diff、未提交/未 push/未 pull 状态，整理提交边界和发布材料；不要在未获授权时 push、merge 或 release。` |
-| 14 | `请使用 gstack /ship 做最终收口：整理 WIP、确认 diff、运行必要验证、准备提交/版本/CHANGELOG/发布说明，并按项目规则处理 push/PR；需要授权的动作先确认。` |
-| 15 | `请使用 gstack /land-and-deploy 在获得授权后完成合并、release、tag、部署等待和线上健康验证；如果是 Docker 部署，还要构建、tag 并上传镜像后做 canary。` |
+Step 1:
+
+```text
+请执行 Discovery / Brainstorm gate，帮我澄清 [项目/版本/功能]。
+
+如果还不确定是否值得做、用户是谁或范围多大，默认使用 gstack /office-hours。
+如果目标和价值已经明确、需要候选方案或 spec 收敛，使用 Superpowers brainstorming。
+
+请输出目标用户、核心问题、约束、最小可行切片、候选方案、是否值得做，以及后续 plan-design-review 和 plan-eng-review 需要挑战的问题。
+
+注意：brainstorming 即便产出前后端实现方案，也只是候选输入。除非需求极其简单，否则下一步不得直接进入 writing-plans。
+```
+
+Step 2:
+
+```text
+请使用 gstack /plan-design-review 审视 [项目/功能] 的早期产品、交互和前端方案。
+
+重点指出关键体验风险、信息架构、主路径、空/错/加载状态，并给出进入 Pencil 原型前的修改建议。
+
+若上一步使用了 Superpowers brainstorming，请重新挑战其中的方案，不要把 brainstorm 输出当作已批准设计。
+```
+
+Step 3:
+
+```text
+请使用 Pencil App 为 [项目/功能] 产出 shadcn/ui 风格原型。
+
+保存 .pen 源文件，导出关键页面截图，并写一份简短设计说明到 design/。
+```
+
+Step 4:
+
+```text
+请使用 gstack /plan-design-review 审查 design/ 中的 Pencil 原型和截图。
+
+按阻塞、重要、可选分类给出问题，并迭代到没有关键设计阻塞。
+```
+
+Step 5:
+
+```text
+请使用 gstack /plan-eng-review 评审 [项目/功能] 的工程方案。
+
+锁定架构、数据流、边界条件、测试策略、性能风险、权限/安全边界和发布风险。
+```
+
+Step 6:
+
+```text
+请使用 Superpowers writing-plans 为 [项目/功能] 生成 IMPLEMENTATION_PLAN.md。
+
+计划必须包含明确文件路径、任务拆分、测试命令、预期输出和完成标准。
+```
+
+Step 7:
+
+```text
+请使用 Superpowers executing-plans 或 subagent-driven-development，实现 IMPLEMENTATION_PLAN.md 的第一个 vertical slice。
+
+如果任务强耦合或文件边界不清晰，用 executing-plans。
+如果已拆成可并行、边界清晰、互不踩代码的任务，用 subagent-driven-development。
+
+无论哪种方式，都只完成第一个 vertical slice。要求可运行、可验证、端到端闭环，不展开后续切片。
+```
+
+Step 8:
+
+```text
+请使用 Superpowers verification-before-completion 对当前 vertical slice 做完成门禁。
+
+运行新鲜的测试、构建、lint 或手动验证，并整理证据。没有证据不要声称完成。
+```
+
+Step 9:
+
+```text
+请优先使用 gstack /browse 验证当前实现。
+
+覆盖关键页面、主路径、空/错/加载状态和桌面/移动视口。
+
+如果需要可视化实时观察、侧边栏活动流或人工跟看操作过程，补充使用 gstack open-gstack-browser。
+记录 console/network 问题，保留截图，并在需要脚本化回归时补 Playwright 检查。
+```
+
+Step 10:
+
+```text
+请使用 gstack /design-review 对已实现界面做视觉和交互 QA。
+
+重点检查层级、间距、响应式、文案、状态和可访问性，并修复高优先级问题。
+```
+
+Step 11:
+
+```text
+请使用 gstack /qa 对当前功能做系统化功能 QA。
+
+按风险优先级记录问题、修复、重新验证，并输出可复核结果。
+```
+
+Step 12:
+
+```text
+请使用 gstack /review 做落地前代码审查。
+
+检查 diff 风险、测试缺口、数据/权限/安全边界和可维护性问题。先列 finding，再给总结。
+```
+
+Step 13:
+
+```text
+请做 Git 收口。
+
+检查 git status、diff、未提交、未 push、未 pull 状态，整理提交边界和发布材料。
+
+不要在未获授权时 push、merge 或 release。
+```
+
+Step 14:
+
+```text
+请使用 gstack /ship 做最终收口。
+
+整理 WIP、确认 diff、运行必要验证、准备提交、版本、CHANGELOG 和发布说明，并按项目规则处理 push/PR。
+
+需要授权的动作先确认。
+```
+
+Step 15:
+
+```text
+请使用 gstack /land-and-deploy 在获得授权后完成合并、release、tag、部署等待和线上健康验证。
+
+如果是 Docker 部署，还要构建、tag 并上传镜像后做 canary。
+```
 
 ## Common Mistakes
 
