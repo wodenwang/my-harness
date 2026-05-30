@@ -47,6 +47,21 @@ After a Superpowers `brainstorming` gate, the next required actions are:
 
 Mark steps 2 and 5 as `⏭️ 前置无需进行` only when the current request is extremely simple, has no meaningful product/interaction ambiguity, and has no engineering architecture or risk decisions to challenge. In that case, state the skip reason explicitly in the table. "The brainstorm already proposed an implementation plan" is not a valid skip reason.
 
+### Codex-Safe Gstack Gate Rule
+
+Codex cannot reliably handle `AskUserQuestion` inside several gstack skills. Whenever the recommended next action uses gstack `/office-hours`, `/plan-design-review`, `/plan-eng-review`, `/design-review`, `/qa`, `/review`, `/ship`, `/land-and-deploy`, or any other gstack skill that may ask the user interactively, the recommended prompt must include the following guard:
+
+```text
+Codex 兼容要求：
+按 gstack 流程执行当前任务，但不要进入 Plan mode，也不要调用 AskUserQuestion、request_user_input 或任何交互式选择工具。
+
+所有交互门禁都改为 Markdown 决策门禁，使用 D1/D2/D3 编号。每个决策项用表格呈现选项、推荐项、pros、cons 和影响范围。
+
+在需要我决策时停止等待，不要继续进入下一阶段。除非我明确要求，否则只读分析，不修改项目文件。输出必须结构化、清晰、适合复制到文档。
+```
+
+If a gstack step reaches a decision point, the next-action result must treat that decision as the current stopping point instead of continuing the harness loop.
+
 ## Status Icons
 
 Use these exact icons in the overview table:
@@ -170,6 +185,13 @@ Step 1:
 请输出目标用户、核心问题、约束、最小可行切片、候选方案、是否值得做，以及后续 plan-design-review 和 plan-eng-review 需要挑战的问题。
 
 注意：brainstorming 即便产出前后端实现方案，也只是候选输入。除非需求极其简单，否则下一步不得直接进入 writing-plans。
+
+Codex 兼容要求：
+如果使用 gstack /office-hours，按 gstack 流程执行当前任务，但不要进入 Plan mode，也不要调用 AskUserQuestion、request_user_input 或任何交互式选择工具。
+
+所有交互门禁都改为 Markdown 决策门禁，使用 D1/D2/D3 编号。每个决策项用表格呈现选项、推荐项、pros、cons 和影响范围。
+
+在需要我决策时停止等待，不要继续进入下一阶段。除非我明确要求，否则只读分析，不修改项目文件。输出必须结构化、清晰、适合复制到文档。
 ```
 
 Step 2:
@@ -180,6 +202,13 @@ Step 2:
 重点指出关键体验风险、信息架构、主路径、空/错/加载状态，并给出进入 Pencil 原型前的修改建议。
 
 若上一步使用了 Superpowers brainstorming，请重新挑战其中的方案，不要把 brainstorm 输出当作已批准设计。
+
+Codex 兼容要求：
+按 gstack 流程执行当前任务，但不要进入 Plan mode，也不要调用 AskUserQuestion、request_user_input 或任何交互式选择工具。
+
+所有交互门禁都改为 Markdown 决策门禁，使用 D1/D2/D3 编号。每个决策项用表格呈现选项、推荐项、pros、cons 和影响范围。
+
+在需要我决策时停止等待，不要继续进入下一阶段。除非我明确要求，否则只读分析，不修改项目文件。输出必须结构化、清晰、适合复制到文档。
 ```
 
 Step 3:
@@ -196,6 +225,13 @@ Step 4:
 请使用 gstack /plan-design-review 审查 design/ 中的 Pencil 原型和截图。
 
 按阻塞、重要、可选分类给出问题，并迭代到没有关键设计阻塞。
+
+Codex 兼容要求：
+按 gstack 流程执行当前任务，但不要进入 Plan mode，也不要调用 AskUserQuestion、request_user_input 或任何交互式选择工具。
+
+所有交互门禁都改为 Markdown 决策门禁，使用 D1/D2/D3 编号。每个决策项用表格呈现选项、推荐项、pros、cons 和影响范围。
+
+在需要我决策时停止等待，不要继续进入下一阶段。除非我明确要求，否则只读分析，不修改项目文件。输出必须结构化、清晰、适合复制到文档。
 ```
 
 Step 5:
@@ -204,6 +240,13 @@ Step 5:
 请使用 gstack /plan-eng-review 评审 [项目/功能] 的工程方案。
 
 锁定架构、数据流、边界条件、测试策略、性能风险、权限/安全边界和发布风险。
+
+Codex 兼容要求：
+按 gstack 流程执行当前任务，但不要进入 Plan mode，也不要调用 AskUserQuestion、request_user_input 或任何交互式选择工具。
+
+所有交互门禁都改为 Markdown 决策门禁，使用 D1/D2/D3 编号。每个决策项用表格呈现选项、推荐项、pros、cons 和影响范围。
+
+在需要我决策时停止等待，不要继续进入下一阶段。除非我明确要求，否则只读分析，不修改项目文件。输出必须结构化、清晰、适合复制到文档。
 ```
 
 Step 6:
@@ -242,6 +285,13 @@ Step 9:
 
 如果需要可视化实时观察、侧边栏活动流或人工跟看操作过程，补充使用 gstack open-gstack-browser。
 记录 console/network 问题，保留截图，并在需要脚本化回归时补 Playwright 检查。
+
+Codex 兼容要求：
+如果任何 gstack 浏览器验证步骤需要用户决策，按 gstack 流程执行当前任务，但不要进入 Plan mode，也不要调用 AskUserQuestion、request_user_input 或任何交互式选择工具。
+
+所有交互门禁都改为 Markdown 决策门禁，使用 D1/D2/D3 编号。每个决策项用表格呈现选项、推荐项、pros、cons 和影响范围。
+
+在需要我决策时停止等待，不要继续进入下一阶段。除非我明确要求，否则只读分析，不修改项目文件。输出必须结构化、清晰、适合复制到文档。
 ```
 
 Step 10:
@@ -250,6 +300,13 @@ Step 10:
 请使用 gstack /design-review 对已实现界面做视觉和交互 QA。
 
 重点检查层级、间距、响应式、文案、状态和可访问性，并修复高优先级问题。
+
+Codex 兼容要求：
+按 gstack 流程执行当前任务，但不要进入 Plan mode，也不要调用 AskUserQuestion、request_user_input 或任何交互式选择工具。
+
+所有交互门禁都改为 Markdown 决策门禁，使用 D1/D2/D3 编号。每个决策项用表格呈现选项、推荐项、pros、cons 和影响范围。
+
+在需要我决策时停止等待，不要继续进入下一阶段。除非我明确要求，否则只读分析，不修改项目文件。输出必须结构化、清晰、适合复制到文档。
 ```
 
 Step 11:
@@ -258,6 +315,13 @@ Step 11:
 请使用 gstack /qa 对当前功能做系统化功能 QA。
 
 按风险优先级记录问题、修复、重新验证，并输出可复核结果。
+
+Codex 兼容要求：
+按 gstack 流程执行当前任务，但不要进入 Plan mode，也不要调用 AskUserQuestion、request_user_input 或任何交互式选择工具。
+
+所有交互门禁都改为 Markdown 决策门禁，使用 D1/D2/D3 编号。每个决策项用表格呈现选项、推荐项、pros、cons 和影响范围。
+
+在需要我决策时停止等待，不要继续进入下一阶段。除非我明确要求，否则只读分析，不修改项目文件。输出必须结构化、清晰、适合复制到文档。
 ```
 
 Step 12:
@@ -266,6 +330,13 @@ Step 12:
 请使用 gstack /review 做落地前代码审查。
 
 检查 diff 风险、测试缺口、数据/权限/安全边界和可维护性问题。先列 finding，再给总结。
+
+Codex 兼容要求：
+按 gstack 流程执行当前任务，但不要进入 Plan mode，也不要调用 AskUserQuestion、request_user_input 或任何交互式选择工具。
+
+所有交互门禁都改为 Markdown 决策门禁，使用 D1/D2/D3 编号。每个决策项用表格呈现选项、推荐项、pros、cons 和影响范围。
+
+在需要我决策时停止等待，不要继续进入下一阶段。除非我明确要求，否则只读分析，不修改项目文件。输出必须结构化、清晰、适合复制到文档。
 ```
 
 Step 13:
@@ -286,6 +357,13 @@ Step 14:
 整理 WIP、确认 diff、运行必要验证、准备提交、版本、CHANGELOG 和发布说明，并按项目规则处理 push/PR。
 
 需要授权的动作先确认。
+
+Codex 兼容要求：
+按 gstack 流程执行当前任务，但不要进入 Plan mode，也不要调用 AskUserQuestion、request_user_input 或任何交互式选择工具。
+
+所有交互门禁都改为 Markdown 决策门禁，使用 D1/D2/D3 编号。每个决策项用表格呈现选项、推荐项、pros、cons 和影响范围。
+
+在需要我决策时停止等待，不要继续进入下一阶段。除非我明确要求，否则只读分析，不修改项目文件。输出必须结构化、清晰、适合复制到文档。
 ```
 
 Step 15:
@@ -294,6 +372,13 @@ Step 15:
 请使用 gstack /land-and-deploy 在获得授权后完成合并、release、tag、部署等待和线上健康验证。
 
 如果是 Docker 部署，还要构建、tag 并上传镜像后做 canary。
+
+Codex 兼容要求：
+按 gstack 流程执行当前任务，但不要进入 Plan mode，也不要调用 AskUserQuestion、request_user_input 或任何交互式选择工具。
+
+所有交互门禁都改为 Markdown 决策门禁，使用 D1/D2/D3 编号。每个决策项用表格呈现选项、推荐项、pros、cons 和影响范围。
+
+在需要我决策时停止等待，不要继续进入下一阶段。除非我明确要求，否则只读分析，不修改项目文件。输出必须结构化、清晰、适合复制到文档。
 ```
 
 ## Common Mistakes
@@ -301,6 +386,8 @@ Step 15:
 - Recommending step 1 because the conversation lacks context while the repo has artifacts. Inspect the repo first.
 - Treating Superpowers `brainstorming` output as approved design or as permission to skip directly to `writing-plans`. Step 1 produces candidate input; later `plan-design-review`, Pencil review when needed, and `plan-eng-review` still challenge it unless the request is extremely simple.
 - Marking `plan-design-review` or `plan-eng-review` unnecessary after `brainstorming` because the brainstorm already proposed frontend/backend implementation details.
+- Recommending a gstack prompt in Codex without the Codex-safe Markdown decision-gate guard.
+- Continuing past a gstack decision point instead of stopping with `D1` / `D2` / `D3` Markdown decision tables.
 - Treating a written plan as implementation. Step 6 does not imply step 7.
 - Using `subagent-driven-development` before `IMPLEMENTATION_PLAN.md` has clear task boundaries, ownership, and non-overlapping write scopes.
 - Treating implementation as completion without fresh verification. Step 7 must flow into step 8.

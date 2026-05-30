@@ -64,3 +64,16 @@
 如果第 1 步使用了 Superpowers `brainstorming`，完成该门禁后不能直接进入 Superpowers `writing-plans`。除非当前需求极其简单、简单到无需设计评审和工程评审，否则必须先使用 `plan-design-review` 挑战产品、交互和前端方案，必要时使用 Pencil 策划原型，再使用 `plan-eng-review` 挑战工程方案，最后才能进入 `writing-plans`。
 
 即便 Superpowers `brainstorming` 已经产出前后端实现方案，也只把它当作候选输入，后续仍要用 `plan-design-review` 和 `plan-eng-review` 重新挑战并打磨最佳方案。
+
+## Codex-safe gstack 门禁
+
+Codex 当前不能稳定承接 gstack 某些 skill 内部的 `AskUserQuestion` 交互。通过 `my-harness` 调用或推荐调用 gstack `/office-hours`、`/plan-design-review`、`/plan-eng-review`、`/design-review`、`/qa`、`/review`、`/ship`、`/land-and-deploy` 或其他可能使用 `AskUserQuestion` 的 skill 时，必须使用 Markdown 决策门禁：
+
+- 按 gstack 流程分析当前任务，但不要进入 Plan mode。
+- 不要调用 `AskUserQuestion`、`request_user_input` 或任何交互式选择工具。
+- 所有交互门禁改为 Markdown 决策门禁。
+- 决策项使用 `D1`、`D2`、`D3` 编号。
+- 每个决策项用表格呈现选项、推荐项、pros、cons、影响范围。
+- 在需要用户决策时停止等待，不继续执行后续阶段。
+- 除非用户明确要求修改文件，否则只读分析，不修改项目文件。
+- 输出必须结构化、清晰、适合复制到文档。

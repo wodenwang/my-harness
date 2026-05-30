@@ -13,13 +13,13 @@
 macOS / Linux:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wodenwang/my-harness/v1.1.0/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/wodenwang/my-harness/v1.1.1/scripts/install.sh | bash
 ```
 
 Windows PowerShell:
 
 ```powershell
-irm https://raw.githubusercontent.com/wodenwang/my-harness/v1.1.0/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/wodenwang/my-harness/v1.1.1/scripts/install.ps1 | iex
 ```
 
 默认安装到：
@@ -66,11 +66,11 @@ irm https://raw.githubusercontent.com/wodenwang/my-harness/main/scripts/install.
 更新到指定 ref:
 
 ```bash
-MY_HARNESS_REF=v1.1.0 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
+MY_HARNESS_REF=v1.1.1 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
 ```
 
 ```powershell
-$env:MY_HARNESS_REF = "v1.1.0"
+$env:MY_HARNESS_REF = "v1.1.1"
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
 ```
 
@@ -85,6 +85,18 @@ $env:MY_HARNESS_REF = "v1.1.0"
 | `my-harness-writing-design` | 初始化 `DESIGN.md`、`design/`、Pencil starter；Admin Console 统一使用 shadcn/ui + tweakcn，并生成包含布局、导航、表格、按钮、状态、响应式和 QA 门禁的后台 UI 规范。 |
 | `my-harness-autopilot-slice` | 在 Discovery / Brainstorm gate 已定稿后推进一个小切片，并在人工门禁处停止。 |
 | `my-harness-upgrade` | 检查或更新已安装插件，并回读版本、备份和 skill 入口。 |
+
+## Codex 兼容门禁
+
+Codex 当前不能稳定承接 gstack 部分 skill 内部的 `AskUserQuestion`。通过 `my-harness` 调用或推荐调用 gstack `/office-hours`、`/plan-design-review`、`/plan-eng-review`、`/design-review`、`/qa`、`/review`、`/ship`、`/land-and-deploy` 或其他可能交互提问的 skill 时，提示词会要求：
+
+- 不进入 Plan mode。
+- 不调用 `AskUserQuestion`、`request_user_input` 或交互式选择工具。
+- 把交互门禁改成 Markdown 决策门禁。
+- 决策项使用 `D1`、`D2`、`D3` 编号，并用表格呈现选项、推荐项、pros、cons 和影响范围。
+- 需要用户决策时停止等待。
+- 除非用户明确要求，否则只读分析，不修改项目文件。
+- 输出保持结构化、清晰、适合复制到文档。
 
 常用提示词：
 
@@ -137,6 +149,13 @@ $env:MY_HARNESS_REF = "v1.1.0"
 远端 push、tag、GitHub Release 或发布动作必须有明确授权。
 
 ## 版本历史
+
+### v1.1.1
+
+- 新增 Codex-safe gstack 门禁契约：通过 harness 推荐 gstack skill 时，不进入 Plan mode，不调用 `AskUserQuestion` / `request_user_input`，改用 Markdown 决策门禁。
+- `my-harness-next-action` 的 gstack 提示词模板内置 `D1` / `D2` / `D3` 决策表、推荐项、pros/cons、影响范围、停止等待和默认只读约束。
+- `my-harness-autopilot-slice` 遇到 gstack 决策点时停止并交给用户选择，不继续交互式推进。
+- `scripts/install.sh` 和 `scripts/install.ps1` 默认稳定版本更新为 `v1.1.1`。
 
 ### v1.1.0
 

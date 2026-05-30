@@ -44,6 +44,19 @@ When step 1 used Superpowers `brainstorming`, completing that gate does not make
 
 Even if the brainstorming output already includes frontend and backend implementation ideas, treat them as candidate inputs. Use `plan-design-review` and `plan-eng-review` to challenge and improve the product, frontend, and engineering plan before writing `IMPLEMENTATION_PLAN.md`.
 
+## Codex-Safe Gstack Gate Rule
+
+Codex cannot reliably handle `AskUserQuestion` inside several gstack skills. Whenever this harness routes to or recommends gstack `/office-hours`, `/plan-design-review`, `/plan-eng-review`, `/design-review`, `/qa`, `/review`, `/ship`, `/land-and-deploy`, or any other gstack skill that may ask the user interactively:
+
+- Follow the gstack reasoning flow, but do not enter Plan mode.
+- Do not call `AskUserQuestion`, `request_user_input`, or any interactive choice tool.
+- Convert every interaction gate into a Markdown decision gate.
+- Number decisions as `D1`, `D2`, `D3`.
+- Present each decision in a table with options, recommended option, pros, cons, and scope/impact.
+- Stop and wait when the user must decide; do not continue into the next stage.
+- Unless the user explicitly asks for edits, keep the step read-only and do not modify project files.
+- Make the output structured, clear, and suitable for copying into documentation.
+
 ## Extension Rule
 
 Add a new harness skill when the helper has a distinct job, trigger, artifacts, and completion check. Do not merge unrelated phases into one skill just because they share the harness name.
