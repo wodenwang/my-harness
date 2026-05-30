@@ -47,6 +47,7 @@ The first implementation packaged that answer into `my-harness-next-action`, the
 - Step 1 output is a candidate input for later review, not an approved design. `plan-design-review` and `plan-eng-review` still challenge the product, interaction, and engineering assumptions.
 - When step 1 used Superpowers `brainstorming`, the next action cannot jump directly to Superpowers `writing-plans`. The workflow must run `plan-design-review` for product/interaction/frontend planning, use Pencil prototype planning when needed, and run `plan-eng-review` for engineering planning before step 6, unless the request is extremely simple enough that both reviews are unnecessary.
 - Even if Superpowers `brainstorming` already produced frontend and backend implementation ideas, those ideas remain candidate inputs for `plan-design-review` and `plan-eng-review`, not approved plans.
+- From `v1.1.1`, all harness-generated gstack prompts must be Codex-safe: do not enter Plan mode, do not call `AskUserQuestion` or `request_user_input`, convert interaction points into Markdown decision gates, number decisions as `D1` / `D2` / `D3`, show options/recommendation/pros/cons/impact in tables, stop when the user must decide, and stay read-only unless the user explicitly asks for file edits.
 - If the SOP is already closed, it must say `当前 SOP 已闭环。` and provide the full status table instead of starting a new Discovery / Brainstorm loop.
 - The next-action table must include all 15 steps and use the agreed emoji status markers.
 - Recommended prompts must be standalone fenced `text` blocks.

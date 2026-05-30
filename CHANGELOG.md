@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.1 - 2026-05-30
+
+- Added a Codex-safe gstack gate contract for harness-recommended gstack skills that may use `AskUserQuestion`.
+- Updated `my-harness-next-action` gstack prompt templates to require Markdown decision gates with `D1` / `D2` / `D3`, recommendation tables, no Plan mode, no `AskUserQuestion` / `request_user_input`, read-only behavior unless explicitly authorized, and stop-on-decision handoff.
+- Updated `my-harness-autopilot-slice` to stop at gstack decision points and hand off with Markdown decision tables instead of continuing interactively.
+- Documented the Codex compatibility rule in governance, router, README, and project history.
+- Updated installer defaults to `v1.1.1`.
+
 ## 1.1.0 - 2026-05-29
 
 - Retired the `my-harness-writing-design` Ant Design template; new Admin Console design baselines now use shadcn/ui + tweakcn only.

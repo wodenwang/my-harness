@@ -43,6 +43,21 @@ Do not skip gates. Do not compress multiple harness steps into one undocumented 
 
 If the Discovery / Brainstorm evidence came from Superpowers `brainstorming`, do not treat that as permission to start at `writing-plans` or implementation. The loop must still pass through `plan-design-review`, Pencil planning when needed, and `plan-eng-review` before `writing-plans`, unless the slice is extremely simple and the skip reasons for both review gates are explicit.
 
+## Codex-Safe Gstack Gate Rule
+
+Codex cannot reliably handle `AskUserQuestion` inside several gstack skills. When autopilot reaches gstack `/office-hours`, `/plan-design-review`, `/plan-eng-review`, `/design-review`, `/qa`, `/review`, `/ship`, `/land-and-deploy`, or any other gstack skill that may ask the user interactively:
+
+- Follow the gstack reasoning flow, but do not enter Plan mode.
+- Do not call `AskUserQuestion`, `request_user_input`, or any interactive choice tool.
+- Convert every interaction gate into a Markdown decision gate.
+- Number decisions as `D1`, `D2`, `D3`.
+- Present each decision in a table with options, recommended option, pros, cons, and scope/impact.
+- Stop and wait when the user must decide; do not continue into the next harness step.
+- Unless the user explicitly asks for edits, keep the step read-only and do not modify project files.
+- Make the output structured, clear, and suitable for copying into documentation.
+
+If a gstack step needs a human decision, that Markdown decision gate is the autopilot stopping point. Mark the relevant row as `🎯 当前下一步`, include the decision table under `需要人工决定`, and provide a copyable prompt for continuing after the user chooses.
+
 ## Step-Specific Rules
 
 ### Design And Pencil Gates
@@ -109,6 +124,7 @@ Stop immediately and hand off when:
 - Discovery / Brainstorm evidence is missing
 - scope is too large or ambiguous
 - Pencil/design confirmation is needed
+- a gstack step reaches a decision point that would normally use `AskUserQuestion`
 - a required tool/credential/service is unavailable
 - the next action requires explicit user authorization
 - a review loop reaches 10 iterations
@@ -209,6 +225,8 @@ The slice is complete only when:
 - Running autopilot on a large, unclear version.
 - Treating Pencil starter files as approved design.
 - Letting review/QA loops run indefinitely.
+- Entering Plan mode or using `AskUserQuestion` / `request_user_input` during a gstack gate in Codex.
+- Continuing past a Markdown decision gate before the user chooses a `D1` / `D2` / `D3` option.
 - Using the older `关键步骤汇总` table instead of the `my-harness-next-action` style `流程执行情况一览`.
 - Expanding the final summary into separate numeric columns for loop statistics. Keep those details in `证据/原因`.
 - Omitting loop statistics from `证据/原因` when stopping early or completing successfully.
