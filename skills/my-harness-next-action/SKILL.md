@@ -32,6 +32,7 @@ If evidence conflicts, trust newest concrete artifacts over older plans. If a st
 5. Mark every canonical step with a status icon before answering.
 6. If all applicable steps are complete, report that the SOP is closed and do not recommend restarting the Discovery / Brainstorm gate.
 7. Include no more than one optional catch-up action unless a blocker makes it necessary.
+8. Treat `my-harness-canary` as an optional direct-call follow-up after step 15, not as a required step for SOP closure.
 
 ### Brainstorm Gate Rule
 
@@ -49,7 +50,7 @@ Mark steps 2 and 5 as `⏭️ 前置无需进行` only when the current request 
 
 ### Codex-Safe Gstack Gate Rule
 
-Codex cannot reliably handle `AskUserQuestion` inside several gstack skills. Whenever the recommended next action uses gstack `/office-hours`, `/plan-design-review`, `/plan-eng-review`, `/design-review`, `/qa`, `/review`, `/ship`, `/land-and-deploy`, or any other gstack skill that may ask the user interactively, the recommended prompt must include the following guard:
+Codex cannot reliably handle `AskUserQuestion` inside several gstack skills. Whenever the recommended next action uses gstack `/office-hours`, `/plan-design-review`, `/plan-eng-review`, `/design-review`, `/qa`, `/review`, `/ship`, `/land-and-deploy`, `/canary`, or any other gstack skill that may ask the user interactively, the recommended prompt must include the following guard:
 
 ```text
 Codex 兼容要求：
@@ -108,7 +109,9 @@ If the evidence shows all applicable SOP steps are complete, or the project has 
 | 12 | gstack `/review` | pre-landing diff review with risks/test gaps addressed |
 | 13 | Git closeout | clean intended diff, commit boundary, status/remote state known |
 | 14 | gstack `/ship` | release/PR/tag/materials prepared according to project rules |
-| 15 | gstack `/land-and-deploy` | authorized merge/release/deploy plus canary or health check |
+| 15 | gstack `/land-and-deploy` | authorized merge/release/deploy plus required production health check |
+
+Optional post-closeout action: `my-harness-canary` runs gstack `/canary` against a live URL after step 15. It is a direct-call skill, not a canonical table row. It observes production or staging, writes canary evidence, and registers confirmed findings as GitHub issues without editing code.
 
 ## Recommended Output
 
@@ -152,6 +155,8 @@ If the SOP is already closed, use the same overview-table format but replace the
 下一步 harness 动作：
 无。当前 SOP 已闭环。
 ```
+
+If the user asks for extra post-deploy confidence, production monitoring, or recurring checks after the SOP is closed, recommend `my-harness-canary` as an optional follow-up instead of reopening the 15-step loop.
 
 The recommended prompt must be easy to copy in one action:
 
@@ -371,7 +376,9 @@ Step 15:
 ```text
 请使用 gstack /land-and-deploy 在获得授权后完成合并、release、tag、部署等待和线上健康验证。
 
-如果是 Docker 部署，还要构建、tag 并上传镜像后做 canary。
+如果是 Docker 部署，还要构建、tag 并上传镜像，并完成部署流程要求的健康检查。
+
+如果我后续还需要独立金丝雀监控，请不要把它混入第 15 步；改为直接调用 my-harness-canary。
 
 Codex 兼容要求：
 按 gstack 流程执行当前任务，但不要进入 Plan mode，也不要调用 AskUserQuestion、request_user_input 或任何交互式选择工具。
@@ -393,3 +400,4 @@ Codex 兼容要求：
 - Treating implementation as completion without fresh verification. Step 7 must flow into step 8.
 - Skipping gstack `/browse` and design QA for UI work because automated tests passed.
 - Calling `ship`, `land`, or `deploy` without checking authorization, clean diff, release materials, and remote state.
+- Treating optional post-deploy `my-harness-canary` as a required step 16 in the canonical table.

@@ -15,11 +15,16 @@ This is the router skill for the user's personal project-delivery harness. It gr
 |---|---|
 | User is unsure where the project is in the delivery loop | `my-harness-next-action` |
 | User needs the next gstack / Superpowers / Pencil / browser verification / Git action and a prompt | `my-harness-next-action` |
+| User needs to initialize a new or mostly empty project repository with baseline governance | `my-harness-initialize-project` |
+| Project needs starter `README.md`, `AGENTS.md`, design/deployment links, and first harness handoff | `my-harness-initialize-project` |
 | Project needs design governance before UI work | `my-harness-writing-design` |
 | Project needs `DESIGN.md`, `design/`, a Pencil starter, or AGENTS design links | `my-harness-writing-design` |
 | Project needs a shadcn/ui Admin Console design baseline | `my-harness-writing-design` |
 | User wants a clear small slice to run through the whole SOP automatically after Discovery / Brainstorm gate is finalized | `my-harness-autopilot-slice` |
 | User wants to update, upgrade, version-check, or refresh the installed `my-harness` plugin from GitHub | `my-harness-upgrade` |
+| Project needs `DEPLOY.md`, versioned Docker Compose deployment governance, `install.sh` / `upgrade.sh` rules, DB init SQL, DB migrations, config migration rules, or AGENTS / CLAUDE deployment links | `my-harness-writing-deployment` |
+| User wants optional post-deploy canary monitoring on a live URL, with findings registered as GitHub issues and no fixes applied | `my-harness-canary` |
+| User wants daily, weekly, or recurring Codex-timer canary checks after deployment | `my-harness-canary` |
 | User wants to add another recurring harness helper | Create a new focused skill under this plugin, then update this routing table |
 
 ## Current Harness Loop
@@ -40,13 +45,15 @@ This is the router skill for the user's personal project-delivery harness. It gr
 14. gstack `/ship`
 15. gstack `/land-and-deploy`
 
+Optional after step 15: run `my-harness-canary` directly when the user wants post-deploy canary monitoring for a live production, staging, or preview URL. This optional follow-up is not required for SOP closure. Canary findings are recorded as GitHub issues in the monitored project; do not fix them during the canary step.
+
 When step 1 used Superpowers `brainstorming`, completing that gate does not make the work ready for Superpowers `writing-plans`. The next action must still move through `plan-design-review`, Pencil prototype planning when needed, and `plan-eng-review` before step 6, unless the current request is extremely simple enough that both design and engineering plan reviews are genuinely unnecessary.
 
 Even if the brainstorming output already includes frontend and backend implementation ideas, treat them as candidate inputs. Use `plan-design-review` and `plan-eng-review` to challenge and improve the product, frontend, and engineering plan before writing `IMPLEMENTATION_PLAN.md`.
 
 ## Codex-Safe Gstack Gate Rule
 
-Codex cannot reliably handle `AskUserQuestion` inside several gstack skills. Whenever this harness routes to or recommends gstack `/office-hours`, `/plan-design-review`, `/plan-eng-review`, `/design-review`, `/qa`, `/review`, `/ship`, `/land-and-deploy`, or any other gstack skill that may ask the user interactively:
+Codex cannot reliably handle `AskUserQuestion` inside several gstack skills. Whenever this harness routes to or recommends gstack `/office-hours`, `/plan-design-review`, `/plan-eng-review`, `/design-review`, `/qa`, `/review`, `/ship`, `/land-and-deploy`, `/canary`, or any other gstack skill that may ask the user interactively:
 
 - Follow the gstack reasoning flow, but do not enter Plan mode.
 - Do not call `AskUserQuestion`, `request_user_input`, or any interactive choice tool.

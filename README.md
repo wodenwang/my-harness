@@ -2,10 +2,13 @@
 
 `my-harness` 是一个 Codex workflow plugin，用来把个人项目交付流程固定成一组可复用 skills。它不安装 gstack、Superpowers、Pencil 或 Playwright，只负责把这些工具、项目证据和发布门禁组织成清晰路径。
 
-适合三类场景：
+适合六类场景：
 
+- 初始化空白项目或新仓库的 `README.md`、`AGENTS.md` 和第一步 harness handoff。
 - 判断项目现在推进到哪一步，下一步该做什么。
 - 初始化 UI/产品项目的设计治理和 Pencil starter。
+- 为业务项目生成 `DEPLOY.md` 部署治理文档，并链接到 `AGENTS.md` / `CLAUDE.md`。
+- 在部署完成后对线上 URL 做可选金丝雀测试，并把发现的问题登记到当前项目 GitHub issues。
 - 在线检查、安装或更新本机 `my-harness` 插件。
 
 ## 安装
@@ -13,13 +16,13 @@
 macOS / Linux:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wodenwang/my-harness/v1.1.1/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/wodenwang/my-harness/v1.2.0/scripts/install.sh | bash
 ```
 
 Windows PowerShell:
 
 ```powershell
-irm https://raw.githubusercontent.com/wodenwang/my-harness/v1.1.1/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/wodenwang/my-harness/v1.2.0/scripts/install.ps1 | iex
 ```
 
 默认安装到：
@@ -66,11 +69,11 @@ irm https://raw.githubusercontent.com/wodenwang/my-harness/main/scripts/install.
 更新到指定 ref:
 
 ```bash
-MY_HARNESS_REF=v1.1.1 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
+MY_HARNESS_REF=v1.2.0 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
 ```
 
 ```powershell
-$env:MY_HARNESS_REF = "v1.1.1"
+$env:MY_HARNESS_REF = "v1.2.0"
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
 ```
 
@@ -81,14 +84,17 @@ $env:MY_HARNESS_REF = "v1.1.1"
 | Skill | 用途 |
 |---|---|
 | `my-harness` | 路由入口，判断该使用哪个 harness helper。 |
+| `my-harness-initialize-project` | 初始化新项目或空白仓库的基础治理：`README.md`、`AGENTS.md`、设计/部署链接和第一步 harness handoff。 |
 | `my-harness-next-action` | 读取项目证据，输出 15 步 SOP 状态表和下一步提示词；提示词会要求执行完成后继续输出进度表和下一步提示词，便于只复制末尾提示词持续推进；第 1 步支持 `office-hours` 或 Superpowers `brainstorming`，但 `brainstorming` 后默认仍需经过 `plan-design-review` 和 `plan-eng-review` 才能进入 `writing-plans`。 |
 | `my-harness-writing-design` | 初始化 `DESIGN.md`、`design/`、Pencil starter；Admin Console 统一使用 shadcn/ui + tweakcn，并生成包含布局、导航、表格、按钮、状态、响应式和 QA 门禁的后台 UI 规范。 |
 | `my-harness-autopilot-slice` | 在 Discovery / Brainstorm gate 已定稿后推进一个小切片，并在人工门禁处停止。 |
 | `my-harness-upgrade` | 检查或更新已安装插件，并回读版本、备份和 skill 入口。 |
+| `my-harness-writing-deployment` | 生成项目级 `DEPLOY.md`，并链接到 `AGENTS.md` / `CLAUDE.md`；约束版本化 Docker Compose 生产部署、`install.sh` 首次安装、`upgrade.sh` 版本间升级、DB 初始化 SQL、DB DDL/数据迁移、配置迁移和版本门禁。 |
+| `my-harness-canary` | 在 15 步 SOP 完成后可选调用 gstack `/canary` 监控线上 URL；只观察和登记 GitHub issues，不修复问题；可按用户要求创建每日/周期性 Codex 定时任务。 |
 
 ## Codex 兼容门禁
 
-Codex 当前不能稳定承接 gstack 部分 skill 内部的 `AskUserQuestion`。通过 `my-harness` 调用或推荐调用 gstack `/office-hours`、`/plan-design-review`、`/plan-eng-review`、`/design-review`、`/qa`、`/review`、`/ship`、`/land-and-deploy` 或其他可能交互提问的 skill 时，提示词会要求：
+Codex 当前不能稳定承接 gstack 部分 skill 内部的 `AskUserQuestion`。通过 `my-harness` 调用或推荐调用 gstack `/office-hours`、`/plan-design-review`、`/plan-eng-review`、`/design-review`、`/qa`、`/review`、`/ship`、`/land-and-deploy`、`/canary` 或其他可能交互提问的 skill 时，提示词会要求：
 
 - 不进入 Plan mode。
 - 不调用 `AskUserQuestion`、`request_user_input` 或交互式选择工具。
@@ -105,11 +111,27 @@ Codex 当前不能稳定承接 gstack 部分 skill 内部的 `AskUserQuestion`�
 ```
 
 ```text
+请使用 my-harness-initialize-project 为当前空白项目初始化 README.md、AGENTS.md 和第一步 harness handoff。
+```
+
+```text
 为当前项目初始化设计治理，默认 shadcn/ui 后台风格。
 ```
 
 ```text
 请使用 my-harness-upgrade 检查当前 my-harness 是否有新版本，只检查不更新。
+```
+
+```text
+请使用 my-harness-writing-deployment 为当前项目生成 DEPLOY.md 部署与升级治理文档，并链接到 AGENTS.md 和 CLAUDE.md。
+```
+
+```text
+请使用 my-harness-canary 对当前项目线上地址做一次 quick canary。只登记 GitHub issues，不修复发现的问题。
+```
+
+```text
+请使用 my-harness-canary 为当前项目线上地址设置每日金丝雀检查。每次只登记 GitHub issues，不修复问题。
 ```
 
 ## 依赖
@@ -149,6 +171,15 @@ Codex 当前不能稳定承接 gstack 部分 skill 内部的 `AskUserQuestion`�
 远端 push、tag、GitHub Release 或发布动作必须有明确授权。
 
 ## 版本历史
+
+### Unreleased
+
+### v1.2.0
+
+- 新增 `my-harness-initialize-project`，用于初始化新项目或空白仓库的基础治理、文档入口和第一步 harness handoff。
+- 新增 `my-harness-writing-deployment`，用于生成项目级 `DEPLOY.md` 部署与升级治理文档。
+- 新增 `my-harness-canary`，作为 15 步 SOP 之后的可选独立金丝雀测试入口；只登记 GitHub issues，不修复问题，并支持用户显式要求的每日/周期性 Codex 定时任务。
+- `scripts/install.sh` 和 `scripts/install.ps1` 默认稳定版本更新为 `v1.2.0`。
 
 ### v1.1.1
 

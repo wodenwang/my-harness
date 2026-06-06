@@ -94,7 +94,7 @@ Windows PowerShell examples:
 
 ```powershell
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1" -Check
-$env:MY_HARNESS_REF = "v1.1.1"
+$env:MY_HARNESS_REF = "v1.2.0"
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
 ```
 
@@ -104,6 +104,51 @@ After an update, always verify:
 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/verify.sh
 ls -l ~/.codex/skills/my-harness*
 ```
+
+## Project Initialization Workflow
+
+New or mostly empty target projects are initialized through `my-harness-initialize-project`.
+
+Use it to create or strengthen the first project-facing governance surface:
+
+- `README.md` with purpose, status, and local/verification placeholders when unknown
+- `AGENTS.md` with agent rules, verification expectations, and no unauthorized release/push/deploy actions
+- links to `DESIGN.md` and `DEPLOY.md` when those governance files are created or already present
+- a final handoff to `my-harness-next-action`
+
+Keep this separate from implementation work. The initializer must not invent a stack, create secrets, or build the app unless the user explicitly asks for implementation.
+
+## Project Deploy / Upgrade Workflow
+
+Project-level production deployment governance is handled by `my-harness-writing-deployment`.
+
+Use it for target projects that need:
+
+- versioned Docker images as the release artifact
+- Docker Compose as the production runtime
+- `install.sh` for first-time initialization
+- `upgrade.sh` for version-to-version upgrades
+- DB initialization SQL for first install when Compose includes a DB container
+- DB DDL/data migration SQL or a mature migration tool for every release gap
+- runtime configuration migration checks during upgrade
+
+The skill writes or preserves `DEPLOY.md`, then links the deployment constraint from `AGENTS.md` and `CLAUDE.md`. Keep this separate from `my-harness-upgrade`, which only updates the local `my-harness` plugin installation.
+
+The generated governance must also require strict `DEPLOY.md` compliance during development and final deployment, require missing `install.sh` / `upgrade.sh` scripts to be developed, and require both install and upgrade logic to be validated for every version upgrade and release.
+
+## Optional Post-Deploy Canary Workflow
+
+Post-deploy canary monitoring is handled by `my-harness-canary`.
+
+Use it after step 15 when a target project needs extra confidence on a live production, staging, or preview URL. Keep it separate from `land-and-deploy`: the required SOP still has 15 steps, and canary is an optional direct-call follow-up.
+
+The skill wraps gstack `/canary` and must stay observational:
+
+- save canary report evidence under `.gstack/canary-reports/` when available
+- create GitHub issues for confirmed findings in the monitored project
+- do not modify code, tests, deployment files, docs, or runtime config to fix findings
+- confirm the target GitHub repo when it cannot be resolved unambiguously
+- support explicit user requests for daily or periodic Codex automation, but never start recurring checks by default
 
 ## Release Checklist
 

@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+## 1.2.0 - 2026-06-07
+
+- Added `my-harness-initialize-project` for new or empty project bootstrap. It creates or strengthens `README.md`, `AGENTS.md`, design/deployment links, and a first harness next-action handoff.
+- Added `my-harness-writing-deployment` for project-level deployment governance. It generates `DEPLOY.md`, links it from `AGENTS.md` and `CLAUDE.md`, and covers versioned Docker Compose deployment, `install.sh`, `upgrade.sh`, DB initialization SQL, DB DDL/data migrations, configuration migrations, and release-version gates.
+- Strengthened the generated deployment governance to require strict `DEPLOY.md` compliance during development and final deployment, require missing `install.sh` / `upgrade.sh` scripts to be developed, and require install plus upgrade logic validation for every version upgrade and release.
+- Added `my-harness-canary` as an optional post-step-15 wrapper around gstack `/canary`; it monitors live URLs, registers confirmed findings as GitHub issues, does not fix findings, and supports explicit Codex timer automation requests.
+- Updated the router, next-action prompt rules, README, maintenance guide, project history, plugin metadata, and verification script to include the new skills.
+- Updated installer defaults to `v1.2.0`.
+
 ## 1.1.1 - 2026-05-30
 
 - Added a Codex-safe gstack gate contract for harness-recommended gstack skills that may use `AskUserQuestion`.

@@ -67,6 +67,9 @@ required_skills=(
   "my-harness-writing-design"
   "my-harness-autopilot-slice"
   "my-harness-upgrade"
+  "my-harness-initialize-project"
+  "my-harness-writing-deployment"
+  "my-harness-canary"
 )
 
 for skill in "${required_skills[@]}"; do

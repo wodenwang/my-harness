@@ -61,13 +61,15 @@
 14. gstack `/ship`
 15. gstack `/land-and-deploy`
 
+可选独立步骤：15 步完成后，如果用户需要线上金丝雀测试，直接调用 `my-harness-canary`。这不是必做的第 16 步，不阻塞 SOP 闭环；发现问题只登记到当前项目 GitHub issues，不在 canary 步骤中修复。
+
 如果第 1 步使用了 Superpowers `brainstorming`，完成该门禁后不能直接进入 Superpowers `writing-plans`。除非当前需求极其简单、简单到无需设计评审和工程评审，否则必须先使用 `plan-design-review` 挑战产品、交互和前端方案，必要时使用 Pencil 策划原型，再使用 `plan-eng-review` 挑战工程方案，最后才能进入 `writing-plans`。
 
 即便 Superpowers `brainstorming` 已经产出前后端实现方案，也只把它当作候选输入，后续仍要用 `plan-design-review` 和 `plan-eng-review` 重新挑战并打磨最佳方案。
 
 ## Codex-safe gstack 门禁
 
-Codex 当前不能稳定承接 gstack 某些 skill 内部的 `AskUserQuestion` 交互。通过 `my-harness` 调用或推荐调用 gstack `/office-hours`、`/plan-design-review`、`/plan-eng-review`、`/design-review`、`/qa`、`/review`、`/ship`、`/land-and-deploy` 或其他可能使用 `AskUserQuestion` 的 skill 时，必须使用 Markdown 决策门禁：
+Codex 当前不能稳定承接 gstack 某些 skill 内部的 `AskUserQuestion` 交互。通过 `my-harness` 调用或推荐调用 gstack `/office-hours`、`/plan-design-review`、`/plan-eng-review`、`/design-review`、`/qa`、`/review`、`/ship`、`/land-and-deploy`、`/canary` 或其他可能使用 `AskUserQuestion` 的 skill 时，必须使用 Markdown 决策门禁：
 
 - 按 gstack 流程分析当前任务，但不要进入 Plan mode。
 - 不要调用 `AskUserQuestion`、`request_user_input` 或任何交互式选择工具。

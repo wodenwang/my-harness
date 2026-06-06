@@ -19,6 +19,9 @@ The first implementation packaged that answer into `my-harness-next-action`, the
 - The design-governance skill is `my-harness-writing-design`.
 - The bounded closed-loop execution skill is `my-harness-autopilot-slice`.
 - The online update skill is `my-harness-upgrade`.
+- The project bootstrap skill is `my-harness-initialize-project`.
+- The project-level deployment and upgrade governance skill is `my-harness-writing-deployment`.
+- The optional post-deploy canary skill is `my-harness-canary`.
 
 ## Canonical Flow
 
@@ -39,6 +42,8 @@ The first implementation packaged that answer into `my-harness-next-action`, the
 | 13 | Git closeout |
 | 14 | gstack `/ship` |
 | 15 | gstack `/land-and-deploy` |
+
+Optional after step 15: `my-harness-canary` can be invoked directly for post-deploy gstack `/canary` monitoring. It is not part of the required 15-step table and does not block SOP closure.
 
 ## Important Behavior Contracts
 
@@ -64,3 +69,9 @@ The first implementation packaged that answer into `my-harness-next-action`, the
 - `my-harness-upgrade` must distinguish current version, target ref, target version, and version iteration before applying updates.
 - Plugin updates use `scripts/upgrade.sh` on macOS/Linux and `scripts/upgrade.ps1` on Windows; the skill coordinates checks, applies user-requested updates, and verifies manifest plus `~/.codex/skills/my-harness*` entries afterward.
 - Stable updates default to the latest GitHub Release/tag. Updating from `main` requires explicit `MY_HARNESS_REF=main` or an equivalent user instruction.
+- `my-harness-initialize-project` is for new or mostly empty target repositories. It creates or strengthens `README.md`, `AGENTS.md`, links to design/deployment governance when relevant, and hands off to `my-harness-next-action`; it must not invent stack decisions or implement the app unless the user explicitly asks.
+- `my-harness-writing-deployment` governs target project deployment, not plugin updates. Like `my-harness-writing-design`, it writes a standalone project document: `DEPLOY.md`, then links it from `AGENTS.md` and `CLAUDE.md`. It requires production deployment to be version-granular: Docker image tags are pinned to release versions, Docker Compose is the runtime, `install.sh` handles first install, `upgrade.sh` handles only explicit version-to-version upgrades, and DB/config changes are part of the same upgrade gate.
+- When a Compose deployment includes a DB container, first install must include DB initialization SQL and later releases must provide DB DDL/data migrations or use a mature migration framework with an explicit release-to-release path.
+- The generated `DEPLOY.md` contract applies during project development and final deployment. Missing `install.sh` / `upgrade.sh` scripts must be developed, and every version upgrade or release must validate both install and upgrade logic.
+- `my-harness-canary` wraps gstack `/canary` for live production, staging, or preview URLs after deployment. It observes and reports only: confirmed findings are registered as GitHub issues in the monitored project, and code or deployment fixes are left to later triage.
+- Recurring canary checks are opt-in only. When the user asks for daily or periodic monitoring, the skill should use Codex automation/timer tooling to schedule repeated runs with the same no-fix, issue-registration contract.

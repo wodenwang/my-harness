@@ -45,7 +45,7 @@ If the Discovery / Brainstorm evidence came from Superpowers `brainstorming`, do
 
 ## Codex-Safe Gstack Gate Rule
 
-Codex cannot reliably handle `AskUserQuestion` inside several gstack skills. When autopilot reaches gstack `/office-hours`, `/plan-design-review`, `/plan-eng-review`, `/design-review`, `/qa`, `/review`, `/ship`, `/land-and-deploy`, or any other gstack skill that may ask the user interactively:
+Codex cannot reliably handle `AskUserQuestion` inside several gstack skills. When autopilot reaches gstack `/office-hours`, `/plan-design-review`, `/plan-eng-review`, `/design-review`, `/qa`, `/review`, `/ship`, `/land-and-deploy`, `/canary`, or any other gstack skill that may ask the user interactively:
 
 - Follow the gstack reasoning flow, but do not enter Plan mode.
 - Do not call `AskUserQuestion`, `request_user_input`, or any interactive choice tool.
