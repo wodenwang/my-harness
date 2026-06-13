@@ -1,12 +1,12 @@
 # My Harness
 
-`my-harness` 是一个 Codex workflow plugin，用来把个人项目交付流程固定成一组可复用 skills。它不安装 gstack、Superpowers、Pencil 或 Playwright，只负责把这些工具、项目证据和发布门禁组织成清晰路径。
+`my-harness` 是一个 Codex workflow plugin，用来把个人项目交付流程固定成一组可复用 skills。它不安装 gstack、Superpowers、Pencil、Product Design 或 Playwright，只负责把这些工具、项目证据和发布门禁组织成清晰路径。
 
 适合六类场景：
 
 - 初始化空白项目或新仓库的 `README.md`、`AGENTS.md` 和第一步 harness handoff。
 - 判断项目现在推进到哪一步，下一步该做什么。
-- 初始化 UI/产品项目的设计治理和 Pencil starter。
+- 初始化 UI/产品项目的设计治理和 Pencil starter；在 shadcn MCP 可用时辅助组件检索/安装，在 Product Design 可用时可选生成视觉目标、辅助 frontend slice 实现或产出 `design-qa.md` 证据。
 - 为业务项目生成 `DEPLOY.md` 部署治理文档，并链接到 `AGENTS.md` / `CLAUDE.md`。
 - 在部署完成后对线上 URL 做可选金丝雀测试，并把发现的问题登记到当前项目 GitHub issues。
 - 在线检查、安装或更新本机 `my-harness` 插件。
@@ -16,13 +16,13 @@
 macOS / Linux:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wodenwang/my-harness/v1.2.0/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/wodenwang/my-harness/v1.3.0/scripts/install.sh | bash
 ```
 
 Windows PowerShell:
 
 ```powershell
-irm https://raw.githubusercontent.com/wodenwang/my-harness/v1.2.0/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/wodenwang/my-harness/v1.3.0/scripts/install.ps1 | iex
 ```
 
 默认安装到：
@@ -69,11 +69,11 @@ irm https://raw.githubusercontent.com/wodenwang/my-harness/main/scripts/install.
 更新到指定 ref:
 
 ```bash
-MY_HARNESS_REF=v1.2.0 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
+MY_HARNESS_REF=v1.3.0 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
 ```
 
 ```powershell
-$env:MY_HARNESS_REF = "v1.2.0"
+$env:MY_HARNESS_REF = "v1.3.0"
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
 ```
 
@@ -87,6 +87,7 @@ $env:MY_HARNESS_REF = "v1.2.0"
 | `my-harness-initialize-project` | 初始化新项目或空白仓库的基础治理：`README.md`、`AGENTS.md`、设计/部署链接和第一步 harness handoff。 |
 | `my-harness-next-action` | 读取项目证据，输出 15 步 SOP 状态表和下一步提示词；提示词会要求执行完成后继续输出进度表和下一步提示词，便于只复制末尾提示词持续推进；第 1 步支持 `office-hours` 或 Superpowers `brainstorming`，但 `brainstorming` 后默认仍需经过 `plan-design-review` 和 `plan-eng-review` 才能进入 `writing-plans`。 |
 | `my-harness-writing-design` | 初始化 `DESIGN.md`、`design/`、Pencil starter；Admin Console 统一使用 shadcn/ui + tweakcn，并生成包含布局、导航、表格、按钮、状态、响应式和 QA 门禁的后台 UI 规范。 |
+| `my-harness-product-design-bridge` | 在 Product Design 插件可用时，为前端/UI 切片可选接入 `get-context`、`ideate`、`image-to-code`、`url-to-code` 和 `design-qa`；未安装时降级为原 Pencil 流程。 |
 | `my-harness-autopilot-slice` | 在 Discovery / Brainstorm gate 已定稿后推进一个小切片，并在人工门禁处停止。 |
 | `my-harness-upgrade` | 检查或更新已安装插件，并回读版本、备份和 skill 入口。 |
 | `my-harness-writing-deployment` | 生成项目级 `DEPLOY.md`，并链接到 `AGENTS.md` / `CLAUDE.md`；约束版本化 Docker Compose 生产部署、`install.sh` 首次安装、`upgrade.sh` 版本间升级、DB 初始化 SQL、DB DDL/数据迁移、配置迁移和版本门禁。 |
@@ -119,6 +120,10 @@ Codex 当前不能稳定承接 gstack 部分 skill 内部的 `AskUserQuestion`�
 ```
 
 ```text
+请使用 my-harness-product-design-bridge 判断当前 frontend slice 是否适合可选接入 Product Design；如果未安装 Product Design，不要要求安装，直接给出原 Pencil 流程下一步。
+```
+
+```text
 请使用 my-harness-upgrade 检查当前 my-harness 是否有新版本，只检查不更新。
 ```
 
@@ -148,6 +153,8 @@ Codex 当前不能稳定承接 gstack 部分 skill 内部的 `AskUserQuestion`�
 - gstack skills
 - Superpowers skills
 - Pencil / Pencil MCP / Pencil CLI
+- shadcn MCP（推荐但可选；缺少时使用 shadcn CLI、官方文档和项目已有组件）
+- Product Design plugin（可选；缺少时降级为 Pencil 流程，不阻塞 `my-harness`）
 - Browser、Playwright 或 gstack browse
 
 缺少这些协调工具时，`my-harness` 可以给出阶段判断和下一步建议，但不能声称对应设计、QA、发布或浏览器验证门禁已经完成。
@@ -173,6 +180,15 @@ Codex 当前不能稳定承接 gstack 部分 skill 内部的 `AskUserQuestion`�
 ## 版本历史
 
 ### Unreleased
+
+### v1.3.0
+
+- 新增 `my-harness-product-design-bridge`，把 Product Design 作为前端设计和实现的可选增强接入：没有视觉目标时可走 `get-context` -> `ideate` -> 用户选择，选中结果作为 Pencil 初稿输入并记录到 `design/`。
+- 允许在 `IMPLEMENTATION_PLAN.md` 已存在后，把 Product Design `image-to-code` / `url-to-code` 作为第一个 frontend vertical slice 的实现辅助；`design-qa.md` 可作为 Step 10 前的视觉还原证据，但不替代 QA、review、ship 或 deploy。
+- 明确 Product Design 不是 `my-harness` 必需依赖；宿主机未安装时不要求安装，直接降级为原 Pencil-centered 流程。
+- 将 shadcn MCP 纳入前端流程：Step 3 辅助组件映射，Step 5 评审 MCP/CLI/registry 策略，Step 6 写入计划，Step 7 用于浏览、搜索和引入组件，Step 10 检查 shadcn composition、8px spacing、token 颜色和自定义组件边界。
+- 在 `DESIGN.md` 模板中新增 shadcn/ui 使用硬约束：优先复用 shadcn/ui 和已有组件，使用 Tailwind CSS 与 tokens，默认 8px spacing，不使用随机颜色，不无故渐变，不随意创建自定义基础组件。
+- `scripts/install.sh` 和 `scripts/install.ps1` 默认稳定版本更新为 `v1.3.0`。
 
 ### v1.2.0
 

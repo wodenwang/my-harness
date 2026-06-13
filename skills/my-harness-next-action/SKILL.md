@@ -1,6 +1,6 @@
 ---
 name: my-harness-next-action
-description: Use when advancing a project through gstack, Superpowers, Pencil, browser verification, Git, ship, land, or deploy and the current phase or next harness action is unclear
+description: Use when advancing a project through gstack, Superpowers, Pencil, optional Product Design, browser verification, Git, ship, land, or deploy and the current phase or next harness action is unclear
 ---
 
 # My Harness Next Action
@@ -16,9 +16,9 @@ First read project governance (`AGENTS.md`, `CLAUDE.md`, README/runbooks) and th
 Use the cheapest relevant evidence first:
 
 - Governance: project `AGENTS.md`, `CLAUDE.md`, release/runbook docs.
-- Planning: `IMPLEMENTATION_PLAN.md`, `docs/superpowers/`, `design/`, Pencil `.pen`, exported screenshots.
+- Planning: `IMPLEMENTATION_PLAN.md`, `docs/superpowers/`, `design/`, Pencil `.pen`, exported screenshots, optional Product Design visual targets or brief notes.
 - Implementation: `git status`, recent commits, changed files, running app, test scripts.
-- Verification: test/lint/build logs, gstack `/browse` findings, Playwright screenshots, QA/design-review/review notes.
+- Verification: test/lint/build logs, gstack `/browse` findings, Playwright screenshots, optional `design-qa.md`, QA/design-review/review notes.
 - Release: version files, CHANGELOG/release notes, tags, PR state, deployment/canary notes.
 
 If evidence conflicts, trust newest concrete artifacts over older plans. If a step is claimed but has no artifact or verification, mark it "claimed, not proven" and recommend the first missing gate.
@@ -47,6 +47,16 @@ After a Superpowers `brainstorming` gate, the next required actions are:
 5. only then step 6 Superpowers `writing-plans`.
 
 Mark steps 2 and 5 as `⏭️ 前置无需进行` only when the current request is extremely simple, has no meaningful product/interaction ambiguity, and has no engineering architecture or risk decisions to challenge. In that case, state the skip reason explicitly in the table. "The brainstorm already proposed an implementation plan" is not a valid skip reason.
+
+### Optional Product Design Branch
+
+Product Design can enhance frontend work but does not add, remove, or renumber canonical SOP steps.
+
+- If a UI slice has no visual target and Product Design is available, optionally recommend `my-harness-product-design-bridge` between steps 2 and 3. It may route to Product Design `get-context` -> `ideate` -> user selection, then continue to step 3.
+- If Product Design is unavailable, do not ask the user to install it and do not mark the SOP blocked. Continue with the original Pencil-centered step 3.
+- Product Design outputs are supporting design artifacts. Pencil remains the formal step 3 governance artifact unless the project explicitly says otherwise.
+- Product Design `image-to-code` / `url-to-code` may be used during step 7 only after step 6 has produced `IMPLEMENTATION_PLAN.md`.
+- Product Design `design-qa.md` may support step 10, but it never replaces steps 8, 9, 10, 11, 12, 14, or 15.
 
 ### Codex-Safe Gstack Gate Rule
 
@@ -97,14 +107,14 @@ If the evidence shows all applicable SOP steps are complete, or the project has 
 | -: | - | - |
 | 1 | Discovery / Brainstorm gate: gstack `/office-hours` or Superpowers `brainstorming` | clarified target user, problem, constraints, smallest worthwhile slice, candidate approach, and questions for later review; use `office-hours` by default for new product/scope discovery, and use `brainstorming` when value and target are already clear but the candidate design/spec needs convergence |
 | 2 | gstack `/plan-design-review` | early product/interaction/frontend direction reviewed; required after Superpowers `brainstorming` unless the request is extremely simple |
-| 3 | Pencil App prototype | `.pen` source, screenshot/export, design notes |
+| 3 | Pencil App prototype | `.pen` source, screenshot/export, design notes; optional Product Design selected visual target may seed the Pencil work if recorded under `design/` |
 | 4 | gstack `/plan-design-review` on prototype | prototype review findings resolved or accepted |
 | 5 | gstack `/plan-eng-review` | architecture, data flow, risks, test strategy locked; required after Superpowers `brainstorming` unless the request is extremely simple |
-| 6 | Superpowers `writing-plans` | `IMPLEMENTATION_PLAN.md` with paths, tasks, tests, done criteria |
-| 7 | Superpowers `executing-plans` or `subagent-driven-development` | first vertical slice implemented end to end; use `subagent-driven-development` only when the slice has clear independent tasks and non-overlapping file boundaries |
+| 6 | Superpowers `writing-plans` | `IMPLEMENTATION_PLAN.md` with paths, tasks, tests, done criteria; frontend plans should name shadcn components/blocks, shadcn MCP or CLI usage, and fallback when relevant |
+| 7 | Superpowers `executing-plans` or `subagent-driven-development` | first vertical slice implemented end to end; use `subagent-driven-development` only when the slice has clear independent tasks and non-overlapping file boundaries; Product Design `image-to-code` / `url-to-code` is allowed only inside this step after `IMPLEMENTATION_PLAN.md` exists; shadcn MCP may be used here to browse/search/install registry components when configured |
 | 8 | Superpowers `verification-before-completion` | fresh tests/build/lint/manual evidence |
 | 9 | gstack `/browse` verification, optional `open-gstack-browser`, Playwright fallback | use `/browse` for fast headless QA evidence; use `open-gstack-browser` when a visible real-time browser window, sidebar activity feed, or human-observable control is needed; use Playwright for scripted regression fallback |
-| 10 | gstack `/design-review` | UI/interaction QA findings fixed or explicitly accepted |
+| 10 | gstack `/design-review` | UI/interaction QA findings fixed or explicitly accepted; optional Product Design `design-qa.md` may be supporting evidence but does not replace this gate |
 | 11 | gstack `/qa` | systematic functional QA and rerun evidence |
 | 12 | gstack `/review` | pre-landing diff review with risks/test gaps addressed |
 | 13 | Git closeout | clean intended diff, commit boundary, status/remote state known |
@@ -112,6 +122,8 @@ If the evidence shows all applicable SOP steps are complete, or the project has 
 | 15 | gstack `/land-and-deploy` | authorized merge/release/deploy plus required production health check |
 
 Optional post-closeout action: `my-harness-canary` runs gstack `/canary` against a live URL after step 15. It is a direct-call skill, not a canonical table row. It observes production or staging, writes canary evidence, and registers confirmed findings as GitHub issues without editing code.
+
+Optional frontend design action: `my-harness-product-design-bridge` can be invoked inside the existing step flow when Product Design is installed. It is not required for SOP closure and must degrade to the original Pencil flow when unavailable.
 
 ## Recommended Output
 
@@ -221,6 +233,12 @@ Step 3:
 ```text
 请使用 Pencil App 为 [项目/功能] 产出 shadcn/ui 风格原型。
 
+如果宿主机已安装 Product Design 插件，且当前还没有明确视觉目标，可先通过 my-harness-product-design-bridge 使用 Product Design get-context -> ideate -> 用户选择 生成前端视觉目标，并把选中的图、说明或引用保存到 design/ 作为 Pencil 初稿输入。
+
+如果 Product Design 不可用，不要要求我安装；直接降级为原来的 Pencil 流程。
+
+如果宿主机已配置 shadcn MCP，可用它浏览和搜索 shadcn components / blocks 来辅助组件映射；未配置时使用 shadcn 官方文档、CLI 和项目已有组件，不阻塞原型工作。
+
 保存 .pen 源文件，导出关键页面截图，并写一份简短设计说明到 design/。
 ```
 
@@ -246,6 +264,8 @@ Step 5:
 
 锁定架构、数据流、边界条件、测试策略、性能风险、权限/安全边界和发布风险。
 
+如果包含前端 shadcn/ui 实现，请额外评审 shadcn MCP / shadcn CLI 的使用策略：是否已有 components.json、是否配置 registry、是否允许使用 MCP 浏览/安装组件、fallback 是什么、生成代码如何审查、是否遵守 8px spacing、token 颜色、无随机颜色、无无必要渐变和不随意创建自定义基础组件。
+
 Codex 兼容要求：
 按 gstack 流程执行当前任务，但不要进入 Plan mode，也不要调用 AskUserQuestion、request_user_input 或任何交互式选择工具。
 
@@ -260,6 +280,8 @@ Step 6:
 请使用 Superpowers writing-plans 为 [项目/功能] 生成 IMPLEMENTATION_PLAN.md。
 
 计划必须包含明确文件路径、任务拆分、测试命令、预期输出和完成标准。
+
+如果包含前端 shadcn/ui 实现，计划还必须写清：需要使用的 shadcn components / blocks、是否使用 shadcn MCP 或 shadcn CLI、对应安装/查看命令、目标文件、fallback、代码审查点、8px spacing、design tokens、颜色来源和禁止随意自定义基础组件的完成标准。
 ```
 
 Step 7:
@@ -269,6 +291,12 @@ Step 7:
 
 如果任务强耦合或文件边界不清晰，用 executing-plans。
 如果已拆成可并行、边界清晰、互不踩代码的任务，用 subagent-driven-development。
+
+如果这是 frontend vertical slice，且 IMPLEMENTATION_PLAN.md 已明确文件路径、任务、测试和完成标准，可在实现过程中通过 my-harness-product-design-bridge 使用 Product Design image-to-code 或 url-to-code 辅助实现；但必须已有选中的视觉目标或 URL，且不得扩大到后续 slice。
+
+如果项目已配置 shadcn MCP，优先用 shadcn MCP 浏览、搜索、查看并引入计划中列出的 shadcn components / blocks；如果未配置，不要阻塞，实现时改用 shadcn CLI、官方文档和项目已有组件。
+
+使用 shadcn MCP 或 CLI 引入组件后，必须检查生成代码、依赖、tokens、可访问性和响应式，不要盲装后直接提交。
 
 无论哪种方式，都只完成第一个 vertical slice。要求可运行、可验证、端到端闭环，不展开后续切片。
 ```
@@ -303,6 +331,12 @@ Step 10:
 
 ```text
 请使用 gstack /design-review 对已实现界面做视觉和交互 QA。
+
+如果当前有 Product Design 源视觉目标和已渲染实现，可先通过 my-harness-product-design-bridge 生成或更新 design-qa.md，作为本次 design-review 的视觉还原证据。
+
+design-qa.md 只能作为辅助证据，不能替代 gstack /design-review、功能 QA、代码 review 或后续 ship/deploy 门禁。
+
+如果是 shadcn/ui 前端，请额外检查是否优先复用 shadcn/ui 和项目已有组件、是否遵守 8px spacing、是否使用 token 颜色、是否避免随机颜色和无必要渐变、是否避免随意创建自定义基础组件。
 
 重点检查层级、间距、响应式、文案、状态和可访问性，并修复高优先级问题。
 
@@ -395,6 +429,11 @@ Codex 兼容要求：
 - Marking `plan-design-review` or `plan-eng-review` unnecessary after `brainstorming` because the brainstorm already proposed frontend/backend implementation details.
 - Recommending a gstack prompt in Codex without the Codex-safe Markdown decision-gate guard.
 - Continuing past a gstack decision point instead of stopping with `D1` / `D2` / `D3` Markdown decision tables.
+- Treating Product Design as required infrastructure. It is optional; if unavailable, continue with the original Pencil-centered flow.
+- Using Product Design `image-to-code` or `url-to-code` before `IMPLEMENTATION_PLAN.md` exists.
+- Treating Product Design `design-qa.md` as a replacement for `gstack /design-review`, functional QA, code review, ship, or deploy.
+- Treating shadcn MCP as mandatory. It is important when configured, but the fallback is shadcn CLI, official docs, and existing project components.
+- Using shadcn MCP or CLI to install components without recording the component source in the plan and reviewing the generated code.
 - Treating a written plan as implementation. Step 6 does not imply step 7.
 - Using `subagent-driven-development` before `IMPLEMENTATION_PLAN.md` has clear task boundaries, ownership, and non-overlapping write scopes.
 - Treating implementation as completion without fresh verification. Step 7 must flow into step 8.

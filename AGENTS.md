@@ -63,6 +63,10 @@
 
 可选独立步骤：15 步完成后，如果用户需要线上金丝雀测试，直接调用 `my-harness-canary`。这不是必做的第 16 步，不阻塞 SOP 闭环；发现问题只登记到当前项目 GitHub issues，不在 canary 步骤中修复。
 
+前端可选增强：如果宿主机安装了 Product Design 插件，且当前 UI 切片需要视觉目标、`image-to-code` / `url-to-code` 辅助实现或 `design-qa.md` 视觉还原证据，可在不改变 15 步编号的前提下调用 `my-harness-product-design-bridge`。没有视觉目标时，设计阶段可走 Product Design `get-context` -> `ideate` -> 用户选择；选中结果记录到 `design/`，并作为 Pencil 初稿输入。实现阶段只有在 `IMPLEMENTATION_PLAN.md` 已存在后，才允许把 Product Design 作为第一个 frontend vertical slice 的实现辅助。Product Design 不是 `my-harness` 必需依赖；未安装时不要求安装，直接降级为原 Pencil 流程。
+
+shadcn MCP 是前端开发的重要可选工具：Step 3 可用于组件映射，Step 5 评审 MCP/CLI/registry 策略和 fallback，Step 6 写入 `IMPLEMENTATION_PLAN.md`，Step 7 用于浏览、搜索和引入组件，Step 10 检查 shadcn composition、8px spacing、token 颜色和自定义组件边界。未配置 shadcn MCP 时不阻塞流程，改用 shadcn CLI、官方文档和项目已有组件。
+
 如果第 1 步使用了 Superpowers `brainstorming`，完成该门禁后不能直接进入 Superpowers `writing-plans`。除非当前需求极其简单、简单到无需设计评审和工程评审，否则必须先使用 `plan-design-review` 挑战产品、交互和前端方案，必要时使用 Pencil 策划原型，再使用 `plan-eng-review` 挑战工程方案，最后才能进入 `writing-plans`。
 
 即便 Superpowers `brainstorming` 已经产出前后端实现方案，也只把它当作候选输入，后续仍要用 `plan-design-review` 和 `plan-eng-review` 重新挑战并打磨最佳方案。

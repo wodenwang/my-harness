@@ -42,6 +42,63 @@ Then run:
 ./scripts/verify.sh
 ```
 
+## Optional Product Design Bridge
+
+Product Design integration is maintained through `my-harness-product-design-bridge`.
+
+Rules:
+
+- Do not add Product Design as a required dependency for `my-harness`.
+- If Product Design is unavailable, the framework must fall back to the original Pencil-centered flow.
+- Keep the 15-step SOP unchanged; Product Design is an optional branch inside design, implementation, or visual QA stages.
+- Keep Pencil as the formal design-governance artifact unless a target project explicitly records a different rule.
+- Keep `image-to-code` / `url-to-code` behind `IMPLEMENTATION_PLAN.md`.
+- Keep `design-qa.md` as supporting evidence only; it must not replace verification, `gstack /design-review`, QA, review, ship, or deploy.
+
+When changing this bridge, update:
+
+- `skills/my-harness-product-design-bridge/SKILL.md`
+- `skills/my-harness/SKILL.md`
+- `skills/my-harness-next-action/SKILL.md`
+- `skills/my-harness-writing-design/SKILL.md`
+- `README.md`
+- `docs/project-history.md`
+- `CHANGELOG.md`
+
+Then run:
+
+```bash
+./scripts/verify.sh
+```
+
+## shadcn MCP Guidance
+
+shadcn MCP is an important optional helper for shadcn/ui frontend work. Maintain it as a recommended tool, not a hard dependency.
+
+Rules:
+
+- Do not block the `my-harness` SOP when shadcn MCP is unavailable.
+- Fall back to shadcn CLI, official shadcn docs, and existing project components.
+- Do not silently edit global Codex MCP configuration; adding shadcn MCP to `~/.codex/config.toml` requires explicit user authorization.
+- Keep component discovery and install work behind the normal gates: design component mapping, `plan-eng-review`, `IMPLEMENTATION_PLAN.md`, implementation, and design review.
+- Generated or installed registry code must still be inspected for dependencies, tokens, accessibility, responsive behavior, and project conventions.
+
+When changing shadcn MCP guidance, update:
+
+- `skills/my-harness-writing-design/SKILL.md`
+- `skills/my-harness-writing-design/templates/DESIGN.shadcn-admin-console.md`
+- `skills/my-harness-next-action/SKILL.md`
+- `skills/my-harness/SKILL.md`
+- `README.md`
+- `docs/project-history.md`
+- `CHANGELOG.md`
+
+Then run:
+
+```bash
+./scripts/verify.sh
+```
+
 ## Local Dogfooding
 
 Use the source repo as the edit point:
@@ -94,7 +151,7 @@ Windows PowerShell examples:
 
 ```powershell
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1" -Check
-$env:MY_HARNESS_REF = "v1.2.0"
+$env:MY_HARNESS_REF = "v1.3.0"
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
 ```
 

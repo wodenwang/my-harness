@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## 1.3.0 - 2026-06-13
+
+- Added `my-harness-product-design-bridge` as an optional Product Design integration for frontend slices. It can route visual-target discovery through `get-context` -> `ideate` -> user selection, record the selected visual target under `design/`, and keep Pencil as the formal design-governance artifact.
+- Allowed Product Design `image-to-code` / `url-to-code` as implementation helpers only inside step 7 after `IMPLEMENTATION_PLAN.md` exists, and allowed `design-qa.md` as supporting evidence before step 10 without replacing verification, browser checks, design review, QA, code review, ship, or deploy gates.
+- Documented Product Design as a non-required dependency: if unavailable, `my-harness` must not require installation and must fall back to the original Pencil-centered flow.
+- Added shadcn MCP guidance across the frontend flow: use it as an important optional tool for component/block discovery, registry access, and installation when configured; fall back to shadcn CLI, official docs, and existing components when unavailable.
+- Expanded the shadcn Admin Console `DESIGN.md` template with strict shadcn/ui implementation constraints: reuse shadcn and project components, use Tailwind CSS and tokens, follow 8px spacing, avoid random colors and unnecessary gradients, and create custom base components only when justified.
+- Updated installer defaults to `v1.3.0`.
+
 ## 1.2.0 - 2026-06-07
 
 - Added `my-harness-initialize-project` for new or empty project bootstrap. It creates or strengthens `README.md`, `AGENTS.md`, design/deployment links, and a first harness next-action handoff.

@@ -43,6 +43,8 @@ Do not skip gates. Do not compress multiple harness steps into one undocumented 
 
 If the Discovery / Brainstorm evidence came from Superpowers `brainstorming`, do not treat that as permission to start at `writing-plans` or implementation. The loop must still pass through `plan-design-review`, Pencil planning when needed, and `plan-eng-review` before `writing-plans`, unless the slice is extremely simple and the skip reasons for both review gates are explicit.
 
+Product Design is an optional frontend accelerator only. Autopilot may use `my-harness-product-design-bridge` when Product Design is available and the current UI slice needs a visual target, image/url-to-code help, or `design-qa.md` evidence. If Product Design is unavailable, do not require installation and continue with the original Pencil-centered flow.
+
 ## Codex-Safe Gstack Gate Rule
 
 Codex cannot reliably handle `AskUserQuestion` inside several gstack skills. When autopilot reaches gstack `/office-hours`, `/plan-design-review`, `/plan-eng-review`, `/design-review`, `/qa`, `/review`, `/ship`, `/land-and-deploy`, `/canary`, or any other gstack skill that may ask the user interactively:
@@ -65,7 +67,8 @@ If a gstack step needs a human decision, that Markdown decision gate is the auto
 If the next action requires Pencil prototype creation or meaningful visual design:
 
 1. Use `my-harness-writing-design` to create or verify `DESIGN.md`, `design/`, and starter files.
-2. Stop and hand off to the human for Pencil/design confirmation.
+2. If Product Design is available and there is no visual target, use `my-harness-product-design-bridge` only to reach the next required human choice, such as selecting one of the generated visual options.
+3. Stop and hand off to the human for Product Design option selection, Pencil confirmation, or design approval.
 
 Do not blindly run Pencil CLI or MCP to produce real design work unless the user explicitly asks in this turn and the scope is small enough for this skill.
 
@@ -75,6 +78,7 @@ For step 7:
 
 - Use `executing-plans` when the first vertical slice is strongly coupled or file boundaries are unclear.
 - Use `subagent-driven-development` only when `IMPLEMENTATION_PLAN.md` has clear independent tasks, ownership, and non-overlapping write scopes.
+- Use Product Design `image-to-code` or `url-to-code` only through `my-harness-product-design-bridge`, only when `IMPLEMENTATION_PLAN.md` already exists, and only for the first frontend vertical slice.
 - Implement only the first vertical slice. Do not expand into later slices just because the loop is running.
 
 ### Review Loops
@@ -123,7 +127,7 @@ Stop immediately and hand off when:
 
 - Discovery / Brainstorm evidence is missing
 - scope is too large or ambiguous
-- Pencil/design confirmation is needed
+- Product Design visual-option selection, Pencil/design confirmation, or other UI approval is needed
 - a gstack step reaches a decision point that would normally use `AskUserQuestion`
 - a required tool/credential/service is unavailable
 - the next action requires explicit user authorization
@@ -224,6 +228,8 @@ The slice is complete only when:
 - Starting before the Discovery / Brainstorm gate has fixed the target.
 - Running autopilot on a large, unclear version.
 - Treating Pencil starter files as approved design.
+- Requiring Product Design installation or blocking the SOP when Product Design is unavailable.
+- Letting Product Design bypass Pencil governance, `IMPLEMENTATION_PLAN.md`, design review, QA, or code review.
 - Letting review/QA loops run indefinitely.
 - Entering Plan mode or using `AskUserQuestion` / `request_user_input` during a gstack gate in Codex.
 - Continuing past a Markdown decision gate before the user chooses a `D1` / `D2` / `D3` option.

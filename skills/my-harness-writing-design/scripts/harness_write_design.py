@@ -159,6 +159,9 @@ UI 框架：{framework_label}
 - {design_direction}
 - 如用户提供官网、logo、截图、主题色或品牌素材，先解析主色、辅助色、背景倾向、对比度、饱和度和品牌气质，再选择合适主题模板。
 - 按钮默认使用 icon + 文字；仅列表页或空间较窄的紧凑区域可使用纯 icon 按钮，并补充可访问标签和必要 tooltip；按钮文字不得换行。
+- 如宿主机安装了 Product Design，可选用其 get-context -> ideate 分支生成视觉目标作为 Pencil 初稿输入；未安装时直接使用原 Pencil 流程，不要求安装。
+- 如宿主机已配置 shadcn MCP，可优先用它浏览、搜索和引入 shadcn registry 组件；未配置时使用 shadcn CLI、官方文档和项目已有组件继续推进，不阻塞设计流程。
+- 默认遵循 8px spacing system，不使用随机颜色，不无故使用渐变或玻璃拟态，不随意创建自定义基础组件。
 
 ## 2. 页面范围
 
@@ -189,6 +192,8 @@ UI 框架：{framework_label}
 - Theme token decision
 - Brand/material interpretation
 - Implementation notes
+- Product Design visual target reference, if used
+- shadcn MCP / CLI component source and fallback decision
 """
     path.write_text(content, encoding="utf-8")
     return True
@@ -203,7 +208,7 @@ def ensure_design_doc_with_framework(root: Path, project_name: str, stage: str, 
 
 
 def ensure_agents_link(path: Path) -> bool:
-    section = """\n## 设计规范\n\n- 项目级 UI/UX 规则见 `DESIGN.md`。\n- Pencil 原型、截图和设计说明统一放在 `design/`。\n- 开始前端实现前，必须先检查 `DESIGN.md` 和 `design/`。\n- 已确认 Pencil 原型优先于临场自由重设计；如需偏离，先说明原因并获得确认。\n"""
+    section = """\n## 设计规范\n\n- 项目级 UI/UX 规则见 `DESIGN.md`。\n- Pencil 原型、截图和设计说明统一放在 `design/`。\n- 如果使用 Product Design 生成视觉目标或 `design-qa.md`，对应图片、链接或说明也必须记录到 `design/`；未安装 Product Design 时直接走原 Pencil 流程。\n- 开始前端实现前，必须先检查 `DESIGN.md` 和 `design/`。\n- 已确认 Pencil 原型优先于临场自由重设计；如需偏离，先说明原因并获得确认。\n"""
 
     if path.exists():
         text = path.read_text(encoding="utf-8", errors="ignore")

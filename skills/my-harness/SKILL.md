@@ -1,6 +1,6 @@
 ---
 name: my-harness
-description: Use when coordinating personal harness workflows, choosing among harness skills, extending the user's gstack Superpowers Pencil browser verification Git delivery loop, or deciding where a new harness helper belongs
+description: Use when coordinating personal harness workflows, choosing among harness skills, extending the user's gstack Superpowers Pencil Product Design browser verification Git delivery loop, or deciding where a new harness helper belongs
 ---
 
 # My Harness
@@ -20,6 +20,7 @@ This is the router skill for the user's personal project-delivery harness. It gr
 | Project needs design governance before UI work | `my-harness-writing-design` |
 | Project needs `DESIGN.md`, `design/`, a Pencil starter, or AGENTS design links | `my-harness-writing-design` |
 | Project needs a shadcn/ui Admin Console design baseline | `my-harness-writing-design` |
+| Frontend/UI work can optionally use Product Design for visual targets, image/url-to-code, or design-qa evidence | `my-harness-product-design-bridge` |
 | User wants a clear small slice to run through the whole SOP automatically after Discovery / Brainstorm gate is finalized | `my-harness-autopilot-slice` |
 | User wants to update, upgrade, version-check, or refresh the installed `my-harness` plugin from GitHub | `my-harness-upgrade` |
 | Project needs `DEPLOY.md`, versioned Docker Compose deployment governance, `install.sh` / `upgrade.sh` rules, DB init SQL, DB migrations, config migration rules, or AGENTS / CLAUDE deployment links | `my-harness-writing-deployment` |
@@ -46,6 +47,10 @@ This is the router skill for the user's personal project-delivery harness. It gr
 15. gstack `/land-and-deploy`
 
 Optional after step 15: run `my-harness-canary` directly when the user wants post-deploy canary monitoring for a live production, staging, or preview URL. This optional follow-up is not required for SOP closure. Canary findings are recorded as GitHub issues in the monitored project; do not fix them during the canary step.
+
+Optional frontend enhancement: when Product Design is installed and the current UI slice would benefit from visual exploration or visual-fidelity implementation, route through `my-harness-product-design-bridge` without changing the 15-step table. Product Design may help create a visual target between steps 2 and 3, assist `image-to-code` / `url-to-code` inside step 7 after `IMPLEMENTATION_PLAN.md` exists, or provide `design-qa.md` evidence before step 10. If Product Design is unavailable, do not require installation; continue with the original Pencil-centered flow.
+
+Optional shadcn MCP enhancement: when shadcn MCP is configured, use it as the preferred shadcn/ui registry tool for browsing, searching, inspecting, and installing components or blocks during frontend work. It fits inside existing steps: step 3 component mapping, step 5 engineering review of MCP/CLI/registry strategy, step 6 implementation planning, step 7 component installation/integration, and step 10 design review. If shadcn MCP is unavailable, do not block the SOP; fall back to shadcn CLI, official docs, and existing project components.
 
 When step 1 used Superpowers `brainstorming`, completing that gate does not make the work ready for Superpowers `writing-plans`. The next action must still move through `plan-design-review`, Pencil prototype planning when needed, and `plan-eng-review` before step 6, unless the current request is extremely simple enough that both design and engineering plan reviews are genuinely unnecessary.
 

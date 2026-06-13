@@ -29,6 +29,7 @@ UI 框架选择：
 - shadcn/ui Theming：https://ui.shadcn.com/docs/theming
 - shadcn/ui Data Table：https://ui.shadcn.com/docs/components/data-table
 - shadcn/ui Card：https://ui.shadcn.com/docs/components/card
+- shadcn/ui MCP Server：https://ui.shadcn.com/docs/mcp
 - tweakcn：https://tweakcn.com/
 
 ## 1. 产品类型
@@ -75,6 +76,38 @@ shadcn/ui 的核心不是传统 NPM 组件库，而是一套可复制进项目�
 | Distribution | 使用 shadcn CLI / registry 思路增量引入需要的组件，不一次性复制无关组件。 |
 | Beautiful Defaults | 默认保持干净、极简、可访问、低装饰的视觉效果，不过早自定义主题。 |
 | AI-Ready | 组件 API、目录和命名保持一致，便于 Agent 读取、复用和修改。 |
+
+### shadcn/ui 使用硬约束
+
+- 优先使用 shadcn/ui 组件、项目已有组件和已有 shadcn 代码块。
+- 如宿主机已配置 shadcn MCP 或项目已有 shadcn 工具链，优先通过这些工具浏览、搜索、查看和引入组件；未配置时不阻塞开发。
+- 使用 Tailwind CSS、CSS variables 和项目 design tokens；不引入额外 UI 框架。
+- 默认遵循 8px spacing system，页面、区块、表格、表单、按钮和弹层间距必须保持一致。
+- 不使用随机颜色；颜色必须来自项目 token、tweakcn 主题、shadcn theme 或明确记录的品牌色决策。
+- 除非业务或品牌明确要求，不使用渐变、玻璃拟态、大面积装饰背景或过度视觉特效。
+- 始终优先复用已有组件；偏离现有设计系统时，必须说明原因并记录到 `DESIGN.md` 或 `design/`。
+- 不随意创建自定义基础组件。只有在复用现有组件无法表达业务语义、能减少真实重复或能稳定封装复杂交互时，才创建项目级组合组件。
+- 自定义组件必须基于 shadcn/ui primitives、Tailwind tokens 和现有组件约定组合实现。
+
+### shadcn MCP 工具策略
+
+shadcn MCP 是重要的前端实现辅助工具，用于让 AI assistant 直接浏览、搜索和安装 shadcn registry 中的组件、blocks 和模板。
+
+使用边界：
+
+- MCP 是推荐工具，不是 `my-harness` 的硬依赖；未配置时使用 shadcn CLI、官方文档和项目已有组件继续推进。
+- 不在设计阶段静默安装或改写全局 Codex 配置；如需配置 Codex 的 shadcn MCP，应由用户授权后再修改 `~/.codex/config.toml`。
+- 项目已有 `components.json` 时，优先读取其中的 aliases、style、Tailwind 配置和 registries。
+- 如项目配置了私有 registry 或第三方 registry，必须先确认来源、权限和代码审查边界，不直接盲装。
+- 通过 MCP 或 CLI 引入组件后，仍需检查生成代码、依赖、样式 token、可访问性和响应式行为。
+
+在 `my-harness` 流程中的推荐使用位置：
+
+1. Step 3 Pencil prototype / design governance：用 shadcn MCP 查找可用 components、blocks 和组合方式，辅助页面级组件映射。
+2. Step 5 `plan-eng-review`：确认是否使用 shadcn MCP / CLI、`components.json`、registry 来源、安装命令、代码审查边界和 fallback。
+3. Step 6 `writing-plans`：把需要引入的 shadcn components / blocks、命令、目标文件、检查项写入 `IMPLEMENTATION_PLAN.md`。
+4. Step 7 implementation：通过 shadcn MCP / CLI 浏览、查看并引入组件，再按项目 wrapper 和业务逻辑集成；不得绕过测试和设计验收。
+5. Step 10 `design-review`：检查实现是否遵守 shadcn composition、token、8px spacing、无随机颜色、无无必要渐变和无随意自定义基础组件。
 
 ### 默认视觉倾向
 
@@ -753,7 +786,28 @@ gstack design review、Playwright 或人工 QA 必须检查：
 - 表格操作列按钮挤压变形
 - 只靠颜色表达状态
 
-## 23. Pencil 原型要求
+## 23. Product Design 可选增强
+
+Product Design 插件可以作为前端视觉探索和视觉还原检查的可选增强，但不是使用本项目设计流程的必要条件。
+
+如宿主机已安装 Product Design，且当前 UI 切片没有明确视觉目标，可在进入 Pencil 前使用：
+
+1. `get-context` 确认设计 brief。
+2. `ideate` 生成视觉方案。
+3. 用户选择一个方向。
+4. 将选中的图片、链接、说明或截图保存或记录到 `design/`。
+5. 继续创建或迭代 Pencil 原型。
+
+如宿主机未安装 Product Design，不要求安装，直接使用原 Pencil 流程。
+
+Product Design 产物的边界：
+
+- 可作为 Pencil 初稿输入。
+- 可作为 `IMPLEMENTATION_PLAN.md` 之后第一个 frontend vertical slice 的实现参考。
+- 如已有源视觉目标和已渲染实现，可产出 `design-qa.md` 作为进入 `gstack /design-review` 前的视觉还原证据。
+- 不替代 Pencil `.pen`、`DESIGN.md`、`gstack /design-review`、功能 QA、代码 review、ship 或 deploy 门禁。
+
+## 24. Pencil 原型要求
 
 Pencil 原型、截图和设计说明统一放在项目根目录 `design/`。
 
@@ -785,7 +839,7 @@ Pencil 原型、截图和设计说明统一放在项目根目录 `design/`。
 
 仅有截图不够，必须同时有实现说明。
 
-## 24. Playwright 视觉 QA
+## 25. Playwright 视觉 QA
 
 条件允许时，使用 Playwright 做前端验证。
 
@@ -816,7 +870,7 @@ Pencil 原型、截图和设计说明统一放在项目根目录 `design/`。
 
 如果页面没有打开并做视觉检查，不应认为前端工作完成。
 
-## 25. 当前阶段设计注意
+## 26. 当前阶段设计注意
 
 当前阶段：`{{STAGE}}`
 
@@ -834,7 +888,7 @@ Pencil 原型、截图和设计说明统一放在项目根目录 `design/`。
 - 响应式降级策略
 - 长文本、长 ID 和操作列处理
 
-## 26. 设计完成定义
+## 27. 设计完成定义
 
 前端设计可进入实现前，必须满足：
 
@@ -842,4 +896,5 @@ Pencil 原型、截图和设计说明统一放在项目根目录 `design/`。
 2. `design/pencil-input-{{STAGE}}.md` 或对应阶段输入文档已确认。
 3. `design/` 下存在已确认 Pencil 原型或截图与说明。
 4. 页面级说明包含组件组合、表格列、筛选项、操作、状态和权限规则。
-5. 如需偏离本文件，必须说明原因并获得确认。
+5. 如使用 Product Design，选中的视觉目标或 `design-qa.md` 证据已在 `design/` 中记录。
+6. 如需偏离本文件，必须说明原因并获得确认。

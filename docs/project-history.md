@@ -22,6 +22,7 @@ The first implementation packaged that answer into `my-harness-next-action`, the
 - The project bootstrap skill is `my-harness-initialize-project`.
 - The project-level deployment and upgrade governance skill is `my-harness-writing-deployment`.
 - The optional post-deploy canary skill is `my-harness-canary`.
+- The optional Product Design bridge skill is `my-harness-product-design-bridge`.
 
 ## Canonical Flow
 
@@ -45,6 +46,8 @@ The first implementation packaged that answer into `my-harness-next-action`, the
 
 Optional after step 15: `my-harness-canary` can be invoked directly for post-deploy gstack `/canary` monitoring. It is not part of the required 15-step table and does not block SOP closure.
 
+Optional frontend enhancement inside the existing 15 steps: `my-harness-product-design-bridge` can be invoked when Product Design is installed and a UI slice needs a visual target, Product Design-assisted `image-to-code` / `url-to-code`, or `design-qa.md` evidence. It is not a new canonical step and does not block SOP closure when unavailable.
+
 ## Important Behavior Contracts
 
 - `my-harness-next-action` must inspect artifacts before recommending step 1.
@@ -58,7 +61,14 @@ Optional after step 15: `my-harness-canary` can be invoked directly for post-dep
 - Recommended prompts must be standalone fenced `text` blocks.
 - Recommended prompts must be self-chaining: after naming the immediate action, they must require the executor to output the `流程执行情况一览：` 15-step table and a new copyable final prompt after finishing, so the user can keep copying the last prompt without asking next-action again.
 - `my-harness-writing-design` creates design-governance scaffolding and may call Pencil plus selected UI framework tools when available.
+- Product Design is optional. If the host Codex does not have the Product Design plugin, `my-harness` must not require installation; continue with the original Pencil-centered flow.
+- When Product Design is available and no frontend visual target exists, the optional design branch is `get-context` -> `ideate` -> user selects one option. The selected visual target must be recorded under `design/` and can seed Pencil, but Pencil remains the formal step 3 governance artifact.
+- Product Design `image-to-code` and `url-to-code` are allowed only inside step 7 after `IMPLEMENTATION_PLAN.md` exists and only for the first frontend vertical slice. They must not bypass Superpowers planning or expand scope.
+- Product Design `design-qa.md` may support step 10 as visual-fidelity evidence, but it does not replace step 8 verification, step 9 browser checks, step 10 `gstack /design-review`, step 11 QA, step 12 review, step 14 ship, or step 15 land/deploy.
 - From `v1.1.0`, `my-harness-writing-design` no longer uses the Ant Design template. New Admin Console design baselines use shadcn/ui with tweakcn as the default style reference.
+- shadcn MCP is an important optional tool for shadcn/ui frontend work. Use it when configured to browse, search, inspect, and install registry components and blocks; if unavailable, fall back to shadcn CLI, official docs, and existing project components.
+- shadcn MCP fits the SOP in five places: step 3 for design component mapping, step 5 for engineering review of MCP/CLI/registry strategy and fallback, step 6 for recording component/block install tasks in `IMPLEMENTATION_PLAN.md`, step 7 for implementation, and step 10 for checking shadcn composition, tokens, spacing, and custom component boundaries.
+- The shadcn/ui design baseline requires reuse before custom components, Tailwind CSS and project tokens, 8px spacing by default, no random colors, no unnecessary gradients or glassmorphism, and no casual custom base components.
 - Unsupported UI framework preferences, including Ant Design, Material UI, Chakra UI, Arco Design, Element Plus, Bootstrap, Tailwind UI, Radix-only, and custom large design systems, are refused by this skill instead of being silently mapped.
 - From `v1.1.0`, the shadcn/ui design baseline is an executable Admin Console UI checklist: it covers `AppShell`, sidebar hierarchy, PageHeader, FilterBar, DataTable column stability, long ID handling, Dialog / Sheet / detail-page selection, form errors, state coverage, responsive checks, accessibility, design review, and Playwright QA.
 - Button rules are part of the design baseline: list pages or genuinely narrow compact layouts may use icon-only buttons; icon-only buttons require accessible labels and tooltip/title; all other buttons use icon + text; button labels must not wrap.

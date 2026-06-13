@@ -1,7 +1,7 @@
 {
   "name": "my-harness",
-  "version": "1.2.0",
-  "description": "Personal project-delivery harness skills for initializing projects and coordinating gstack, Superpowers, Pencil, browser checks, Git, release closeout, deployment governance documents, optional canary monitoring, and cross-platform plugin updates.",
+  "version": "1.3.0",
+  "description": "Personal project-delivery harness skills for initializing projects and coordinating gstack, Superpowers, Pencil, Product Design, shadcn MCP guidance, browser checks, Git, release closeout, deployment governance documents, optional canary monitoring, and cross-platform plugin updates.",
   "author": {
     "name": "Wenzhe Wang"
   },
@@ -16,14 +16,16 @@
     "playwright",
     "git",
     "ship",
-    "deploy",
-    "project-workflow"
+      "deploy",
+      "product-design",
+      "shadcn",
+      "project-workflow"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "My Harness",
     "shortDescription": "Personal project workflow harness",
-    "longDescription": "My Harness groups personal workflow skills for initializing project governance, deciding the next project action, creating design governance, writing DEPLOY.md deployment governance, running optional post-deploy canary monitoring, updating the harness plugin, and extending a gstack + Superpowers + Pencil + Playwright + Git delivery loop.",
+    "longDescription": "My Harness groups personal workflow skills for initializing project governance, deciding the next project action, creating design governance, coordinating optional Product Design and shadcn MCP frontend helpers, writing DEPLOY.md deployment governance, running optional post-deploy canary monitoring, updating the harness plugin, and extending a gstack + Superpowers + Pencil + Playwright + Git delivery loop.",
     "developerName": "Wenzhe Wang",
     "category": "Coding",
     "capabilities": [

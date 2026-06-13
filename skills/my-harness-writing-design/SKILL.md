@@ -27,6 +27,14 @@ Pencil dependencies:
 - Use the Pencil CLI when the task needs a generated `.pen` file or exported image and CLI auth is available.
 - Do not treat a blank starter `.pen` as an approved prototype. It is only a placeholder until generated or reviewed through Pencil.
 
+Product Design optional dependency:
+
+- Product Design is not required for this skill or for `my-harness`.
+- If Product Design is installed, `my-harness-product-design-bridge` may be used to create a visual target before Pencil work, seed a Pencil draft from a selected ImageGen option, or produce `design-qa.md` as supporting evidence before `gstack /design-review`.
+- If Product Design is unavailable, do not ask the user to install it; continue with the original Pencil-centered design governance.
+- Product Design outputs must be recorded under `design/` or referenced from `DESIGN.md` / `design/pencil-input-<stage>.md` before they influence implementation.
+- Product Design outputs do not replace `.pen` source files, exported Pencil screenshots, or project-level `DESIGN.md` unless the project explicitly adopts a different design governance rule.
+
 UI framework selection:
 
 - Supported UI framework is `shadcn` / shadcn/ui only.
@@ -42,7 +50,21 @@ shadcn/ui dependencies and style:
 - Treat shadcn/ui as open component code plus a code-distribution workflow, not as a sealed component library.
 - Preserve shadcn/ui beautiful defaults and use tweakcn as the default theme/style source for zero-to-one Admin Console work when no stronger brand direction exists.
 - Use the project's existing shadcn/ui setup if present. If no setup exists, reference official shadcn/ui docs for component names, token conventions, and CLI install patterns.
+- Treat shadcn MCP as an important optional implementation aid for browsing, searching, and installing shadcn registry items. Prefer it when configured, but never make it a required dependency for `my-harness`.
+- If Codex does not have shadcn MCP configured, do not block the design flow. Fall back to shadcn CLI, official docs, and existing project components.
+- Do not silently modify global Codex MCP configuration. If a task requires adding shadcn MCP to `~/.codex/config.toml`, get explicit user authorization first.
+- When shadcn MCP or CLI is used, inspect project `components.json`, aliases, style, Tailwind config, registries, and installed components before adding new code.
 - Do not combine shadcn/ui with Ant Design or another UI framework in the same design baseline unless the user explicitly asks for a migration/interop plan outside this skill's normal baseline.
+
+shadcn/ui implementation constraints:
+
+- Prioritize shadcn/ui components, existing project components, and existing shadcn code blocks.
+- Use Tailwind CSS, CSS variables, and project design tokens; do not introduce another UI framework.
+- Follow an 8px spacing system by default.
+- Do not use random colors. Colors must come from project tokens, tweakcn/shadcn theme decisions, or documented brand decisions.
+- Do not use gradients, glassmorphism, large decorative backgrounds, or heavy visual effects unless business or brand requirements explicitly justify them.
+- Do not create custom base components casually. Create project-level composed components only when existing components cannot express the business semantics, meaningful duplication is removed, or complex interaction is stabilized.
+- Custom components must compose shadcn/ui primitives, Tailwind tokens, and existing project component conventions.
 
 Button design rules:
 
@@ -63,10 +85,11 @@ Recommended order:
 
 1. Read project governance and existing design assets.
 2. Check Pencil availability (`pencil-design` skill, Pencil MCP, or Pencil CLI) if `.pen` assets are needed.
-3. Resolve UI framework preference using the shadcn/ui-only rule above.
-4. Check shadcn/ui availability (project dependency, local guideline, skill, CLI, or docs) before writing component mappings.
-5. Inspect theme/color/material inputs if provided, including websites, logos, screenshots, or explicit color names.
-6. Create or update `DESIGN.md`, `design/`, Pencil starter/assets, and governance links.
+3. If Product Design is available and the UI scope lacks a visual target, optionally route through `my-harness-product-design-bridge`; otherwise continue without it.
+4. Resolve UI framework preference using the shadcn/ui-only rule above.
+5. Check shadcn/ui availability (project dependency, local guideline, shadcn MCP, CLI, or docs) before writing component mappings.
+6. Inspect theme/color/material inputs if provided, including websites, logos, screenshots, or explicit color names.
+7. Create or update `DESIGN.md`, `design/`, Pencil starter/assets, and governance links.
 
 ## Required Outputs
 
@@ -80,6 +103,7 @@ In the target project root:
 Recommended optional output:
 
 - `design/pencil-input-<stage>.md` describing the current project phase and prototype scope.
+- Product Design selected visual targets, screenshots, links, or `design-qa.md` references under `design/` when that optional branch was used.
 
 ## Naming Rule
 
@@ -139,6 +163,7 @@ shadcn/ui selected principles:
 - tweakcn as the default shadcn theme/style reference for zero-to-one Admin Console projects
 - composition-first UI built from shadcn/ui primitives and project-level wrappers
 - Tailwind CSS variables and semantic tokens
+- optional shadcn MCP for registry browsing, component search, and installation when configured
 - clean minimal beautiful defaults instead of heavy enterprise chrome
 - standard Admin Console shell: `AppShell`, `Sidebar`, `TopBar`, `PageHeader`, `FilterBar`, `DataTable`, `Dialog`, `Sheet`, and detail pages
 - table-first CRUD with stable status/time/action columns, long text and long ID handling, responsive fallback, and no complex forms inside list cells
@@ -147,6 +172,7 @@ shadcn/ui selected principles:
 - explicit accessibility, focus, keyboard, loading/empty/error/forbidden/success/disabled/pending/readonly states
 - design review checks for backend density, stable columns, no button wrapping, no heavy Sheet misuse, no layout overflow, clean console, and no unexpected Network failures
 - Pencil prototype as implementation input
+- optional Product Design visual target as Pencil input, not as a replacement for Pencil governance
 - Playwright visual QA across desktop/tablet/mobile before claiming frontend completion
 
 ## AGENTS.md Link
@@ -158,6 +184,7 @@ Add or merge a short section like:
 
 - 项目级 UI/UX 规则见 `DESIGN.md`。
 - Pencil 原型、截图和设计说明统一放在 `design/`。
+- 如果使用 Product Design 生成视觉目标或 `design-qa.md`，对应图片、链接或说明也必须记录到 `design/`；未安装 Product Design 时直接走原 Pencil 流程。
 - 开始前端实现前，必须先检查 `DESIGN.md` 和 `design/`。
 - 已确认 Pencil 原型优先于临场自由重设计；如需偏离，先说明原因并获得确认。
 ```
@@ -180,8 +207,10 @@ Before reporting done:
 - `rg -n "DESIGN.md|design/" AGENTS.md`
 - Record which UI framework was selected and why.
 - Record that shadcn/ui was selected and tweakcn was used as the Admin Console layout/style reference.
+- Record whether shadcn MCP was available, used, unavailable, or intentionally skipped; if used, record the registry/components/blocks involved.
 - Record theme/material source and inferred theme decision when the user provides colors, logo, website, screenshots, or brand material.
 - Record whether Pencil tooling and selected-framework references were available and used.
+- Record whether Product Design was used, unavailable, or intentionally skipped; if used, record where the selected visual target or `design-qa.md` evidence lives.
 - If `CLAUDE.md` exists and is expected to mirror `AGENTS.md`, verify the design section is present there too.
 
 ## Common Mistakes
@@ -189,7 +218,13 @@ Before reporting done:
 - Creating `DESIGN.md` but forgetting to link it from `AGENTS.md`.
 - Overwriting existing governance files instead of merging.
 - Creating screenshots without a `.pen` source.
+- Treating Product Design as mandatory or requiring the user to install it before continuing.
+- Using Product Design outputs without recording them in `design/`.
+- Treating a Product Design visual or `design-qa.md` file as a replacement for Pencil, `DESIGN.md`, `gstack /design-review`, functional QA, or code review.
 - Hand-editing or guessing around Pencil when Pencil-specific tools are available.
+- Treating shadcn MCP as mandatory or blocking the workflow when it is unavailable.
+- Silently editing `~/.codex/config.toml` to add shadcn MCP without explicit user authorization.
+- Installing registry components through shadcn MCP or CLI without inspecting generated code, dependencies, tokens, and accessibility.
 - Accepting unsupported UI framework preferences instead of refusing them.
 - Using the retired Ant Design template or recommending Ant Design for new Admin Console work.
 - Allowing button labels to wrap instead of treating the space as compact and changing the control pattern.

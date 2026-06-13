@@ -65,6 +65,7 @@ required_skills=(
   "my-harness"
   "my-harness-next-action"
   "my-harness-writing-design"
+  "my-harness-product-design-bridge"
   "my-harness-autopilot-slice"
   "my-harness-upgrade"
   "my-harness-initialize-project"
