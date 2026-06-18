@@ -1,18 +1,18 @@
 ---
 name: my-harness-writing-design
-description: Use when a project needs initial design requirements, a DESIGN.md baseline, a design directory, Pencil prototype starter files, or AGENTS.md links to design governance
+description: Use when a project needs initial design requirements, a DESIGN.md baseline, a design directory, Product Design visual-target guidance, optional Pencil coordination, or AGENTS.md links to design governance
 ---
 
 # My Harness Writing Design
 
 ## Purpose
 
-Create the design-governance starting point for the current project before product/UI implementation begins. The default and only active Admin Console baseline is a shadcn/ui-compatible style using tweakcn as the default theme/style reference.
+Create the design-governance starting point for the current project before product/UI implementation begins. The selected frontend design baseline depends on product scenario: Admin Console uses shadcn/ui + tweakcn, BI dashboards use React + Ant Design Pro + ECharts, and C-end websites/apps leave framework selection to Product Design plus later engineering review. Product Design is the preferred visual-target helper when available; Pencil is optional for complex frontend modules that need explicit human alignment.
 
 ## Before Editing
 
 1. Read project governance first: `AGENTS.md`, `CLAUDE.md`, README, and existing docs.
-2. Inspect existing `design/`, `DESIGN.md`, Pencil files, screenshots, and design notes.
+2. Inspect existing `design/`, `DESIGN.md`, Product Design notes, screenshots, URL captures, Figma references, optional Pencil files, and design notes.
 3. Preserve existing project rules. Merge design governance; do not overwrite unrelated instructions.
 4. If the project already has `AGENTS.md` and `CLAUDE.md` as synchronized governance files, keep relevant design references synchronized.
 
@@ -20,31 +20,33 @@ Create the design-governance starting point for the current project before produ
 
 This skill is explicitly allowed to use design-specific tools and skills when available. Prefer specialized tools over hand-written approximations.
 
+Product Design dependencies:
+
+- Product Design is not required for this skill or for `my-harness`, but it is preferred for frontend visual-target generation when installed.
+- If Product Design is installed and the UI scope lacks a visual target, use Product Design `get-context` -> `ideate` -> user selection to create a selected visual target.
+- Product Design `image-to-code` / `url-to-code` belongs in implementation only after `IMPLEMENTATION_PLAN.md` exists and a selected visual target or source URL is available.
+- Product Design `design-qa.md` may be used as supporting visual-fidelity evidence before `gstack /design-review`.
+- If Product Design is unavailable, do not ask the user to install it; continue with shadcn/ui design governance, existing UI references, screenshots, or optional Pencil when needed.
+- Product Design outputs must be recorded under `design/` or referenced from `DESIGN.md` / `design/design-input-<stage>.md` before they influence implementation.
+
 Pencil dependencies:
 
-- Invoke the `pencil-design` skill when creating or iterating visual prototypes, mockups, app screens, or `.pen` assets.
+- Invoke the `pencil-design` skill only when the module is complex enough to need human alignment, when the user explicitly asks for Pencil, or when an existing project governance file requires `.pen` assets.
 - Use Pencil App / Pencil MCP tools for `.pen` documents when available, especially for opening, editing, validating, exporting, or inspecting existing Pencil files.
 - Use the Pencil CLI when the task needs a generated `.pen` file or exported image and CLI auth is available.
 - Do not treat a blank starter `.pen` as an approved prototype. It is only a placeholder until generated or reviewed through Pencil.
 
-Product Design optional dependency:
+Product scenario and frontend framework selection:
 
-- Product Design is not required for this skill or for `my-harness`.
-- If Product Design is installed, `my-harness-product-design-bridge` may be used to create a visual target before Pencil work, seed a Pencil draft from a selected ImageGen option, or produce `design-qa.md` as supporting evidence before `gstack /design-review`.
-- If Product Design is unavailable, do not ask the user to install it; continue with the original Pencil-centered design governance.
-- Product Design outputs must be recorded under `design/` or referenced from `DESIGN.md` / `design/pencil-input-<stage>.md` before they influence implementation.
-- Product Design outputs do not replace `.pen` source files, exported Pencil screenshots, or project-level `DESIGN.md` unless the project explicitly adopts a different design governance rule.
+- Hard gate: if the user invokes this skill without a clearly stated or discoverable product scenario, do not initialize files. Stop and ask the user to choose the scenario: Admin Console, BI dashboard/data cockpit, or C-end website/app.
+- Admin Console / backend management / CRUD console: use `shadcn/ui + tweakcn`. This keeps the existing Admin Console logic unchanged.
+- BI chart analysis / analytics dashboard / data cockpit / data big screen: use `React + Ant Design Pro + ECharts`.
+- C-end website / consumer app / mobile app / public-facing product: do not lock any frontend framework in this skill. Use Product Design to clarify the brief, visual direction, interaction model, and framework-selection inputs; final framework selection belongs in `plan-eng-review`.
+- Do not silently map an unclear request to Admin Console just because this skill has an Admin Console template.
+- If the user explicitly requests a framework that conflicts with the scenario, stop and explain the scenario/framework mismatch before writing files.
+- Ant Design Pro is supported only for BI dashboards/data cockpits in this skill. Do not recommend Ant Design Pro for normal Admin Console work.
 
-UI framework selection:
-
-- Supported UI framework is `shadcn` / shadcn/ui only.
-- If the user does not explicitly prefer a UI framework, choose `shadcn`.
-- If the user explicitly prefers shadcn or shadcn/ui, choose `shadcn`.
-- If the user explicitly asks for Ant Design, antd, Ant, or any other frontend UI framework, directly refuse that framework request and say this skill currently supports only shadcn/ui.
-- Do not silently map unsupported preferences such as Ant Design, Material UI, Chakra UI, Arco Design, Element Plus, Bootstrap, Tailwind UI, Radix-only, or a custom design system into shadcn/ui.
-- For a zero-to-one Admin Console with no strong user preference, choose `shadcn` and use tweakcn as the default shadcn theme/style reference.
-
-shadcn/ui dependencies and style:
+shadcn/ui dependencies and style for Admin Console:
 
 - Use shadcn/ui by default and for all new Admin Console design baselines.
 - Treat shadcn/ui as open component code plus a code-distribution workflow, not as a sealed component library.
@@ -55,6 +57,23 @@ shadcn/ui dependencies and style:
 - Do not silently modify global Codex MCP configuration. If a task requires adding shadcn MCP to `~/.codex/config.toml`, get explicit user authorization first.
 - When shadcn MCP or CLI is used, inspect project `components.json`, aliases, style, Tailwind config, registries, and installed components before adding new code.
 - Do not combine shadcn/ui with Ant Design or another UI framework in the same design baseline unless the user explicitly asks for a migration/interop plan outside this skill's normal baseline.
+
+React + Ant Design Pro + ECharts dependencies and style for BI dashboards:
+
+- Use React as the application framework baseline for BI/dashboard frontends.
+- Use Ant Design Pro for page shell, layout, ProComponents, forms, filters, tables, permissions, and enterprise dashboard structure.
+- Use ECharts for all primary charts, trends, maps, funnels, scatter plots, composition charts, and interactive analysis views.
+- Design around metrics, dimensions, filters, drilldowns, comparison, data freshness, loading/empty/error/partial-data states, and chart performance.
+- Do not force BI dashboards into shadcn/ui. BI chart analysis needs Ant Design Pro's dashboard/pro components and ECharts' visualization model.
+- Do not use Ant Design Pro as a generic Admin Console replacement in this harness; its supported role here is BI/data cockpit work.
+
+Product Design framework decision for C-end products:
+
+- Use Product Design `get-context` first when product, visual source, or interactivity is unclear.
+- Use Product Design `ideate` for visual directions when no source visual exists.
+- Record the selected visual target and framework-selection inputs under `design/`.
+- Do not lock React, Next.js, Vue, React Native, Flutter, shadcn/ui, Ant Design Pro, or any other framework during this skill unless the user or existing project governance already requires one.
+- The final C-end frontend framework choice must be reviewed in `plan-eng-review` using Product Design output, target platform, SEO/content needs, animation complexity, performance constraints, and existing codebase conventions.
 
 shadcn/ui implementation constraints:
 
@@ -79,31 +98,32 @@ Theme and brand inference:
 - Extract dominant colors, accent colors, neutral/background direction, saturation, contrast, typography mood, density, and any obvious industry/brand tone.
 - For shadcn/ui, map the result to a tweakcn-compatible theme decision: use an appropriate preset family when it fits, or define a custom CSS-variable token set when no preset is a good match.
 - If the material is visually noisy or unsuitable for backend work, keep the admin console conservative and use only the strongest safe brand accent.
-- Always record the theme source and decision in `DESIGN.md` or `design/pencil-input-<stage>.md`.
+- Always record the theme source and decision in `DESIGN.md` or `design/design-input-<stage>.md`.
 
 Recommended order:
 
 1. Read project governance and existing design assets.
-2. Check Pencil availability (`pencil-design` skill, Pencil MCP, or Pencil CLI) if `.pen` assets are needed.
-3. If Product Design is available and the UI scope lacks a visual target, optionally route through `my-harness-product-design-bridge`; otherwise continue without it.
-4. Resolve UI framework preference using the shadcn/ui-only rule above.
-5. Check shadcn/ui availability (project dependency, local guideline, shadcn MCP, CLI, or docs) before writing component mappings.
-6. Inspect theme/color/material inputs if provided, including websites, logos, screenshots, or explicit color names.
-7. Create or update `DESIGN.md`, `design/`, Pencil starter/assets, and governance links.
+2. Resolve product scenario before writing files. If unclear, ask the user and stop.
+3. Select frontend baseline from scenario: Admin Console -> shadcn/ui + tweakcn; BI dashboard -> React + Ant Design Pro + ECharts; C-end -> Product Design decides.
+4. If Product Design is available and the UI scope lacks a visual target, use Product Design `get-context` -> `ideate` -> user selection; otherwise continue with existing references.
+5. Check Pencil availability (`pencil-design` skill, Pencil MCP, or Pencil CLI) only if `.pen` assets are needed for complex alignment.
+6. Check selected-framework availability and docs before writing component mappings.
+7. Inspect theme/color/material inputs if provided, including websites, logos, screenshots, or explicit color names.
+8. Create or update `DESIGN.md`, `design/`, design input notes, optional Pencil assets, and governance links.
 
 ## Required Outputs
 
 In the target project root:
 
 - `design/` directory exists.
-- A blank Pencil starter file exists under `design/`.
 - `DESIGN.md` exists and describes project-level UI/UX requirements.
 - `AGENTS.md` links to `DESIGN.md` and tells agents to inspect `design/` before frontend work.
 
 Recommended optional output:
 
-- `design/pencil-input-<stage>.md` describing the current project phase and prototype scope.
-- Product Design selected visual targets, screenshots, links, or `design-qa.md` references under `design/` when that optional branch was used.
+- `design/design-input-<stage>.md` describing the current project phase, visual target, component mapping, and prototype scope.
+- Product Design selected visual targets, screenshots, links, or `design-qa.md` references under `design/` when Product Design was used.
+- Pencil `.pen` files and exported screenshots only when complex alignment requires them.
 
 ## Naming Rule
 
@@ -138,14 +158,22 @@ Useful options:
 ```bash
 python3 ~/.codex/skills/my-harness-writing-design/scripts/harness_write_design.py --stage v0.1.0 --phase admin-console
 python3 ~/.codex/skills/my-harness-writing-design/scripts/harness_write_design.py --project-name feishu-iam --stage v0.1.0 --phase admin-console
-python3 ~/.codex/skills/my-harness-writing-design/scripts/harness_write_design.py --ui-framework shadcn --stage v0.1.0 --phase admin-console
+python3 ~/.codex/skills/my-harness-writing-design/scripts/harness_write_design.py --product-scenario admin-console --stage v0.1.0 --phase admin-console
+python3 ~/.codex/skills/my-harness-writing-design/scripts/harness_write_design.py --product-scenario bi-dashboard --stage v0.1.0 --phase data-cockpit
+python3 ~/.codex/skills/my-harness-writing-design/scripts/harness_write_design.py --product-scenario consumer --stage v0.1.0 --phase mobile-app
 ```
 
 The script is conservative: it creates missing files and appends a design-governance section to `AGENTS.md`; it does not overwrite existing `DESIGN.md` or `.pen` files unless explicitly extended later.
 
 ## DESIGN.md Baseline
 
-Use `templates/DESIGN.shadcn-admin-console.md` as the default and only Admin Console content. Adapt these fields before finalizing:
+Use one of the scenario templates:
+
+- `templates/DESIGN.shadcn-admin-console.md` for Admin Console / backend management.
+- `templates/DESIGN.ant-design-pro-echarts-bi-dashboard.md` for BI dashboard / data cockpit.
+- `templates/DESIGN.product-design-consumer.md` for C-end websites/apps where Product Design decides framework direction.
+
+Adapt these fields before finalizing:
 
 - project name
 - product type
@@ -155,7 +183,7 @@ Use `templates/DESIGN.shadcn-admin-console.md` as the default and only Admin Con
 - role/permission examples
 - technology stack if already chosen
 
-Keep the selected framework's core principles unless the project clearly is not an enterprise backend tool.
+Keep the selected scenario's core principles unless the user or existing project governance clearly says otherwise.
 
 shadcn/ui selected principles:
 
@@ -171,9 +199,24 @@ shadcn/ui selected principles:
 - button rules: icon-only only for list pages or narrow compact spaces; icon-only buttons need accessible labels and tooltip/title; otherwise use icon + text; no wrapped button labels
 - explicit accessibility, focus, keyboard, loading/empty/error/forbidden/success/disabled/pending/readonly states
 - design review checks for backend density, stable columns, no button wrapping, no heavy Sheet misuse, no layout overflow, clean console, and no unexpected Network failures
-- Pencil prototype as implementation input
-- optional Product Design visual target as Pencil input, not as a replacement for Pencil governance
+- Product Design visual target as preferred implementation input when available
+- optional Pencil prototype only for complex modules or human alignment
 - Playwright visual QA across desktop/tablet/mobile before claiming frontend completion
+
+BI dashboard selected principles:
+
+- React + Ant Design Pro + ECharts
+- metric-first information hierarchy
+- Ant Design Pro for layout, ProComponents, forms, filters, tables, permissions, and shell
+- ECharts for all core visualizations
+- explicit metric definitions, dimensions, time ranges, drilldowns, comparison, loading/empty/error/partial-data states, and performance constraints
+
+C-end selected principles:
+
+- no frontend framework lock inside `writing-design`
+- Product Design brief and selected visual target are the design source of truth
+- framework-selection inputs are recorded for `plan-eng-review`
+- mobile and responsive behavior are first-class
 
 ## AGENTS.md Link
 
@@ -183,19 +226,19 @@ Add or merge a short section like:
 ## 设计规范
 
 - 项目级 UI/UX 规则见 `DESIGN.md`。
-- Pencil 原型、截图和设计说明统一放在 `design/`。
-- 如果使用 Product Design 生成视觉目标或 `design-qa.md`，对应图片、链接或说明也必须记录到 `design/`；未安装 Product Design 时直接走原 Pencil 流程。
+- 设计制品、视觉目标、截图和设计说明统一放在 `design/`。
+- 如果使用 Product Design 生成视觉目标或 `design-qa.md`，对应图片、链接或说明也必须记录到 `design/`；未安装 Product Design 时使用 shadcn/ui 设计基线、已有 UI 参考、截图或必要时 Pencil 协同制品继续推进。
 - 开始前端实现前，必须先检查 `DESIGN.md` 和 `design/`。
-- 已确认 Pencil 原型优先于临场自由重设计；如需偏离，先说明原因并获得确认。
+- 已确认视觉目标或设计说明优先于临场自由重设计；如需偏离，先说明原因并获得确认。
 ```
 
 If `CLAUDE.md` mirrors `AGENTS.md`, apply the same change there and verify both files remain aligned.
 
-## Pencil Starter
+## Optional Pencil Assets
 
-Prefer creating a real blank Pencil document through available Pencil tooling. If only a filesystem starter is needed, create a minimal blank `.pen` with one 1440x900 frame and no UI elements. Do not treat the blank file as an approved prototype.
+Do not create Pencil assets by default. Prefer Product Design visual targets, screenshots, existing UI references, or `design/design-input-<stage>.md` for normal shadcn/ui frontend work.
 
-When Pencil tooling is unavailable, say so clearly in the final result and mark the starter as a placeholder requiring Pencil follow-up.
+Use Pencil only when the module is complex enough to need human alignment, when the user explicitly asks for it, or when project governance requires `.pen` files. When Pencil tooling is unavailable but required, say so clearly in the final result and mark the missing Pencil artifact as follow-up.
 
 ## Completion Check
 
@@ -203,37 +246,41 @@ Before reporting done:
 
 - `test -d design`
 - `test -f DESIGN.md`
-- `find design -maxdepth 1 -name '*.pen' -print`
 - `rg -n "DESIGN.md|design/" AGENTS.md`
-- Record which UI framework was selected and why.
-- Record that shadcn/ui was selected and tweakcn was used as the Admin Console layout/style reference.
+- Record which product scenario was selected and why.
+- Record which UI framework baseline was selected and why, or record that Product Design will decide the C-end framework later.
+- For Admin Console, record that shadcn/ui was selected and tweakcn was used as the layout/style reference.
+- For BI dashboard, record that React + Ant Design Pro + ECharts was selected.
+- For C-end, record that no framework was locked and Product Design output will feed `plan-eng-review`.
 - Record whether shadcn MCP was available, used, unavailable, or intentionally skipped; if used, record the registry/components/blocks involved.
 - Record theme/material source and inferred theme decision when the user provides colors, logo, website, screenshots, or brand material.
-- Record whether Pencil tooling and selected-framework references were available and used.
 - Record whether Product Design was used, unavailable, or intentionally skipped; if used, record where the selected visual target or `design-qa.md` evidence lives.
+- Record whether Pencil tooling was needed, unavailable, skipped, or used; if used, record where `.pen` and exported screenshots live.
 - If `CLAUDE.md` exists and is expected to mirror `AGENTS.md`, verify the design section is present there too.
 
 ## Common Mistakes
 
 - Creating `DESIGN.md` but forgetting to link it from `AGENTS.md`.
 - Overwriting existing governance files instead of merging.
-- Creating screenshots without a `.pen` source.
+- Treating a normal shadcn/ui screen as requiring Pencil when Product Design, screenshots, existing UI references, or design notes would be enough.
 - Treating Product Design as mandatory or requiring the user to install it before continuing.
 - Using Product Design outputs without recording them in `design/`.
-- Treating a Product Design visual or `design-qa.md` file as a replacement for Pencil, `DESIGN.md`, `gstack /design-review`, functional QA, or code review.
+- Treating a Product Design visual or `design-qa.md` file as a replacement for `DESIGN.md`, `gstack /design-review`, functional QA, or code review.
 - Hand-editing or guessing around Pencil when Pencil-specific tools are available.
 - Treating shadcn MCP as mandatory or blocking the workflow when it is unavailable.
 - Silently editing `~/.codex/config.toml` to add shadcn MCP without explicit user authorization.
 - Installing registry components through shadcn MCP or CLI without inspecting generated code, dependencies, tokens, and accessibility.
 - Accepting unsupported UI framework preferences instead of refusing them.
-- Using the retired Ant Design template or recommending Ant Design for new Admin Console work.
+- Defaulting to Admin Console when the user did not clearly state the product scenario.
+- Using Ant Design Pro for Admin Console work; Ant Design Pro is supported here only for BI/data cockpit scenarios.
+- Locking a framework for C-end websites/apps before Product Design and `plan-eng-review`.
 - Allowing button labels to wrap instead of treating the space as compact and changing the control pattern.
 - Letting table action buttons resize rows, wrap, or lose a stable operation-column width.
 - Putting long URLs, JSON, permission lists, errors, or IDs directly into tables without truncation, tooltip, copy, or detail placement.
 - Using a narrow Sheet for heavy configuration, multi-tab editing, tree selection, batch binding, or complex permission workflows.
 - Treating a page as complete without checking 390px mobile, console errors, unexpected Network failures, and responsive overflow.
 - Writing component mappings without checking project dependencies, existing code, or selected-framework references.
-- Mixing Ant Design and shadcn/ui in a single baseline without explicit migration/interop scope.
+- Mixing Ant Design Pro and shadcn/ui in a single baseline without explicit migration/interop scope.
 - Ignoring user-provided theme colors, websites, logos, screenshots, or brand assets.
 - Copying a brand website's marketing layout into an Admin Console instead of extracting safe color/token direction.
 - Starting frontend implementation before design requirements and prototype scope are written.

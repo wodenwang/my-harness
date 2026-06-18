@@ -42,25 +42,57 @@ Then run:
 ./scripts/verify.sh
 ```
 
-## Optional Product Design Bridge
+Step numbers are the evidence ledger. If a change introduces user-facing phase grouping or work-package language, keep the 15 canonical step rows intact and update the phase view in the same files. Do not remove or renumber steps just because adjacent steps can be executed together.
 
-Product Design integration is maintained through `my-harness-product-design-bridge`.
+## Product Design Frontend Guidance
+
+Product Design integration is maintained directly inside the core harness skills. There is no separate bridge skill.
 
 Rules:
 
 - Do not add Product Design as a required dependency for `my-harness`.
-- If Product Design is unavailable, the framework must fall back to the original Pencil-centered flow.
-- Keep the 15-step SOP unchanged; Product Design is an optional branch inside design, implementation, or visual QA stages.
-- Keep Pencil as the formal design-governance artifact unless a target project explicitly records a different rule.
+- If Product Design is unavailable, the framework must fall back to shadcn/ui design governance, existing UI references, screenshots, or optional Pencil for complex alignment.
+- Keep the 15-step SOP unchanged; Product Design is used directly inside design, implementation, or visual QA stages.
+- Keep Pencil optional unless a target project explicitly records a `.pen` requirement or the UI module needs human alignment.
+- Step 3 is `Design artifact / visual target`, not mandatory Pencil work.
 - Keep `image-to-code` / `url-to-code` behind `IMPLEMENTATION_PLAN.md`.
 - Keep `design-qa.md` as supporting evidence only; it must not replace verification, `gstack /design-review`, QA, review, ship, or deploy.
 
-When changing this bridge, update:
+When changing Product Design guidance, update:
 
-- `skills/my-harness-product-design-bridge/SKILL.md`
 - `skills/my-harness/SKILL.md`
 - `skills/my-harness-next-action/SKILL.md`
 - `skills/my-harness-writing-design/SKILL.md`
+- `skills/my-harness-autopilot-slice/SKILL.md`
+- `README.md`
+- `docs/project-history.md`
+- `CHANGELOG.md`
+
+Then run:
+
+```bash
+./scripts/verify.sh
+```
+
+## Writing Design Scenario Guidance
+
+`my-harness-writing-design` must choose the design baseline from the product scenario.
+
+Rules:
+
+- If product scenario is unclear, do not initialize files. Ask the user to choose Admin Console, BI dashboard/data cockpit, or C-end website/app.
+- Admin Console / backend management uses shadcn/ui + tweakcn.
+- BI chart analysis / analytics dashboard / data cockpit uses React + Ant Design Pro + ECharts.
+- C-end website/app does not lock a frontend framework in `writing-design`; Product Design output feeds the later `plan-eng-review` framework decision.
+- Ant Design Pro is supported here only for BI/data cockpit scenarios, not normal Admin Console work.
+
+When changing scenario guidance, update:
+
+- `skills/my-harness-writing-design/SKILL.md`
+- `skills/my-harness-writing-design/scripts/harness_write_design.py`
+- `skills/my-harness-writing-design/templates/`
+- `skills/my-harness-next-action/SKILL.md`
+- `skills/my-harness/SKILL.md`
 - `README.md`
 - `docs/project-history.md`
 - `CHANGELOG.md`
@@ -151,7 +183,7 @@ Windows PowerShell examples:
 
 ```powershell
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1" -Check
-$env:MY_HARNESS_REF = "v1.3.0"
+$env:MY_HARNESS_REF = "v1.4.0"
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
 ```
 

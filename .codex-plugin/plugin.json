@@ -1,7 +1,7 @@
 {
   "name": "my-harness",
-  "version": "1.3.0",
-  "description": "Personal project-delivery harness skills for initializing projects and coordinating gstack, Superpowers, Pencil, Product Design, shadcn MCP guidance, browser checks, Git, release closeout, deployment governance documents, optional canary monitoring, and cross-platform plugin updates.",
+  "version": "1.4.0",
+  "description": "Personal project-delivery harness skills for initializing projects and coordinating gstack, Superpowers, Product Design, optional Pencil artifacts, shadcn MCP guidance, browser checks, Git, release closeout, deployment governance documents, optional canary monitoring, and cross-platform plugin updates.",
   "author": {
     "name": "Wenzhe Wang"
   },
@@ -25,7 +25,7 @@
   "interface": {
     "displayName": "My Harness",
     "shortDescription": "Personal project workflow harness",
-    "longDescription": "My Harness groups personal workflow skills for initializing project governance, deciding the next project action, creating design governance, coordinating optional Product Design and shadcn MCP frontend helpers, writing DEPLOY.md deployment governance, running optional post-deploy canary monitoring, updating the harness plugin, and extending a gstack + Superpowers + Pencil + Playwright + Git delivery loop.",
+    "longDescription": "My Harness groups personal workflow skills for initializing project governance, deciding the next project action, creating design governance, coordinating Product Design and shadcn MCP frontend helpers, writing DEPLOY.md deployment governance, running optional post-deploy canary monitoring, updating the harness plugin, and extending a gstack + Superpowers + Product Design + optional Pencil + Playwright + Git delivery loop.",
     "developerName": "Wenzhe Wang",
     "category": "Coding",
     "capabilities": [
@@ -36,7 +36,7 @@
     "defaultPrompt": [
       "我现在项目推进到哪一步了，下一步该做什么？",
       "为当前空白项目初始化 README.md、AGENTS.md 和第一步 harness handoff",
-      "为这个项目初始化设计规范和 Pencil 原型目录",
+      "为这个项目初始化设计规范和设计制品目录",
       "检查 my-harness 是否有新版本，并说明当前版本到目标版本的迭代",
       "为当前项目生成 DEPLOY.md 部署治理文档，并链接到 AGENTS.md 和 CLAUDE.md",
       "对当前项目线上地址做一次 quick canary，只登记 GitHub issues，不修复问题"

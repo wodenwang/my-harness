@@ -1,6 +1,6 @@
 ---
 name: my-harness-next-action
-description: Use when advancing a project through gstack, Superpowers, Pencil, optional Product Design, browser verification, Git, ship, land, or deploy and the current phase or next harness action is unclear
+description: Use when advancing a project through gstack, Superpowers, Product Design, optional Pencil, browser verification, Git, ship, land, or deploy and the current phase or next harness action is unclear
 ---
 
 # My Harness Next Action
@@ -16,7 +16,7 @@ First read project governance (`AGENTS.md`, `CLAUDE.md`, README/runbooks) and th
 Use the cheapest relevant evidence first:
 
 - Governance: project `AGENTS.md`, `CLAUDE.md`, release/runbook docs.
-- Planning: `IMPLEMENTATION_PLAN.md`, `docs/superpowers/`, `design/`, Pencil `.pen`, exported screenshots, optional Product Design visual targets or brief notes.
+- Planning: `IMPLEMENTATION_PLAN.md`, `docs/superpowers/`, `design/`, Product Design visual targets or brief notes, screenshots, URL captures, Figma references, optional Pencil `.pen` files, and exported screenshots.
 - Implementation: `git status`, recent commits, changed files, running app, test scripts.
 - Verification: test/lint/build logs, gstack `/browse` findings, Playwright screenshots, optional `design-qa.md`, QA/design-review/review notes.
 - Release: version files, CHANGELOG/release notes, tags, PR state, deployment/canary notes.
@@ -33,6 +33,7 @@ If evidence conflicts, trust newest concrete artifacts over older plans. If a st
 6. If all applicable steps are complete, report that the SOP is closed and do not recommend restarting the Discovery / Brainstorm gate.
 7. Include no more than one optional catch-up action unless a blocker makes it necessary.
 8. Treat `my-harness-canary` as an optional direct-call follow-up after step 15, not as a required step for SOP closure.
+9. When adjacent steps are ready to run together, recommend the phase work package while still preserving each step as a separate row in the status table.
 
 ### Brainstorm Gate Rule
 
@@ -41,20 +42,20 @@ If step 1 was completed with Superpowers `brainstorming`, do not jump directly t
 After a Superpowers `brainstorming` gate, the next required actions are:
 
 1. step 2 `gstack /plan-design-review` to challenge product, interaction, frontend approach, information architecture, and state design;
-2. step 3 Pencil prototype planning when the scope needs UI or interaction evidence;
-3. step 4 prototype review when a Pencil prototype was created;
+2. step 3 design artifact / visual target planning when the scope needs UI or interaction evidence;
+3. step 4 design artifact review when a Product Design visual target, screenshot, URL capture, Figma reference, design note, or Pencil prototype was created;
 4. step 5 `gstack /plan-eng-review` to challenge architecture, data flow, boundaries, tests, performance, permissions, and release risk;
 5. only then step 6 Superpowers `writing-plans`.
 
 Mark steps 2 and 5 as `⏭️ 前置无需进行` only when the current request is extremely simple, has no meaningful product/interaction ambiguity, and has no engineering architecture or risk decisions to challenge. In that case, state the skip reason explicitly in the table. "The brainstorm already proposed an implementation plan" is not a valid skip reason.
 
-### Optional Product Design Branch
+### Product Design Frontend Rule
 
-Product Design can enhance frontend work but does not add, remove, or renumber canonical SOP steps.
+Product Design can enhance frontend work but does not add, remove, or renumber canonical SOP steps. It no longer needs a separate `my-harness-product-design-bridge` skill; call Product Design focused skills directly when they are available and appropriate.
 
-- If a UI slice has no visual target and Product Design is available, optionally recommend `my-harness-product-design-bridge` between steps 2 and 3. It may route to Product Design `get-context` -> `ideate` -> user selection, then continue to step 3.
-- If Product Design is unavailable, do not ask the user to install it and do not mark the SOP blocked. Continue with the original Pencil-centered step 3.
-- Product Design outputs are supporting design artifacts. Pencil remains the formal step 3 governance artifact unless the project explicitly says otherwise.
+- If a UI slice has no visual target and Product Design is available, recommend Product Design `get-context` -> `ideate` -> user selection as step 3 evidence.
+- If Product Design is unavailable, do not ask the user to install it and do not mark the SOP blocked. Continue with the shadcn/ui design baseline, existing UI references, screenshots, or optional Pencil only when human alignment requires it.
+- Product Design outputs are first-class design artifacts when recorded under `design/`. Pencil is optional and used for complex modules, multi-step interaction alignment, or explicit human review needs.
 - Product Design `image-to-code` / `url-to-code` may be used during step 7 only after step 6 has produced `IMPLEMENTATION_PLAN.md`.
 - Product Design `design-qa.md` may support step 10, but it never replaces steps 8, 9, 10, 11, 12, 14, or 15.
 
@@ -101,14 +102,29 @@ If the evidence shows all applicable SOP steps are complete, or the project has 
 - In the "下一步 harness 动作" section, write `无。当前 SOP 已闭环。`
 - Omit the copyable prompt block unless there is a genuine optional follow-up requested by the user.
 
+## Phase Work Packages
+
+The 15 canonical steps remain the source of truth for evidence, status, and handoff prompts. For user-facing guidance, group adjacent steps into phases:
+
+| Phase | Steps | When to recommend as one package |
+|---|---:|---|
+| 1. Discovery and direction | 1-2 | Use when the scope, user, problem, or early product/interaction direction is still unsettled. |
+| 2. Design baseline and visual target | 3-4 | Use when the next work is to create/confirm a visual target and review that target before engineering planning. |
+| 3. Engineering plan | 5-6 | Use when architecture review can flow directly into `IMPLEMENTATION_PLAN.md`, provided no decision gate blocks the review. |
+| 4. First runnable slice | 7-8 | Use when a planned first vertical slice can be implemented and immediately verified in the same bounded pass. |
+| 5. Browser, visual, and functional QA | 9-11 | Use when a running UI exists and browser verification, design review, and functional QA can be executed as one QA pass with separate evidence. |
+| 6. Review, ship, and deploy | 12-15 | Use when the implementation is verified and the remaining work is diff review, Git closeout as `/ship` preflight, shipping materials, and authorized land/deploy. |
+
+Do not collapse evidence. A phase package is only a recommendation convenience; the `流程执行情况一览：` table must still include all 15 rows and the first incomplete or blocked row must remain visible.
+
 ## Canonical Sequence
 
 | Step | Harness action | Completion evidence |
 | -: | - | - |
 | 1 | Discovery / Brainstorm gate: gstack `/office-hours` or Superpowers `brainstorming` | clarified target user, problem, constraints, smallest worthwhile slice, candidate approach, and questions for later review; use `office-hours` by default for new product/scope discovery, and use `brainstorming` when value and target are already clear but the candidate design/spec needs convergence |
 | 2 | gstack `/plan-design-review` | early product/interaction/frontend direction reviewed; required after Superpowers `brainstorming` unless the request is extremely simple |
-| 3 | Pencil App prototype | `.pen` source, screenshot/export, design notes; optional Product Design selected visual target may seed the Pencil work if recorded under `design/` |
-| 4 | gstack `/plan-design-review` on prototype | prototype review findings resolved or accepted |
+| 3 | Design artifact / visual target | Product Design selected visual target, source screenshot, URL capture, Figma frame, existing UI reference, design notes, or optional Pencil `.pen` when complex human alignment is needed; artifact is recorded under `design/` |
+| 4 | gstack `/plan-design-review` on selected design artifact | design artifact review findings resolved or accepted |
 | 5 | gstack `/plan-eng-review` | architecture, data flow, risks, test strategy locked; required after Superpowers `brainstorming` unless the request is extremely simple |
 | 6 | Superpowers `writing-plans` | `IMPLEMENTATION_PLAN.md` with paths, tasks, tests, done criteria; frontend plans should name shadcn components/blocks, shadcn MCP or CLI usage, and fallback when relevant |
 | 7 | Superpowers `executing-plans` or `subagent-driven-development` | first vertical slice implemented end to end; use `subagent-driven-development` only when the slice has clear independent tasks and non-overlapping file boundaries; Product Design `image-to-code` / `url-to-code` is allowed only inside this step after `IMPLEMENTATION_PLAN.md` exists; shadcn MCP may be used here to browse/search/install registry components when configured |
@@ -117,13 +133,13 @@ If the evidence shows all applicable SOP steps are complete, or the project has 
 | 10 | gstack `/design-review` | UI/interaction QA findings fixed or explicitly accepted; optional Product Design `design-qa.md` may be supporting evidence but does not replace this gate |
 | 11 | gstack `/qa` | systematic functional QA and rerun evidence |
 | 12 | gstack `/review` | pre-landing diff review with risks/test gaps addressed |
-| 13 | Git closeout | clean intended diff, commit boundary, status/remote state known |
-| 14 | gstack `/ship` | release/PR/tag/materials prepared according to project rules |
+| 13 | Git closeout / `/ship` preflight | clean intended diff, commit boundary, status/remote state known, and authorization-sensitive actions identified before `/ship` |
+| 14 | gstack `/ship` | final Git/release closeout, release/PR/tag/materials prepared according to project rules, and no push/PR/tag/release performed without authorization |
 | 15 | gstack `/land-and-deploy` | authorized merge/release/deploy plus required production health check |
 
 Optional post-closeout action: `my-harness-canary` runs gstack `/canary` against a live URL after step 15. It is a direct-call skill, not a canonical table row. It observes production or staging, writes canary evidence, and registers confirmed findings as GitHub issues without editing code.
 
-Optional frontend design action: `my-harness-product-design-bridge` can be invoked inside the existing step flow when Product Design is installed. It is not required for SOP closure and must degrade to the original Pencil flow when unavailable.
+Frontend design action: Product Design focused skills can be used directly inside the existing step flow when installed. They are not required for SOP closure; when unavailable, use shadcn/ui design governance, existing UI references, screenshots, or optional Pencil for complex alignment.
 
 ## Recommended Output
 
@@ -132,13 +148,15 @@ Use this shape:
 ```markdown
 当前判断：第 N 步「...」已完成/未完成；现在应执行第 M 步「...」。
 
+当前阶段：第 X 阶段「...」。
+
 流程执行情况一览：
 | 状态 | 步骤 | Harness 动作 | 判断 | 证据/原因 |
 |---|---:|---|---|---|
 | ✅ | 1 | Discovery / Brainstorm gate | 前置已完成 | ... |
 | ⏭️ | 2 | gstack `/plan-design-review` | 前置无需进行 | ... |
-| 🎯 | 3 | Pencil App prototype | 当前下一步 | ... |
-| ⏳ | 4 | gstack `/plan-design-review` on prototype | 待执行 | ... |
+| 🎯 | 3 | Design artifact / visual target | 当前下一步 | ... |
+| ⏳ | 4 | gstack `/plan-design-review` on selected design artifact | 待执行 | ... |
 
 证据：
 - ...
@@ -216,7 +234,7 @@ Step 2:
 ```text
 请使用 gstack /plan-design-review 审视 [项目/功能] 的早期产品、交互和前端方案。
 
-重点指出关键体验风险、信息架构、主路径、空/错/加载状态，并给出进入 Pencil 原型前的修改建议。
+重点指出关键体验风险、信息架构、主路径、空/错/加载状态，并给出进入设计制品 / 视觉目标阶段前的修改建议。
 
 若上一步使用了 Superpowers brainstorming，请重新挑战其中的方案，不要把 brainstorm 输出当作已批准设计。
 
@@ -231,21 +249,36 @@ Codex 兼容要求：
 Step 3:
 
 ```text
-请使用 Pencil App 为 [项目/功能] 产出 shadcn/ui 风格原型。
+请为 [项目/功能] 产出设计制品 / 视觉目标，并把结果记录到 design/。
 
-如果宿主机已安装 Product Design 插件，且当前还没有明确视觉目标，可先通过 my-harness-product-design-bridge 使用 Product Design get-context -> ideate -> 用户选择 生成前端视觉目标，并把选中的图、说明或引用保存到 design/ 作为 Pencil 初稿输入。
+开始前必须先确认产品场景；如果当前项目或我的描述没有明确场景，不要初始化文件，先反向询问我选择：Admin Console、BI 图表分析 / 数据驾驶舱、或 C 端网站 / App。
 
-如果 Product Design 不可用，不要要求我安装；直接降级为原来的 Pencil 流程。
+场景对应前端基线：
+Admin Console / 后台管理：使用 shadcn/ui + tweakcn。
+BI 图表分析 / 数据驾驶舱：使用 React + Ant Design Pro + ECharts。
+C 端网站 / App：不锁定框架，交给 Product Design 产出视觉方向和框架选择输入，后续在 plan-eng-review 中决策。
 
-如果宿主机已配置 shadcn MCP，可用它浏览和搜索 shadcn components / blocks 来辅助组件映射；未配置时使用 shadcn 官方文档、CLI 和项目已有组件，不阻塞原型工作。
+如果宿主机已安装 Product Design 插件，且当前还没有明确视觉目标，默认使用 Product Design get-context -> ideate -> 用户选择，生成 3 个视觉方向并等待我选择。选中的图、说明或引用必须保存或记录到 design/。
 
-保存 .pen 源文件，导出关键页面截图，并写一份简短设计说明到 design/。
+如果已有截图、URL、Figma、现有 UI 或足够清晰的设计说明，可直接把它们作为视觉目标记录到 design/。
+
+如果 Product Design 不可用，不要要求我安装；使用当前场景的设计基线、已有 UI 参考、截图或设计说明继续推进。C 端场景如果缺少 Product Design 和视觉来源，应停止并要求补充视觉方向或参考。
+
+只有当前模块足够复杂、需要人类协同对齐多页面/多状态/复杂交互时，才使用 Pencil App 产出 .pen 原型和导出截图。
+
+如果是 Admin Console 且宿主机已配置 shadcn MCP，可用它浏览和搜索 shadcn components / blocks 来辅助组件映射；未配置时使用 shadcn 官方文档、CLI 和项目已有组件，不阻塞原型工作。
+
+如果是 BI 图表分析 / 数据驾驶舱，必须写清 Ant Design Pro 页面骨架、ECharts 图表映射、指标口径、筛选、联动、下钻、loading/empty/error/partial-data 状态和性能要求。
+
+输出必须包含：产品场景、框架基线或 Product Design 决策状态、视觉目标来源、页面/组件范围、component/chart mapping、关键状态、响应式要求、是否需要 Pencil、以及下一步 plan-design-review 输入。
 ```
 
 Step 4:
 
 ```text
-请使用 gstack /plan-design-review 审查 design/ 中的 Pencil 原型和截图。
+请使用 gstack /plan-design-review 审查 design/ 中已选定的设计制品 / 视觉目标。
+
+设计制品可以是 Product Design 选中图、源截图、URL capture、Figma frame、现有 UI 参考、设计说明，或复杂协同场景下的 Pencil 原型。
 
 按阻塞、重要、可选分类给出问题，并迭代到没有关键设计阻塞。
 
@@ -292,7 +325,7 @@ Step 7:
 如果任务强耦合或文件边界不清晰，用 executing-plans。
 如果已拆成可并行、边界清晰、互不踩代码的任务，用 subagent-driven-development。
 
-如果这是 frontend vertical slice，且 IMPLEMENTATION_PLAN.md 已明确文件路径、任务、测试和完成标准，可在实现过程中通过 my-harness-product-design-bridge 使用 Product Design image-to-code 或 url-to-code 辅助实现；但必须已有选中的视觉目标或 URL，且不得扩大到后续 slice。
+如果这是 frontend vertical slice，且 IMPLEMENTATION_PLAN.md 已明确文件路径、任务、测试和完成标准，可在实现过程中直接使用 Product Design image-to-code 或 url-to-code 辅助实现；但必须已有选中的视觉目标或 URL，且不得扩大到后续 slice。
 
 如果项目已配置 shadcn MCP，优先用 shadcn MCP 浏览、搜索、查看并引入计划中列出的 shadcn components / blocks；如果未配置，不要阻塞，实现时改用 shadcn CLI、官方文档和项目已有组件。
 
@@ -332,7 +365,7 @@ Step 10:
 ```text
 请使用 gstack /design-review 对已实现界面做视觉和交互 QA。
 
-如果当前有 Product Design 源视觉目标和已渲染实现，可先通过 my-harness-product-design-bridge 生成或更新 design-qa.md，作为本次 design-review 的视觉还原证据。
+如果当前有 Product Design 源视觉目标和已渲染实现，可先使用 Product Design design-qa 生成或更新 design-qa.md，作为本次 design-review 的视觉还原证据。
 
 design-qa.md 只能作为辅助证据，不能替代 gstack /design-review、功能 QA、代码 review 或后续 ship/deploy 门禁。
 
@@ -381,11 +414,15 @@ Codex 兼容要求：
 Step 13:
 
 ```text
-请做 Git 收口。
+请做 Step 13 Git closeout / gstack /ship preflight。
 
-检查 git status、diff、未提交、未 push、未 pull 状态，整理提交边界和发布材料。
+检查 git status、diff、未提交、未 push、未 pull 状态，整理提交边界、远端状态、版本材料、CHANGELOG/发布说明缺口和后续 /ship 需要确认的授权动作。
 
-不要在未获授权时 push、merge 或 release。
+这一步是 /ship 前置检查，不单独替代 gstack /ship。不要在未获授权时 push、创建 PR、merge、tag、release、上传镜像或 deploy。
+
+执行完毕后，请按照 my-harness 规定的流程输出 `流程执行情况一览：` 15 步进度表，并在末尾继续给出下一步可直接复制执行的 `推荐提示词`。
+
+这个末尾提示词必须同时包含本句要求，让用户后续只需要复制末尾提示词继续推进，不需要重新询问 next action。
 ```
 
 Step 14:
@@ -393,7 +430,7 @@ Step 14:
 ```text
 请使用 gstack /ship 做最终收口。
 
-整理 WIP、确认 diff、运行必要验证、准备提交、版本、CHANGELOG 和发布说明，并按项目规则处理 push/PR。
+整理 WIP、复核 Step 13 Git closeout 结论、确认 diff、运行必要验证、准备提交、版本、CHANGELOG 和发布说明，并按项目规则处理 push/PR。
 
 需要授权的动作先确认。
 
@@ -425,11 +462,11 @@ Codex 兼容要求：
 ## Common Mistakes
 
 - Recommending step 1 because the conversation lacks context while the repo has artifacts. Inspect the repo first.
-- Treating Superpowers `brainstorming` output as approved design or as permission to skip directly to `writing-plans`. Step 1 produces candidate input; later `plan-design-review`, Pencil review when needed, and `plan-eng-review` still challenge it unless the request is extremely simple.
+- Treating Superpowers `brainstorming` output as approved design or as permission to skip directly to `writing-plans`. Step 1 produces candidate input; later `plan-design-review`, design artifact review when needed, and `plan-eng-review` still challenge it unless the request is extremely simple.
 - Marking `plan-design-review` or `plan-eng-review` unnecessary after `brainstorming` because the brainstorm already proposed frontend/backend implementation details.
 - Recommending a gstack prompt in Codex without the Codex-safe Markdown decision-gate guard.
 - Continuing past a gstack decision point instead of stopping with `D1` / `D2` / `D3` Markdown decision tables.
-- Treating Product Design as required infrastructure. It is optional; if unavailable, continue with the original Pencil-centered flow.
+- Treating Product Design as required infrastructure. It is preferred for visual targets when available, but optional; if unavailable, continue with shadcn/ui design governance, existing references, screenshots, or optional Pencil for complex alignment.
 - Using Product Design `image-to-code` or `url-to-code` before `IMPLEMENTATION_PLAN.md` exists.
 - Treating Product Design `design-qa.md` as a replacement for `gstack /design-review`, functional QA, code review, ship, or deploy.
 - Treating shadcn MCP as mandatory. It is important when configured, but the fallback is shadcn CLI, official docs, and existing project components.

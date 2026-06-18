@@ -2,7 +2,7 @@
 set -euo pipefail
 
 PLUGIN_NAME="my-harness"
-DEFAULT_REF="v1.3.0"
+DEFAULT_REF="v1.4.0"
 REPO_SLUG="wodenwang/my-harness"
 
 MY_HARNESS_REF="${MY_HARNESS_REF:-$DEFAULT_REF}"
@@ -81,8 +81,19 @@ cat > "$MARKETPLACE_FILE" <<'JSON'
 JSON
 
 STAMP="$(date +%Y%m%d%H%M%S)"
+for target in "$CODEX_HOME"/skills/my-harness*; do
+  [[ -e "$target" || -L "$target" ]] || continue
+  skill_name="$(basename "$target")"
+  [[ ! -f "$PLUGIN_ROOT/skills/$skill_name/SKILL.md" ]] || continue
+  if [[ -L "$target" ]] || [[ -f "$target" ]]; then
+    rm -f "$target"
+  elif [[ -d "$target" ]]; then
+    mv "$target" "$target.backup.$STAMP"
+  fi
+done
+
 for skill_dir in "$PLUGIN_ROOT"/skills/*; do
-  [[ -d "$skill_dir" ]] || continue
+  [[ -f "$skill_dir/SKILL.md" ]] || continue
   skill_name="$(basename "$skill_dir")"
   target="$CODEX_HOME/skills/$skill_name"
   if [[ -L "$target" ]] || [[ -f "$target" ]]; then

@@ -39,11 +39,11 @@ When refusing, state the blocking reason and recommend `my-harness-next-action` 
 5. Re-run `my-harness-next-action`.
 6. Continue until complete, refused, blocked, or handed off.
 
-Do not skip gates. Do not compress multiple harness steps into one undocumented leap.
+Do not skip gates. Adjacent steps may be executed as a documented phase work package only when `my-harness-next-action` recommends that package and the final evidence table still records each canonical step separately.
 
-If the Discovery / Brainstorm evidence came from Superpowers `brainstorming`, do not treat that as permission to start at `writing-plans` or implementation. The loop must still pass through `plan-design-review`, Pencil planning when needed, and `plan-eng-review` before `writing-plans`, unless the slice is extremely simple and the skip reasons for both review gates are explicit.
+If the Discovery / Brainstorm evidence came from Superpowers `brainstorming`, do not treat that as permission to start at `writing-plans` or implementation. The loop must still pass through `plan-design-review`, design artifact planning when needed, and `plan-eng-review` before `writing-plans`, unless the slice is extremely simple and the skip reasons for both review gates are explicit.
 
-Product Design is an optional frontend accelerator only. Autopilot may use `my-harness-product-design-bridge` when Product Design is available and the current UI slice needs a visual target, image/url-to-code help, or `design-qa.md` evidence. If Product Design is unavailable, do not require installation and continue with the original Pencil-centered flow.
+Product Design is the preferred frontend visual-target accelerator when available. Autopilot may use Product Design focused skills directly when the current UI slice needs a visual target, image/url-to-code help, or `design-qa.md` evidence. If Product Design is unavailable, do not require installation and continue with shadcn/ui design governance, existing references, screenshots, or optional Pencil for complex human alignment.
 
 ## Codex-Safe Gstack Gate Rule
 
@@ -62,15 +62,15 @@ If a gstack step needs a human decision, that Markdown decision gate is the auto
 
 ## Step-Specific Rules
 
-### Design And Pencil Gates
+### Design Artifact Gates
 
-If the next action requires Pencil prototype creation or meaningful visual design:
+If the next action requires a design artifact, visual target, optional Pencil prototype, or meaningful visual design:
 
 1. Use `my-harness-writing-design` to create or verify `DESIGN.md`, `design/`, and starter files.
-2. If Product Design is available and there is no visual target, use `my-harness-product-design-bridge` only to reach the next required human choice, such as selecting one of the generated visual options.
-3. Stop and hand off to the human for Product Design option selection, Pencil confirmation, or design approval.
+2. If Product Design is available and there is no visual target, use Product Design `get-context` -> `ideate` only to reach the next required human choice, such as selecting one of the generated visual options.
+3. Stop and hand off to the human for Product Design option selection, optional Pencil confirmation, or design approval.
 
-Do not blindly run Pencil CLI or MCP to produce real design work unless the user explicitly asks in this turn and the scope is small enough for this skill.
+Do not blindly run Pencil CLI or MCP to produce real design work unless the user explicitly asks in this turn, the module is complex enough to need human alignment, and the scope is small enough for this skill.
 
 ### Implementation Step
 
@@ -78,7 +78,7 @@ For step 7:
 
 - Use `executing-plans` when the first vertical slice is strongly coupled or file boundaries are unclear.
 - Use `subagent-driven-development` only when `IMPLEMENTATION_PLAN.md` has clear independent tasks, ownership, and non-overlapping write scopes.
-- Use Product Design `image-to-code` or `url-to-code` only through `my-harness-product-design-bridge`, only when `IMPLEMENTATION_PLAN.md` already exists, and only for the first frontend vertical slice.
+- Use Product Design `image-to-code` or `url-to-code` only when `IMPLEMENTATION_PLAN.md` already exists, a selected visual target or source URL exists, and the work is limited to the first frontend vertical slice.
 - Implement only the first vertical slice. Do not expand into later slices just because the loop is running.
 
 ### Review Loops
@@ -143,6 +143,7 @@ Include:
 
 - final outcome: completed, refused, handed off, blocked, or authorization required
 - current stopping point
+- current phase or phase work package when one was used
 - the same `流程执行情况一览：` table shape used by `my-harness-next-action`
 - one row for all 15 canonical harness steps, including skipped or inapplicable steps
 - exactly one status icon per row, using the `my-harness-next-action` meanings
@@ -177,13 +178,16 @@ Use this format:
 停止点 / 完成点：
 - ...
 
+当前阶段 / 工作包：
+- ...
+
 流程执行情况一览：
 | 状态 | 步骤 | Harness 动作 | 判断 | 证据/原因 |
 |---|---:|---|---|---|
 | ✅ | 1 | Discovery / Brainstorm gate | 前置已完成 | 范围已通过 ... 锁定为 ...；无循环。 |
 | ⏭️ | 2 | gstack `/plan-design-review` | 前置无需进行 | 当前切片不涉及新增产品/交互方向，按已批准范围执行。 |
-| ⏭️ | 3 | Pencil App prototype | 前置无需进行 | 当前切片不涉及 UI；已有规则允许跳过 Pencil 原型。 |
-| ⏭️ | 4 | gstack `/plan-design-review` on prototype | 前置无需进行 | 未创建新原型，因此无需原型复审。 |
+| ⏭️ | 3 | Design artifact / visual target | 前置无需进行 | 当前切片不涉及 UI；无需新增设计制品。 |
+| ⏭️ | 4 | gstack `/plan-design-review` on selected design artifact | 前置无需进行 | 未创建新设计制品，因此无需设计制品复审。 |
 | ✅ | 5 | gstack `/plan-eng-review` | 前置已完成 | 工程边界和测试策略已在 ... 锁定。 |
 | ✅ | 6 | Superpowers `writing-plans` | 前置已完成 | `IMPLEMENTATION_PLAN.md` 覆盖文件路径、任务、测试和完成标准。 |
 | ✅ | 7 | Superpowers `executing-plans` or `subagent-driven-development` | 前置已完成 | 已完成第一个 vertical slice，未扩展后续切片。 |
@@ -192,7 +196,7 @@ Use this format:
 | ✅ | 10 | gstack `/design-review` | 前置已完成 | 循环 1 次，发现 0 个阻塞问题，无需修复。 |
 | ✅ | 11 | gstack `/qa` | 前置已完成 | 循环 1 次，发现 2 个问题，已修复 2 个，无遗留。 |
 | 🎯 | 12 | gstack `/review` | 当前下一步 | 循环 10 次后仍有 1 个高风险 finding，需要人工判断是否接受。 |
-| ⏳ | 13 | Git closeout | 待执行 | 停止点之后，未执行。 |
+| ⏳ | 13 | Git closeout / `/ship` preflight | 待执行 | 停止点之后，未执行。 |
 | ⏳ | 14 | gstack `/ship` | 待执行 | 停止点之后，未执行；未执行 push/PR/tag/release。 |
 | ⏳ | 15 | gstack `/land-and-deploy` | 待执行 | 停止点之后，未执行；未执行 merge/release/deploy。 |
 
@@ -227,9 +231,9 @@ The slice is complete only when:
 
 - Starting before the Discovery / Brainstorm gate has fixed the target.
 - Running autopilot on a large, unclear version.
-- Treating Pencil starter files as approved design.
+- Treating starter design files or blank Pencil files as approved design.
 - Requiring Product Design installation or blocking the SOP when Product Design is unavailable.
-- Letting Product Design bypass Pencil governance, `IMPLEMENTATION_PLAN.md`, design review, QA, or code review.
+- Letting Product Design bypass `IMPLEMENTATION_PLAN.md`, design review, QA, or code review.
 - Letting review/QA loops run indefinitely.
 - Entering Plan mode or using `AskUserQuestion` / `request_user_input` during a gstack gate in Codex.
 - Continuing past a Markdown decision gate before the user chooses a `D1` / `D2` / `D3` option.

@@ -1,6 +1,17 @@
 # Changelog
 
-## Unreleased
+## 1.4.0 - 2026-06-18
+
+- Added a six-phase user-facing view over the canonical 15-step SOP while preserving all step numbers as the evidence ledger.
+- Reframed step 13 as Git closeout / `/ship` preflight, with step 14 `gstack /ship` retaining the final shipping closeout.
+- Updated `my-harness-next-action` to allow phase work-package recommendations while still requiring the full 15-row `流程执行情况一览：` table.
+- Added a product-scenario gate to `my-harness-writing-design`: if the scenario is unclear, it must stop and ask whether the project is an Admin Console, BI dashboard/data cockpit, or C-end website/app before initializing files.
+- Added scenario-based frontend baselines: Admin Console uses shadcn/ui + tweakcn, BI dashboard/data cockpit uses React + Ant Design Pro + ECharts, and C-end website/app leaves framework selection to Product Design plus `plan-eng-review`.
+- Removed `my-harness-product-design-bridge`; Product Design focused skills are now used directly inside the core SOP.
+- Changed step 3 from fixed Pencil prototype work to `Design artifact / visual target`, with Product Design `get-context` -> `ideate` as the preferred path when available.
+- Downgraded Pencil to an optional artifact for complex frontend modules, human alignment, or explicit `.pen` requirements.
+- Updated `my-harness-writing-design` to create `design/design-input-<stage>.md` instead of a blank `.pen` by default.
+- Updated installer defaults to `v1.4.0`.
 
 ## 1.3.0 - 2026-06-13
 
@@ -45,7 +56,7 @@
 ## 1.0.5 - 2026-05-28
 
 - Clarified that Superpowers `brainstorming` output is candidate input only and must not jump directly to Superpowers `writing-plans`.
-- Required `plan-design-review`, Pencil prototype planning when needed, and `plan-eng-review` after a brainstorming gate unless the request is extremely simple.
+- Required `plan-design-review`, design artifact planning when needed, and `plan-eng-review` after a brainstorming gate unless the request is extremely simple.
 - Updated installer defaults to `v1.0.5`.
 
 ## 1.0.4 - 2026-05-28

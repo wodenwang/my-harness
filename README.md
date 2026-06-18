@@ -6,7 +6,7 @@
 
 - 初始化空白项目或新仓库的 `README.md`、`AGENTS.md` 和第一步 harness handoff。
 - 判断项目现在推进到哪一步，下一步该做什么。
-- 初始化 UI/产品项目的设计治理和 Pencil starter；在 shadcn MCP 可用时辅助组件检索/安装，在 Product Design 可用时可选生成视觉目标、辅助 frontend slice 实现或产出 `design-qa.md` 证据。
+- 初始化 UI/产品项目的设计治理和 `design/` 设计制品目录；在 shadcn MCP 可用时辅助组件检索/安装，在 Product Design 可用时生成视觉目标、辅助 frontend slice 实现或产出 `design-qa.md` 证据；Pencil 仅作为复杂协同场景的可选制品。
 - 为业务项目生成 `DEPLOY.md` 部署治理文档，并链接到 `AGENTS.md` / `CLAUDE.md`。
 - 在部署完成后对线上 URL 做可选金丝雀测试，并把发现的问题登记到当前项目 GitHub issues。
 - 在线检查、安装或更新本机 `my-harness` 插件。
@@ -16,13 +16,13 @@
 macOS / Linux:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wodenwang/my-harness/v1.3.0/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/wodenwang/my-harness/v1.4.0/scripts/install.sh | bash
 ```
 
 Windows PowerShell:
 
 ```powershell
-irm https://raw.githubusercontent.com/wodenwang/my-harness/v1.3.0/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/wodenwang/my-harness/v1.4.0/scripts/install.ps1 | iex
 ```
 
 默认安装到：
@@ -69,11 +69,11 @@ irm https://raw.githubusercontent.com/wodenwang/my-harness/main/scripts/install.
 更新到指定 ref:
 
 ```bash
-MY_HARNESS_REF=v1.3.0 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
+MY_HARNESS_REF=v1.4.0 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
 ```
 
 ```powershell
-$env:MY_HARNESS_REF = "v1.3.0"
+$env:MY_HARNESS_REF = "v1.4.0"
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
 ```
 
@@ -86,12 +86,26 @@ $env:MY_HARNESS_REF = "v1.3.0"
 | `my-harness` | 路由入口，判断该使用哪个 harness helper。 |
 | `my-harness-initialize-project` | 初始化新项目或空白仓库的基础治理：`README.md`、`AGENTS.md`、设计/部署链接和第一步 harness handoff。 |
 | `my-harness-next-action` | 读取项目证据，输出 15 步 SOP 状态表和下一步提示词；提示词会要求执行完成后继续输出进度表和下一步提示词，便于只复制末尾提示词持续推进；第 1 步支持 `office-hours` 或 Superpowers `brainstorming`，但 `brainstorming` 后默认仍需经过 `plan-design-review` 和 `plan-eng-review` 才能进入 `writing-plans`。 |
-| `my-harness-writing-design` | 初始化 `DESIGN.md`、`design/`、Pencil starter；Admin Console 统一使用 shadcn/ui + tweakcn，并生成包含布局、导航、表格、按钮、状态、响应式和 QA 门禁的后台 UI 规范。 |
-| `my-harness-product-design-bridge` | 在 Product Design 插件可用时，为前端/UI 切片可选接入 `get-context`、`ideate`、`image-to-code`、`url-to-code` 和 `design-qa`；未安装时降级为原 Pencil 流程。 |
+| `my-harness-writing-design` | 初始化 `DESIGN.md`、`design/` 和设计制品规则；先确认产品场景，Admin Console 使用 shadcn/ui + tweakcn，BI / 数据驾驶舱使用 React + Ant Design Pro + ECharts，C 端网站/App 不锁定框架并交给 Product Design 产出决策输入。 |
 | `my-harness-autopilot-slice` | 在 Discovery / Brainstorm gate 已定稿后推进一个小切片，并在人工门禁处停止。 |
 | `my-harness-upgrade` | 检查或更新已安装插件，并回读版本、备份和 skill 入口。 |
 | `my-harness-writing-deployment` | 生成项目级 `DEPLOY.md`，并链接到 `AGENTS.md` / `CLAUDE.md`；约束版本化 Docker Compose 生产部署、`install.sh` 首次安装、`upgrade.sh` 版本间升级、DB 初始化 SQL、DB DDL/数据迁移、配置迁移和版本门禁。 |
 | `my-harness-canary` | 在 15 步 SOP 完成后可选调用 gstack `/canary` 监控线上 URL；只观察和登记 GitHub issues，不修复问题；可按用户要求创建每日/周期性 Codex 定时任务。 |
+
+## 阶段视图
+
+`my-harness` 仍然保留 15 个 step 作为证据编号和交接表，但面向用户说明时按 6 个阶段表达：
+
+| 阶段 | 覆盖 step | 主要目的 |
+|---|---:|---|
+| 1. 需求和方向澄清 | 1-2 | 确认目标用户、问题、约束、最小切片，并审视早期产品/交互方向。 |
+| 2. 设计基线和视觉目标 | 3-4 | 确认设计制品、视觉目标、组件/图表映射，并完成设计输入复审。 |
+| 3. 工程方案和实施计划 | 5-6 | 挑战架构、数据流、测试策略和风险，然后写入 `IMPLEMENTATION_PLAN.md`。 |
+| 4. 第一个可运行切片 | 7-8 | 实现第一个端到端 vertical slice，并完成基础验证。 |
+| 5. 浏览器、视觉、功能 QA | 9-11 | 在真实页面上完成浏览器验证、设计 QA 和功能 QA。 |
+| 6. 代码审查、发布、部署 | 12-15 | 完成代码 review、Git closeout / `/ship` preflight、`/ship` 和授权后的 `/land-and-deploy`。 |
+
+`my-harness-next-action` 可以推荐一个阶段工作包，但最终 `流程执行情况一览：` 仍然必须包含全部 15 行。
 
 ## Codex 兼容门禁
 
@@ -116,11 +130,11 @@ Codex 当前不能稳定承接 gstack 部分 skill 内部的 `AskUserQuestion`�
 ```
 
 ```text
-为当前项目初始化设计治理，默认 shadcn/ui 后台风格。
+为当前项目初始化设计治理。开始前先确认产品场景；如果我没有明确说明场景，不要初始化文件，先反向询问我是 Admin Console、BI 图表分析 / 数据驾驶舱，还是 C 端网站 / App。
 ```
 
 ```text
-请使用 my-harness-product-design-bridge 判断当前 frontend slice 是否适合可选接入 Product Design；如果未安装 Product Design，不要要求安装，直接给出原 Pencil 流程下一步。
+请为当前 frontend slice 产出 shadcn/ui 视觉目标：如果 Product Design 可用，使用 get-context -> ideate 生成 3 个方向并等待选择；如果不可用，使用现有 UI 参考、截图或设计说明继续推进。只有复杂协同场景才使用 Pencil。
 ```
 
 ```text
@@ -154,7 +168,7 @@ Codex 当前不能稳定承接 gstack 部分 skill 内部的 `AskUserQuestion`�
 - Superpowers skills
 - Pencil / Pencil MCP / Pencil CLI
 - shadcn MCP（推荐但可选；缺少时使用 shadcn CLI、官方文档和项目已有组件）
-- Product Design plugin（可选；缺少时降级为 Pencil 流程，不阻塞 `my-harness`）
+- Product Design plugin（推荐但可选；缺少时使用 shadcn/ui 基线、已有 UI 参考、截图或必要时 Pencil 协同制品，不阻塞 `my-harness`）
 - Browser、Playwright 或 gstack browse
 
 缺少这些协调工具时，`my-harness` 可以给出阶段判断和下一步建议，但不能声称对应设计、QA、发布或浏览器验证门禁已经完成。
@@ -179,7 +193,17 @@ Codex 当前不能稳定承接 gstack 部分 skill 内部的 `AskUserQuestion`�
 
 ## 版本历史
 
-### Unreleased
+### v1.4.0
+
+- 保留 15 个 step 编号，同时新增 6 个阶段视图：需求方向、设计目标、工程计划、可运行切片、QA、发布部署。
+- 将 Step 13 明确为 Git closeout / `/ship` preflight，作为 Step 14 `/ship` 的前置检查，而不是独立发布阶段。
+- `my-harness-next-action` 支持推荐阶段工作包，但状态表仍必须保留全部 15 个 step。
+- `my-harness-writing-design` 增加产品场景门禁：场景不明确时不得初始化，必须反向询问用户选择 Admin Console、BI 图表分析 / 数据驾驶舱或 C 端网站 / App。
+- `my-harness-writing-design` 增加场景化前端基线：Admin Console 使用 shadcn/ui + tweakcn；BI / 数据驾驶舱使用 React + Ant Design Pro + ECharts；C 端网站/App 不锁定框架，交给 Product Design 和后续 `plan-eng-review` 决策。
+- 删除 `my-harness-product-design-bridge`，Product Design focused skills 直接进入核心 SOP：Step 3 用 `get-context` -> `ideate` 生成视觉目标，Step 7 可用 `image-to-code` / `url-to-code`，Step 10 可用 `design-qa.md` 作为视觉还原证据。
+- 将 Step 3 从固定 Pencil prototype 改为 Design artifact / visual target；Pencil 降级为复杂前端模块、跨人协作或明确需要 `.pen` 的可选协同制品。
+- `my-harness-writing-design` 不再默认生成 blank `.pen`，改为生成 `design/design-input-<stage>.md` 并记录 Product Design、截图、URL、Figma 或可选 Pencil 证据。
+- `scripts/install.sh` 和 `scripts/install.ps1` 默认稳定版本更新为 `v1.4.0`。
 
 ### v1.3.0
 
@@ -219,7 +243,7 @@ Codex 当前不能稳定承接 gstack 部分 skill 内部的 `AskUserQuestion`�
 
 ### v1.0.5
 
-- 明确 Superpowers `brainstorming` 完成后不得直接跳到 Superpowers `writing-plans`；除非需求极其简单，否则必须先经过 `plan-design-review`、必要的 Pencil 原型策划和 `plan-eng-review`。
+- 明确 Superpowers `brainstorming` 完成后不得直接跳到 Superpowers `writing-plans`；除非需求极其简单，否则必须先经过 `plan-design-review`、必要的设计制品策划和 `plan-eng-review`。
 - `scripts/install.sh` 和 `scripts/install.ps1` 默认稳定版本更新为 `v1.0.5`。
 
 ### v1.0.4

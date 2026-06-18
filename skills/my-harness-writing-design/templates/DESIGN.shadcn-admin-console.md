@@ -1,6 +1,6 @@
 # {{PROJECT_NAME}} shadcn/ui 设计系统基线
 
-本文档是 `{{PROJECT_NAME}}` 的视觉与交互设计基线，供 Pencil 原型、前端实现和后续设计评审使用。
+本文档是 `{{PROJECT_NAME}}` 的视觉与交互设计基线，供 Product Design 视觉目标、可选 Pencil 协同制品、前端实现和后续设计评审使用。
 
 规则来源优先级：
 
@@ -20,8 +20,9 @@ UI 框架选择：
 - 使用条件：所有新的 Admin Console / 后台管理设计基线均使用本模板。
 - 默认规则：用户没有明确 UI 框架倾向时，必须选择 shadcn/ui；用户明确倾向 shadcn / shadcn/ui 时，也选择本模板。
 - 从零到一规则：如果没有明确后台主题倾向，默认采用 tweakcn 作为主题框架、整体视觉和后台 layout 风格参考。
-- 拒绝规则：本 harness 当前设计基线只支持 shadcn/ui。如果用户要求 Ant Design、Material UI、Chakra UI、Arco Design、Element Plus、Bootstrap、Tailwind UI、Radix-only 或自定义大型 Design System，应拒绝并说明本技能只产出 shadcn/ui Admin Console 基线。
-- 混用规则：不要把 Ant Design 或其他 UI 框架和 shadcn/ui 混在同一套设计基线中，除非当前任务明确是迁移或过渡方案；正常新项目不做混用。
+- 场景边界：Admin Console 使用 shadcn/ui；BI 图表分析 / 数据驾驶舱使用 React + Ant Design Pro + ECharts；C 端网站 / App 不在本模板锁定框架，交给 Product Design 和后续工程评审决策。
+- 拒绝规则：如果当前场景是 Admin Console，但用户要求 Ant Design、Material UI、Chakra UI、Arco Design、Element Plus、Bootstrap、Tailwind UI、Radix-only 或自定义大型 Design System，应拒绝并说明 Admin Console 基线只产出 shadcn/ui。
+- 混用规则：不要把 Ant Design Pro 或其他 UI 框架和 shadcn/ui 混在同一套 Admin Console 设计基线中，除非当前任务明确是迁移或过渡方案；正常新项目不做混用。
 
 官方参考：
 
@@ -103,7 +104,7 @@ shadcn MCP 是重要的前端实现辅助工具，用于让 AI assistant 直接�
 
 在 `my-harness` 流程中的推荐使用位置：
 
-1. Step 3 Pencil prototype / design governance：用 shadcn MCP 查找可用 components、blocks 和组合方式，辅助页面级组件映射。
+1. Step 3 Design artifact / visual target：用 shadcn MCP 查找可用 components、blocks 和组合方式，辅助页面级组件映射。
 2. Step 5 `plan-eng-review`：确认是否使用 shadcn MCP / CLI、`components.json`、registry 来源、安装命令、代码审查边界和 fallback。
 3. Step 6 `writing-plans`：把需要引入的 shadcn components / blocks、命令、目标文件、检查项写入 `IMPLEMENTATION_PLAN.md`。
 4. Step 7 implementation：通过 shadcn MCP / CLI 浏览、查看并引入组件，再按项目 wrapper 和业务逻辑集成；不得绕过测试和设计验收。
@@ -786,40 +787,41 @@ gstack design review、Playwright 或人工 QA 必须检查：
 - 表格操作列按钮挤压变形
 - 只靠颜色表达状态
 
-## 23. Product Design 可选增强
+## 23. Product Design 视觉目标
 
-Product Design 插件可以作为前端视觉探索和视觉还原检查的可选增强，但不是使用本项目设计流程的必要条件。
+Product Design 插件是本项目首选的前端视觉探索和视觉还原检查工具，但不是使用本项目设计流程的必要条件。
 
-如宿主机已安装 Product Design，且当前 UI 切片没有明确视觉目标，可在进入 Pencil 前使用：
+如宿主机已安装 Product Design，且当前 UI 切片没有明确视觉目标，默认使用：
 
 1. `get-context` 确认设计 brief。
-2. `ideate` 生成视觉方案。
+2. `ideate` 生成 3 个视觉方案。
 3. 用户选择一个方向。
 4. 将选中的图片、链接、说明或截图保存或记录到 `design/`。
-5. 继续创建或迭代 Pencil 原型。
+5. 将选中视觉目标作为后续 `plan-design-review`、`IMPLEMENTATION_PLAN.md` 和 frontend vertical slice 的输入。
 
-如宿主机未安装 Product Design，不要求安装，直接使用原 Pencil 流程。
+如宿主机未安装 Product Design，不要求安装，使用 shadcn/ui 设计基线、已有 UI 参考、截图、URL capture、Figma frame 或设计说明继续推进。
 
 Product Design 产物的边界：
 
-- 可作为 Pencil 初稿输入。
 - 可作为 `IMPLEMENTATION_PLAN.md` 之后第一个 frontend vertical slice 的实现参考。
 - 如已有源视觉目标和已渲染实现，可产出 `design-qa.md` 作为进入 `gstack /design-review` 前的视觉还原证据。
-- 不替代 Pencil `.pen`、`DESIGN.md`、`gstack /design-review`、功能 QA、代码 review、ship 或 deploy 门禁。
+- 不替代 `DESIGN.md`、`gstack /design-review`、功能 QA、代码 review、ship 或 deploy 门禁。
 
-## 24. Pencil 原型要求
+## 24. 设计制品和可选 Pencil 要求
 
-Pencil 原型、截图和设计说明统一放在项目根目录 `design/`。
+设计制品、视觉目标、截图和设计说明统一放在项目根目录 `design/`。
 
 开始实现前端页面前必须：
 
-1. 检查 `design/` 是否存在 Pencil 原型、截图或设计说明。
-2. 遵守已确认的 Pencil 页面布局、组件结构、信息密度和交互方式。
+1. 检查 `design/` 是否存在 Product Design 选中视觉目标、截图、URL capture、Figma frame、现有 UI 参考、设计说明或可选 Pencil 原型。
+2. 遵守已确认的视觉目标、页面布局、组件结构、信息密度和交互方式。
 3. 不在实现阶段自由重设计 UI。
-4. 如果 Pencil 设计与 shadcn/ui 实现边界冲突，说明冲突点，并选择最接近 shadcn/ui composition 的可维护实现方式。
-5. 原型未确认前，不直接开始前端页面开发，除非用户明确要求。
+4. 如果视觉目标与 shadcn/ui 实现边界冲突，说明冲突点，并选择最接近 shadcn/ui composition 的可维护实现方式。
+5. 设计制品未确认前，不直接开始前端页面开发，除非用户明确要求。
 
-每个 Pencil 页面必须包含：
+只有复杂前端模块、跨人协作、多页面/多状态流程或用户明确要求时，才需要 Pencil `.pen` 原型和导出截图。普通 shadcn/ui 后台页面不默认要求 Pencil。
+
+每个页面设计说明必须包含：
 
 - 页面名称
 - 页面用途
@@ -852,7 +854,7 @@ Pencil 原型、截图和设计说明统一放在项目根目录 `design/`。
 
 每个已实现页面应检查：
 
-- Layout 是否符合 Pencil 原型
+- Layout 是否符合已确认视觉目标或设计说明
 - Sidebar 行为是否正确
 - Header 和 Breadcrumb 是否正确
 - FilterBar 对齐是否正确
@@ -893,8 +895,8 @@ Pencil 原型、截图和设计说明统一放在项目根目录 `design/`。
 前端设计可进入实现前，必须满足：
 
 1. `DESIGN.md` 已存在并被遵守。
-2. `design/pencil-input-{{STAGE}}.md` 或对应阶段输入文档已确认。
-3. `design/` 下存在已确认 Pencil 原型或截图与说明。
+2. `design/design-input-{{STAGE}}.md` 或对应阶段输入文档已确认。
+3. `design/` 下存在已确认视觉目标、截图与说明；复杂协同场景下可包含 Pencil 原型。
 4. 页面级说明包含组件组合、表格列、筛选项、操作、状态和权限规则。
 5. 如使用 Product Design，选中的视觉目标或 `design-qa.md` 证据已在 `design/` 中记录。
 6. 如需偏离本文件，必须说明原因并获得确认。

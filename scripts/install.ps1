@@ -3,7 +3,7 @@ param()
 $ErrorActionPreference = "Stop"
 
 $PluginName = "my-harness"
-$DefaultRef = "v1.3.0"
+$DefaultRef = "v1.4.0"
 $RepoSlug = "wodenwang/my-harness"
 
 function Fail($Message) {
@@ -88,6 +88,33 @@ function Set-SkillEntry($SkillDir, $Target, $Stamp) {
   }
 }
 
+function Remove-StaleSkillEntries($CodexHome, $PluginRoot, $PluginName, $Stamp) {
+  $SkillsRoot = Join-Path $CodexHome "skills"
+  $PluginSkillsRoot = Join-Path $PluginRoot "skills"
+  if (-not (Test-Path $SkillsRoot)) {
+    return
+  }
+
+  $CurrentSkills = @{}
+  Get-ChildItem -LiteralPath $PluginSkillsRoot -Directory | Where-Object {
+    Test-Path (Join-Path $_.FullName "SKILL.md")
+  } | ForEach-Object {
+    $CurrentSkills[$_.Name] = $true
+  }
+
+  Get-ChildItem -LiteralPath $SkillsRoot -Filter "$PluginName*" -Force | ForEach-Object {
+    if ($CurrentSkills.ContainsKey($_.Name)) {
+      return
+    }
+
+    if (($_.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0 -or -not $_.PSIsContainer) {
+      Remove-Item -LiteralPath $_.FullName -Recurse -Force
+    } else {
+      Move-Item -LiteralPath $_.FullName -Destination "$($_.FullName).backup.$Stamp"
+    }
+  }
+}
+
 function Ensure-Config($ConfigFile, $MarketplaceRoot) {
   New-Item -ItemType Directory -Force -Path (Split-Path -Parent $ConfigFile) | Out-Null
   if (-not (Test-Path $ConfigFile)) {
@@ -162,7 +189,10 @@ try {
   Write-Marketplace $MarketplaceFile
 
   $Stamp = Get-Date -Format "yyyyMMddHHmmss"
-  Get-ChildItem -LiteralPath (Join-Path $PluginRoot "skills") -Directory | ForEach-Object {
+  Remove-StaleSkillEntries $CodexHome $PluginRoot $PluginName $Stamp
+  Get-ChildItem -LiteralPath (Join-Path $PluginRoot "skills") -Directory | Where-Object {
+    Test-Path (Join-Path $_.FullName "SKILL.md")
+  } | ForEach-Object {
     $Target = Join-Path (Join-Path $CodexHome "skills") $_.Name
     Set-SkillEntry $_.FullName $Target $Stamp
   }
