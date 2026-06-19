@@ -2,11 +2,13 @@
 
 `my-harness` 是一个 Codex workflow plugin，用来把个人项目交付流程固定成一组可复用 skills。它不安装 gstack、Superpowers、Pencil、Product Design 或 Playwright，只负责把这些工具、项目证据和发布门禁组织成清晰路径。
 
-适合六类场景：
+适合以下场景：
 
 - 初始化空白项目或新仓库的 `README.md`、`AGENTS.md` 和第一步 harness handoff。
+- 当空白项目或尚未开始使用流程的项目显式要求使用 `my-harness` 框架时，引导进入第 1 步 Superpowers `brainstorming`，先沟通清楚需求。
 - 判断项目现在推进到哪一步，下一步该做什么。
-- 初始化 UI/产品项目的设计治理和 `design/` 设计制品目录；在 shadcn MCP 可用时辅助组件检索/安装，在 Product Design 可用时生成视觉目标、辅助 frontend slice 实现或产出 `design-qa.md` 证据；Pencil 仅作为复杂协同场景的可选制品。
+- 为已经使用 `my-harness` 的项目维护可选 `.my-harness/` 执行索引；第三方技能文档仍保留在各自规范目录中。
+- 初始化 UI/产品项目的设计治理和 `design/` 设计制品目录；如果项目还没有 `DESIGN.md`，任何 UI / 前端 / 图表 / App 工作前先调用 `my-harness-writing-design`；系统缺标题、logo 或 favicon 时用 Creative Production `logo-explorer` 补齐品牌资产方向；在 shadcn MCP 可用时辅助组件检索/安装，在 Product Design 可用时用至少三套原型/视觉方案生成视觉目标、辅助 frontend slice 原型切割实现或产出 `design-qa.md` 证据；Pencil 仅作为复杂协同场景的可选制品。
 - 为业务项目生成 `DEPLOY.md` 部署治理文档，并链接到 `AGENTS.md` / `CLAUDE.md`。
 - 在部署完成后对线上 URL 做可选金丝雀测试，并把发现的问题登记到当前项目 GitHub issues。
 - 在线检查、安装或更新本机 `my-harness` 插件。
@@ -16,13 +18,13 @@
 macOS / Linux:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wodenwang/my-harness/v1.4.0/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/wodenwang/my-harness/v1.4.1/scripts/install.sh | bash
 ```
 
 Windows PowerShell:
 
 ```powershell
-irm https://raw.githubusercontent.com/wodenwang/my-harness/v1.4.0/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/wodenwang/my-harness/v1.4.1/scripts/install.ps1 | iex
 ```
 
 默认安装到：
@@ -69,11 +71,11 @@ irm https://raw.githubusercontent.com/wodenwang/my-harness/main/scripts/install.
 更新到指定 ref:
 
 ```bash
-MY_HARNESS_REF=v1.4.0 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
+MY_HARNESS_REF=v1.4.1 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
 ```
 
 ```powershell
-$env:MY_HARNESS_REF = "v1.4.0"
+$env:MY_HARNESS_REF = "v1.4.1"
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
 ```
 
@@ -84,9 +86,9 @@ $env:MY_HARNESS_REF = "v1.4.0"
 | Skill | 用途 |
 |---|---|
 | `my-harness` | 路由入口，判断该使用哪个 harness helper。 |
-| `my-harness-initialize-project` | 初始化新项目或空白仓库的基础治理：`README.md`、`AGENTS.md`、设计/部署链接和第一步 harness handoff。 |
-| `my-harness-next-action` | 读取项目证据，输出 15 步 SOP 状态表和下一步提示词；提示词会要求执行完成后继续输出进度表和下一步提示词，便于只复制末尾提示词持续推进；第 1 步支持 `office-hours` 或 Superpowers `brainstorming`，但 `brainstorming` 后默认仍需经过 `plan-design-review` 和 `plan-eng-review` 才能进入 `writing-plans`。 |
-| `my-harness-writing-design` | 初始化 `DESIGN.md`、`design/` 和设计制品规则；先确认产品场景，Admin Console 使用 shadcn/ui + tweakcn，BI / 数据驾驶舱使用 React + Ant Design Pro + ECharts，C 端网站/App 不锁定框架并交给 Product Design 产出决策输入。 |
+| `my-harness-initialize-project` | 初始化新项目或空白仓库的基础治理：`README.md`、`AGENTS.md`、设计/部署链接和第一步 harness handoff；如果用户在空白/未开始项目里显式指定 my-harness 框架，下一步必须交给第 1 步 Superpowers `brainstorming`。 |
+| `my-harness-next-action` | 读取项目证据，输出 15 步 SOP 状态表和下一步提示词；提示词会要求执行完成后继续输出进度表和下一步提示词，便于只复制末尾提示词持续推进；第 1 步支持 `office-hours` 或 Superpowers `brainstorming`，空白/未开始项目显式指定 my-harness 时先用 `brainstorming`，但 `brainstorming` 后默认仍需经过 Product Design planning review 和 `plan-eng-review` 才能进入 `writing-plans`。 |
+| `my-harness-writing-design` | 初始化 `DESIGN.md`、`design/` 和设计制品规则；先确认产品场景，Admin Console 使用 shadcn/ui + tweakcn，BI / 数据驾驶舱使用 React + Ant Design Pro + ECharts，C 端网站/App 不锁定框架并交给 Product Design 产出至少三套原型/视觉方案和决策输入。 |
 | `my-harness-autopilot-slice` | 在 Discovery / Brainstorm gate 已定稿后推进一个小切片，并在人工门禁处停止。 |
 | `my-harness-upgrade` | 检查或更新已安装插件，并回读版本、备份和 skill 入口。 |
 | `my-harness-writing-deployment` | 生成项目级 `DEPLOY.md`，并链接到 `AGENTS.md` / `CLAUDE.md`；约束版本化 Docker Compose 生产部署、`install.sh` 首次安装、`upgrade.sh` 版本间升级、DB 初始化 SQL、DB DDL/数据迁移、配置迁移和版本门禁。 |
@@ -106,6 +108,10 @@ $env:MY_HARNESS_REF = "v1.4.0"
 | 6. 代码审查、发布、部署 | 12-15 | 完成代码 review、Git closeout / `/ship` preflight、`/ship` 和授权后的 `/land-and-deploy`。 |
 
 `my-harness-next-action` 可以推荐一个阶段工作包，但最终 `流程执行情况一览：` 仍然必须包含全部 15 行。
+
+显式启动规则：如果当前是空白项目，或者尚未开始使用 `my-harness` 流程，并且用户明确指定使用 `my-harness` 框架，第一步应使用 Superpowers `brainstorming` 沟通清楚目标用户、核心问题、约束、成功标准、最小值得做切片、非目标、风险和候选方案。不要直接跳到 `writing-plans`、设计制品、实现、QA 或 autopilot。
+
+执行索引规则：已经使用 `my-harness` 的项目可以建立 `.my-harness/` 保存执行过程快速索引，例如 `.my-harness/index.md`、`.my-harness/status.md` 或 `.my-harness/runs/<date-or-slice>.md`。Superpowers、gstack、Product Design、Pencil 等第三方技能创建的文档仍放在其规范目录中，例如 `docs/superpowers/`、`IMPLEMENTATION_PLAN.md`、`.gstack/`、`design/`、`DEPLOY.md` 或发布文档；`.my-harness/` 只保存链接、简短摘要、步骤状态、决策、验证命令和下一步提示词。
 
 ## Codex 兼容门禁
 
@@ -130,11 +136,19 @@ Codex 当前不能稳定承接 gstack 部分 skill 内部的 `AskUserQuestion`�
 ```
 
 ```text
+当前项目还没有开始使用 my-harness。请按 my-harness 框架从第 1 步开始，使用 Superpowers brainstorming 帮我沟通清楚需求、目标用户、约束、成功标准、最小值得做切片、非目标、风险和候选方案。不要直接进入 writing-plans、设计制品、实现、QA 或 autopilot。
+```
+
+```text
+当前项目已经在使用 my-harness。请建立或更新 .my-harness/ 快速索引，记录 15 步状态、关键决策、证据链接、验证命令和下一步提示词；Superpowers、gstack、Product Design、Pencil 等第三方文档仍保留在各自规范目录中，.my-harness/ 只做索引和短摘要。
+```
+
+```text
 为当前项目初始化设计治理。开始前先确认产品场景；如果我没有明确说明场景，不要初始化文件，先反向询问我是 Admin Console、BI 图表分析 / 数据驾驶舱，还是 C 端网站 / App。
 ```
 
 ```text
-请为当前 frontend slice 产出 shadcn/ui 视觉目标：如果 Product Design 可用，使用 get-context -> ideate 生成 3 个方向并等待选择；如果不可用，使用现有 UI 参考、截图或设计说明继续推进。只有复杂协同场景才使用 Pencil。
+请为当前 frontend slice 产出 shadcn/ui 视觉目标：如果项目还没有 DESIGN.md，先使用 my-harness-writing-design 创建设计规范；如果系统没有明确标题、logo 或 favicon，先用 Creative Production logo-explorer 构建 logo / favicon / app icon 方向并记录到 design/；如果 Product Design 可用，使用 get-context -> ideate 生成至少 3 个原型/视觉方向并等待选择；目标模式下可选择系统推荐方案但要记录理由；如果不可用，使用现有 UI 参考、截图或设计说明继续推进。只有复杂协同场景才使用 Pencil。
 ```
 
 ```text
@@ -192,6 +206,16 @@ Codex 当前不能稳定承接 gstack 部分 skill 内部的 `AskUserQuestion`�
 远端 push、tag、GitHub Release 或发布动作必须有明确授权。
 
 ## 版本历史
+
+### v1.4.1
+
+- 设计相关门禁更新为 Product Design 优先：缺少 `DESIGN.md` 时先调用 `my-harness-writing-design`；Product Design 替代 `plan-design-review` 和 `design-review` 的设计职责；规划设计和前端时至少提供三套原型/视觉方案；frontend slice 先用 Product Design `image-to-code` / `url-to-code` 做原型切割；design review 持续比对成品与原型直到高度还原或偏差被接受。
+- 所有设计、前端规划、实现和 design review 必须严格遵循 `DESIGN.md` 的字体、间距、技术栈、组件、图表、token、响应式、状态和可访问性要求；当 shadcn/ui、Ant Design Pro、ECharts 等框架组件与原型不一致时，以框架组件和 `DESIGN.md` 为准。
+- 设计规划和原型设计阶段如果缺少标题、logo 或 favicon，要求先用 Creative Production `logo-explorer` 构建 logo / favicon / app icon 方向并记录到 `design/`。
+- `executing-plans` 和 `subagent-driven-development` 阶段要求 Codex 和所有 subagent 持续遵守 `AGENTS.md`、`DESIGN.md`、`IMPLEMENTATION_PLAN.md` 等治理文档，subagent brief 必须带治理约束、文件边界和偏差回报要求。
+- 空白项目或尚未开始使用流程的项目显式指定 `my-harness` 框架时，必须先进入第 1 步 Superpowers `brainstorming` 澄清需求，不直接跳到计划、设计、实现、QA 或 autopilot。
+- 已经使用 `my-harness` 的项目可以建立 `.my-harness/` 执行索引；第三方技能生成的文档继续保留在其规范目录中，`.my-harness/` 只保存链接、短摘要、步骤状态和下一步提示词。
+- `scripts/install.sh` 和 `scripts/install.ps1` 默认稳定版本更新为 `v1.4.1`。
 
 ### v1.4.0
 

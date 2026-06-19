@@ -23,11 +23,21 @@ This skill is explicitly allowed to use design-specific tools and skills when av
 Product Design dependencies:
 
 - Product Design is not required for this skill or for `my-harness`, but it is preferred for frontend visual-target generation when installed.
-- If Product Design is installed and the UI scope lacks a visual target, use Product Design `get-context` -> `ideate` -> user selection to create a selected visual target.
-- Product Design `image-to-code` / `url-to-code` belongs in implementation only after `IMPLEMENTATION_PLAN.md` exists and a selected visual target or source URL is available.
-- Product Design `design-qa.md` may be used as supporting visual-fidelity evidence before `gstack /design-review`.
+- If Product Design is installed and the UI scope lacks a visual target, use Product Design `get-context` -> `ideate` -> user selection to create at least three prototype/visual directions and a selected visual target. In target/autopilot mode, a system-recommended direction may be selected automatically only when allowed and must be recorded with rationale.
+- Product Design focused skills replace gstack `/plan-design-review` and `/design-review` for design-related gates when available; fallback to gstack only when Product Design is unavailable or project governance requires it.
+- Product Design `image-to-code` / `url-to-code` belongs in implementation only after `IMPLEMENTATION_PLAN.md` exists and a selected visual target or source URL is available. It should be used to cut the selected prototype into a frontend frame before hand implementation continues.
+- Product Design visual QA / `design-qa.md` must compare the rendered implementation with the selected prototype and `DESIGN.md`, record differences, and drive fixes until the result is highly faithful or deviations are explicitly accepted.
 - If Product Design is unavailable, do not ask the user to install it; continue with shadcn/ui design governance, existing UI references, screenshots, or optional Pencil when needed.
 - Product Design outputs must be recorded under `design/` or referenced from `DESIGN.md` / `design/design-input-<stage>.md` before they influence implementation.
+- Frontend implementation, design review, and QA must strictly obey `DESIGN.md` and `design/`, including typography, spacing, technology stack, components, chart library, color tokens, responsive behavior, states, and accessibility.
+- If a selected framework such as shadcn/ui, Ant Design Pro, ECharts, or another approved third-party framework conflicts with a prototype, prefer the framework's native components and `DESIGN.md`; the prototype is a visual/reference input, not authority to create a parallel component system.
+
+Creative Production dependencies:
+
+- During design planning and prototype design, if the target system has no clear app/product title, logo, or favicon, use Creative Production `logo-explorer` before finalizing Product Design prototypes.
+- Use the existing project/product name as a provisional title when available. In target/autopilot mode, derive a conservative app title from the repo/project name if no title exists; otherwise stop and ask for a title/brand anchor when the title cannot be inferred safely.
+- Save or reference selected logo direction, favicon/app-icon direction, title, rejected routes, caveats, and asset paths under `design/`.
+- Creative Production logo outputs are directional identity assets unless explicitly polished later; record trademark, generated text, and production-vector caveats in `design/`.
 
 Pencil dependencies:
 
@@ -105,11 +115,12 @@ Recommended order:
 1. Read project governance and existing design assets.
 2. Resolve product scenario before writing files. If unclear, ask the user and stop.
 3. Select frontend baseline from scenario: Admin Console -> shadcn/ui + tweakcn; BI dashboard -> React + Ant Design Pro + ECharts; C-end -> Product Design decides.
-4. If Product Design is available and the UI scope lacks a visual target, use Product Design `get-context` -> `ideate` -> user selection; otherwise continue with existing references.
-5. Check Pencil availability (`pencil-design` skill, Pencil MCP, or Pencil CLI) only if `.pen` assets are needed for complex alignment.
-6. Check selected-framework availability and docs before writing component mappings.
-7. Inspect theme/color/material inputs if provided, including websites, logos, screenshots, or explicit color names.
-8. Create or update `DESIGN.md`, `design/`, design input notes, optional Pencil assets, and governance links.
+4. If Product Design is available and the UI scope lacks a visual target, use Product Design `get-context` -> `ideate` -> at least three options -> user selection; otherwise continue with existing references.
+5. If title/logo/favicon is missing, use Creative Production `logo-explorer` or record why it is deferred.
+6. Check Pencil availability (`pencil-design` skill, Pencil MCP, or Pencil CLI) only if `.pen` assets are needed for complex alignment.
+7. Check selected-framework availability and docs before writing component mappings.
+8. Inspect theme/color/material inputs if provided, including websites, logos, screenshots, or explicit color names.
+9. Create or update `DESIGN.md`, `design/`, design input notes, optional Pencil assets, and governance links.
 
 ## Required Outputs
 
@@ -118,11 +129,13 @@ In the target project root:
 - `design/` directory exists.
 - `DESIGN.md` exists and describes project-level UI/UX requirements.
 - `AGENTS.md` links to `DESIGN.md` and tells agents to inspect `design/` before frontend work.
+- `DESIGN.md` explicitly governs typography, spacing, technology stack, component rules, chart rules, colors, responsive behavior, states, accessibility, Product Design prototype options, implementation slicing, and visual QA.
 
 Recommended optional output:
 
 - `design/design-input-<stage>.md` describing the current project phase, visual target, component mapping, and prototype scope.
-- Product Design selected visual targets, screenshots, links, or `design-qa.md` references under `design/` when Product Design was used.
+- Product Design selected visual targets, at least three prototype/visual options, screenshots, links, or `design-qa.md` references under `design/` when Product Design was used.
+- Creative Production logo/favicon/title notes or assets under `design/` when the system lacked title, logo, or favicon.
 - Pencil `.pen` files and exported screenshots only when complex alignment requires them.
 
 ## Naming Rule
@@ -200,6 +213,10 @@ shadcn/ui selected principles:
 - explicit accessibility, focus, keyboard, loading/empty/error/forbidden/success/disabled/pending/readonly states
 - design review checks for backend density, stable columns, no button wrapping, no heavy Sheet misuse, no layout overflow, clean console, and no unexpected Network failures
 - Product Design visual target as preferred implementation input when available
+- Product Design must provide at least three prototype/visual options when no visual target exists
+- Creative Production `logo-explorer` should create logo/favicon/title direction when the system lacks brand assets
+- frontend implementation should use Product Design `image-to-code` / `url-to-code` to cut the selected prototype into a framework before hand development when applicable
+- selected third-party framework components take precedence over prototype mismatches
 - optional Pencil prototype only for complex modules or human alignment
 - Playwright visual QA across desktop/tablet/mobile before claiming frontend completion
 
@@ -227,9 +244,15 @@ Add or merge a short section like:
 
 - 项目级 UI/UX 规则见 `DESIGN.md`。
 - 设计制品、视觉目标、截图和设计说明统一放在 `design/`。
-- 如果使用 Product Design 生成视觉目标或 `design-qa.md`，对应图片、链接或说明也必须记录到 `design/`；未安装 Product Design 时使用 shadcn/ui 设计基线、已有 UI 参考、截图或必要时 Pencil 协同制品继续推进。
-- 开始前端实现前，必须先检查 `DESIGN.md` 和 `design/`。
-- 已确认视觉目标或设计说明优先于临场自由重设计；如需偏离，先说明原因并获得确认。
+- 如果项目还没有 `DESIGN.md`，任何 UI / 前端 / 图表 / App 工作开始前都必须先用 `my-harness-writing-design` 创建。
+- 所有设计、前端规划、实现和 design review 必须严格遵守 `DESIGN.md`，包括字体、间距、技术栈、组件体系、图表库、颜色 token、响应式、状态设计和可访问性。
+- 如果使用 Product Design 生成视觉目标，默认至少提供三套原型/视觉方案供选择；目标模式下可选择系统推荐方案，但必须记录推荐理由。对应图片、链接或说明也必须记录到 `design/`。
+- 进入设计规划和原型图设计时，如果系统没有明确标题、logo 或 favicon，必须先使用 Creative Production plugin 的 `logo-explorer` 构建 logo / favicon / app icon 方向；已有项目名时可作为临时标题，目标模式下可从 repo/project name 推导保守标题。选中方向、拒绝方案、标题和资产路径记录到 `design/`。
+- 做前端开发时，如已有 Product Design 选中原型或视觉目标，先使用 `image-to-code` / `url-to-code` 做原型切割形成前端框架，再按项目代码和组件体系开发。
+- 进入 `executing-plans` 或 `subagent-driven-development` 后，Codex 和所有 subagent 必须持续遵守 `AGENTS.md`、`CLAUDE.md`、README、`DESIGN.md`、`DEPLOY.md`、`IMPLEMENTATION_PLAN.md` 和相关 docs/runbooks；subagent brief 必须写明治理约束、允许改动边界和偏差回报要求。
+- design review 阶段要严格比对成品和原型图之间的差异，持续修复直到高度还原或偏差被明确接受；`design-qa.md` 记录差异、修复和接受项。
+- 若选定 shadcn/ui、Ant Design Pro、ECharts 或其他第三方框架，且原型与已有组件不一致，以前端框架组件和 `DESIGN.md` 为准，原型仅作参考。
+- 未安装 Product Design 时使用当前场景的设计基线、已有 UI 参考、截图或必要时 Pencil 协同制品继续推进。
 ```
 
 If `CLAUDE.md` mirrors `AGENTS.md`, apply the same change there and verify both files remain aligned.
@@ -254,6 +277,7 @@ Before reporting done:
 - For C-end, record that no framework was locked and Product Design output will feed `plan-eng-review`.
 - Record whether shadcn MCP was available, used, unavailable, or intentionally skipped; if used, record the registry/components/blocks involved.
 - Record theme/material source and inferred theme decision when the user provides colors, logo, website, screenshots, or brand material.
+- Record whether Creative Production logo/favicon/title exploration was needed, used, unavailable, deferred, or intentionally skipped; if used, record selected route and asset paths.
 - Record whether Product Design was used, unavailable, or intentionally skipped; if used, record where the selected visual target or `design-qa.md` evidence lives.
 - Record whether Pencil tooling was needed, unavailable, skipped, or used; if used, record where `.pen` and exported screenshots live.
 - If `CLAUDE.md` exists and is expected to mirror `AGENTS.md`, verify the design section is present there too.
@@ -265,7 +289,7 @@ Before reporting done:
 - Treating a normal shadcn/ui screen as requiring Pencil when Product Design, screenshots, existing UI references, or design notes would be enough.
 - Treating Product Design as mandatory or requiring the user to install it before continuing.
 - Using Product Design outputs without recording them in `design/`.
-- Treating a Product Design visual or `design-qa.md` file as a replacement for `DESIGN.md`, `gstack /design-review`, functional QA, or code review.
+- Treating a Product Design visual or `design-qa.md` file as a replacement for `DESIGN.md`, functional QA, or code review.
 - Hand-editing or guessing around Pencil when Pencil-specific tools are available.
 - Treating shadcn MCP as mandatory or blocking the workflow when it is unavailable.
 - Silently editing `~/.codex/config.toml` to add shadcn MCP without explicit user authorization.
@@ -282,6 +306,8 @@ Before reporting done:
 - Writing component mappings without checking project dependencies, existing code, or selected-framework references.
 - Mixing Ant Design Pro and shadcn/ui in a single baseline without explicit migration/interop scope.
 - Ignoring user-provided theme colors, websites, logos, screenshots, or brand assets.
+- Entering prototype design with no title/logo/favicon and no Creative Production logo/favicon/title exploration or explicit deferral.
+- Letting executing-plans or subagents drift from `AGENTS.md`, `DESIGN.md`, `IMPLEMENTATION_PLAN.md`, or other governance docs.
 - Copying a brand website's marketing layout into an Admin Console instead of extracting safe color/token direction.
 - Starting frontend implementation before design requirements and prototype scope are written.
 - Copying `feishu-iam` domain rules, such as Feishu-only auth, into unrelated projects. Reuse its UI/UX baseline, not its product-specific identity rules.

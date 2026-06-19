@@ -12,6 +12,16 @@
 6. Ant Design Pro / ECharts 官方文档
 7. 通用数据可视化最佳实践
 
+硬性执行规则：
+
+- 任何设计、前端规划、实现和 design review 都必须严格遵守本 `DESIGN.md`，包括字体、间距、React + Ant Design Pro + ECharts 技术栈、ProComponents、图表映射、颜色 token、响应式、状态设计和可访问性。
+- 如使用 Product Design 生成视觉目标，默认至少提供三套原型/视觉方案供选择；目标模式下可以选择系统推荐方案，但必须记录推荐理由。
+- 进入设计规划和原型图设计时，如果系统没有明确标题、logo 或 favicon，必须先使用 Creative Production plugin 的 `logo-explorer` 构建 logo / favicon / app icon 方向，并把选中方向、拒绝方案、标题和资产路径记录到 `design/`。
+- 做前端开发时，如已有 Product Design 选中原型或视觉目标，先使用 `image-to-code` / `url-to-code` 做原型切割形成前端框架，再按 Ant Design Pro 和 ECharts 组件/图表体系开发。
+- 执行 `IMPLEMENTATION_PLAN.md` 时，Codex 和所有 subagent 必须持续遵守 `AGENTS.md`、`CLAUDE.md`、README、本 `DESIGN.md`、`DEPLOY.md`、`IMPLEMENTATION_PLAN.md` 和相关 docs/runbooks；subagent brief 必须写明治理约束、允许改动边界和偏差回报要求。
+- design review 阶段要严格比对成品和原型图之间的差异，持续修复直到高度还原或偏差被明确接受。
+- 如果原型与 Ant Design Pro、ProComponents、ECharts 或项目已有组件不一致，以框架组件、图表库和本 `DESIGN.md` 为准；原型仅作视觉和信息架构参考。
+
 ## 1. 场景和技术栈
 
 产品场景：`{{PRODUCT_SCENARIO}}`
@@ -200,12 +210,13 @@ ECharts 是所有核心图表的默认实现。
 如宿主机安装了 Product Design，可用于：
 
 - `get-context` 确认业务问题、指标层级和目标用户
-- `ideate` 生成驾驶舱视觉方向
+- `ideate` 生成至少三套驾驶舱原型/视觉方向
+- `image-to-code` / `url-to-code` 在 `IMPLEMENTATION_PLAN.md` 之后切割选中原型形成前端页面骨架
 - `design-qa` 对比视觉目标和实现截图
 
 Product Design 不改变本场景的技术组合：React + Ant Design Pro + ECharts。
 
-所有视觉目标、截图、图表说明和 `design-qa.md` 必须记录到 `design/`。
+所有视觉目标、至少三套原型/视觉方向、截图、图表说明和 `design-qa.md` 必须记录到 `design/`。`design-qa.md` 必须记录成品和原型图差异、严重程度、修复建议和已接受偏差，并驱动修复直到高度还原或偏差被明确接受。
 
 ## 10. 完成定义
 
@@ -217,4 +228,8 @@ Product Design 不改变本场景的技术组合：React + Ant Design Pro + ECha
 4. Ant Design Pro 组件使用边界明确。
 5. Loading / Empty / Error / Permission / Partial data 状态完整。
 6. 性能和响应式策略明确。
-7. 如使用 Product Design，选中的视觉目标或 `design-qa.md` 证据已记录到 `design/`。
+7. 如使用 Product Design，至少三套原型/视觉方案、选中的视觉目标或 `design-qa.md` 证据已记录到 `design/`。
+8. 如系统缺少标题、logo 或 favicon，Creative Production `logo-explorer` 的选中方向、拒绝方案、标题和资产路径已记录到 `design/`，或已明确记录延期原因。
+9. 前端实现已先用 Product Design `image-to-code` / `url-to-code` 切割选中原型形成页面骨架，或已记录为什么无需切割。
+10. `executing-plans` 或 `subagent-driven-development` 已明确要求遵守 `AGENTS.md`、本文件、`IMPLEMENTATION_PLAN.md` 和相关治理文档。
+11. 如原型与 Ant Design Pro / ECharts 或项目已有组件不一致，已按框架组件和本文件收敛并记录偏差。

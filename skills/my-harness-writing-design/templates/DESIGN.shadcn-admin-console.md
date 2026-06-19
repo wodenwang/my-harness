@@ -12,6 +12,16 @@
 6. shadcn/ui 官方文档
 7. 通用前端最佳实践
 
+硬性执行规则：
+
+- 任何设计、前端规划、实现和 design review 都必须严格遵守本 `DESIGN.md`，包括字体、间距、技术栈、组件体系、颜色 token、响应式、状态设计和可访问性。
+- 如使用 Product Design 生成视觉目标，默认至少提供三套原型/视觉方案供选择；目标模式下可以选择系统推荐方案，但必须记录推荐理由。
+- 进入设计规划和原型图设计时，如果系统没有明确标题、logo 或 favicon，必须先使用 Creative Production plugin 的 `logo-explorer` 构建 logo / favicon / app icon 方向，并把选中方向、拒绝方案、标题和资产路径记录到 `design/`。
+- 做前端开发时，如已有 Product Design 选中原型或视觉目标，先使用 `image-to-code` / `url-to-code` 做原型切割形成前端框架，再按本项目 shadcn/ui 组件体系开发。
+- 执行 `IMPLEMENTATION_PLAN.md` 时，Codex 和所有 subagent 必须持续遵守 `AGENTS.md`、`CLAUDE.md`、README、本 `DESIGN.md`、`DEPLOY.md`、`IMPLEMENTATION_PLAN.md` 和相关 docs/runbooks；subagent brief 必须写明治理约束、允许改动边界和偏差回报要求。
+- design review 阶段要严格比对成品和原型图之间的差异，持续修复直到高度还原或偏差被明确接受。
+- 如果原型与 shadcn/ui、项目已有组件或 tweakcn/shadcn token 不一致，以 shadcn/ui 组件、项目已有组件和本 `DESIGN.md` 为准；原型仅作视觉和信息架构参考。
+
 本文件只描述 UI/UX 与设计系统规则。业务、安全、后端、发布流程、Agent 行为等规则以项目工程文档为准。
 
 UI 框架选择：
@@ -108,7 +118,7 @@ shadcn MCP 是重要的前端实现辅助工具，用于让 AI assistant 直接�
 2. Step 5 `plan-eng-review`：确认是否使用 shadcn MCP / CLI、`components.json`、registry 来源、安装命令、代码审查边界和 fallback。
 3. Step 6 `writing-plans`：把需要引入的 shadcn components / blocks、命令、目标文件、检查项写入 `IMPLEMENTATION_PLAN.md`。
 4. Step 7 implementation：通过 shadcn MCP / CLI 浏览、查看并引入组件，再按项目 wrapper 和业务逻辑集成；不得绕过测试和设计验收。
-5. Step 10 `design-review`：检查实现是否遵守 shadcn composition、token、8px spacing、无随机颜色、无无必要渐变和无随意自定义基础组件。
+5. Step 10 Product Design visual QA / design review：检查实现是否遵守 shadcn composition、token、8px spacing、无随机颜色、无无必要渐变和无随意自定义基础组件，并比对成品与选中原型差异。
 
 ### 默认视觉倾向
 
@@ -156,6 +166,7 @@ shadcn/ui 项目的后台视觉主题从零到一时默认采用 tweakcn 的主�
 默认决策：
 
 - 没有素材：使用 tweakcn 的 modern minimal / neutral admin 方向。
+- 没有标题、logo 或 favicon：先使用 Creative Production `logo-explorer` 生成 logo / favicon / app icon 方向；已有项目名时可作为临时标题，目标模式下可从 repo/project name 推导保守标题。
 - 只有明确主题色：选择接近该色相的 tweakcn 预设或生成 custom token set，并校正对比度。
 - 有 logo：从 logo 提取主色和强调色；如果 logo 色过亮或过饱和，用作 accent，不直接作为大面积背景。
 - 有官网：提取品牌色、字体气质和图形语言，但后台仍保持 tweakcn/shadcn 的信息架构和组件组合。
@@ -794,18 +805,22 @@ Product Design 插件是本项目首选的前端视觉探索和视觉还原检�
 如宿主机已安装 Product Design，且当前 UI 切片没有明确视觉目标，默认使用：
 
 1. `get-context` 确认设计 brief。
-2. `ideate` 生成 3 个视觉方案。
+2. `ideate` 生成至少 3 个原型/视觉方案。
 3. 用户选择一个方向。
 4. 将选中的图片、链接、说明或截图保存或记录到 `design/`。
-5. 将选中视觉目标作为后续 `plan-design-review`、`IMPLEMENTATION_PLAN.md` 和 frontend vertical slice 的输入。
+5. 将选中视觉目标作为后续 Product Design 设计制品评审、`IMPLEMENTATION_PLAN.md` 和 frontend vertical slice 的输入。
+
+目标模式或自动闭环模式下，可以选择 Product Design 系统推荐方案，但必须把推荐依据、被选方案和接受/放弃的偏差记录到 `design/`。
 
 如宿主机未安装 Product Design，不要求安装，使用 shadcn/ui 设计基线、已有 UI 参考、截图、URL capture、Figma frame 或设计说明继续推进。
 
 Product Design 产物的边界：
 
 - 可作为 `IMPLEMENTATION_PLAN.md` 之后第一个 frontend vertical slice 的实现参考。
-- 如已有源视觉目标和已渲染实现，可产出 `design-qa.md` 作为进入 `gstack /design-review` 前的视觉还原证据。
-- 不替代 `DESIGN.md`、`gstack /design-review`、功能 QA、代码 review、ship 或 deploy 门禁。
+- 当前端实现开始时，先用 `image-to-code` / `url-to-code` 切割选中原型形成页面骨架，再用 shadcn/ui、项目已有组件和 Tailwind tokens 收敛为可维护代码。
+- 如已有源视觉目标和已渲染实现，可产出 `design-qa.md` 作为 Product Design visual QA / design review 的视觉还原证据。
+- `design-qa.md` 必须记录成品和原型图差异、严重程度、修复建议和已接受偏差，并持续驱动修复直到高度还原或偏差被明确接受。
+- 不替代 `DESIGN.md`、功能 QA、代码 review、ship 或 deploy 门禁。
 
 ## 24. 设计制品和可选 Pencil 要求
 
@@ -898,5 +913,9 @@ Product Design 产物的边界：
 2. `design/design-input-{{STAGE}}.md` 或对应阶段输入文档已确认。
 3. `design/` 下存在已确认视觉目标、截图与说明；复杂协同场景下可包含 Pencil 原型。
 4. 页面级说明包含组件组合、表格列、筛选项、操作、状态和权限规则。
-5. 如使用 Product Design，选中的视觉目标或 `design-qa.md` 证据已在 `design/` 中记录。
-6. 如需偏离本文件，必须说明原因并获得确认。
+5. 如使用 Product Design，至少三套原型/视觉方案、选中的视觉目标或 `design-qa.md` 证据已在 `design/` 中记录。
+6. 如系统缺少标题、logo 或 favicon，Creative Production `logo-explorer` 的选中方向、拒绝方案、标题和资产路径已记录到 `design/`，或已明确记录延期原因。
+7. 前端实现已先用 Product Design `image-to-code` / `url-to-code` 切割选中原型形成页面骨架，或已记录为什么无需切割。
+8. `executing-plans` 或 `subagent-driven-development` 已明确要求遵守 `AGENTS.md`、本文件、`IMPLEMENTATION_PLAN.md` 和相关治理文档。
+9. 如原型与 shadcn/ui 或项目已有组件不一致，已按 shadcn/ui 和本文件收敛并记录偏差。
+10. 如需偏离本文件，必须说明原因并获得确认。

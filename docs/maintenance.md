@@ -52,11 +52,18 @@ Rules:
 
 - Do not add Product Design as a required dependency for `my-harness`.
 - If Product Design is unavailable, the framework must fall back to shadcn/ui design governance, existing UI references, screenshots, or optional Pencil for complex alignment.
+- If a UI / frontend / chart / app project has no `DESIGN.md`, the flow must first use or recommend `my-harness-writing-design` before design review, frontend planning, implementation, or visual QA.
+- When Product Design is available, it replaces gstack `/plan-design-review` and `/design-review` for design-related gates; keep gstack only as fallback.
+- Product Design `ideate` must provide at least three prototype/visual options for planning design and frontend work. Target/autopilot mode may choose the system-recommended option only when allowed and with recorded rationale.
 - Keep the 15-step SOP unchanged; Product Design is used directly inside design, implementation, or visual QA stages.
 - Keep Pencil optional unless a target project explicitly records a `.pen` requirement or the UI module needs human alignment.
 - Step 3 is `Design artifact / visual target`, not mandatory Pencil work.
-- Keep `image-to-code` / `url-to-code` behind `IMPLEMENTATION_PLAN.md`.
-- Keep `design-qa.md` as supporting evidence only; it must not replace verification, `gstack /design-review`, QA, review, ship, or deploy.
+- Keep `image-to-code` / `url-to-code` behind `IMPLEMENTATION_PLAN.md`, and require it for frontend prototype slicing when a selected Product Design visual target exists.
+- Keep Product Design visual QA / `design-qa.md` as supporting evidence for step 10; it must compare implementation to the prototype and `DESIGN.md`, drive fixes until highly faithful or accepted, and must not replace verification, QA, review, ship, or deploy.
+- If the target system lacks an app/product title, logo, or favicon during design planning or prototype design, use Creative Production `logo-explorer` and record selected directions and asset paths under `design/`.
+- Step 7 prompts must require Codex and any subagents to continuously follow `AGENTS.md`, `CLAUDE.md`, README, `DESIGN.md`, `DEPLOY.md`, `IMPLEMENTATION_PLAN.md`, and relevant docs/runbooks. Subagent briefs must include governance constraints, allowed file boundaries, no-drift requirements, and deviation reporting.
+- Every design-related stage must strictly follow `DESIGN.md`, including typography, spacing, technology stack, components, chart libraries, colors, responsive rules, states, and accessibility.
+- When shadcn/ui, Ant Design Pro, ECharts, or another selected third-party framework conflicts with a prototype, framework components and `DESIGN.md` take precedence; the prototype is only a reference.
 
 When changing Product Design guidance, update:
 
@@ -67,6 +74,8 @@ When changing Product Design guidance, update:
 - `README.md`
 - `docs/project-history.md`
 - `CHANGELOG.md`
+
+When changing Creative Production brand-asset guidance or step 7 governance/no-drift guidance, update the same core SOP files plus `skills/my-harness-writing-design/scripts/harness_write_design.py` and the `DESIGN.md` templates.
 
 Then run:
 
@@ -183,7 +192,7 @@ Windows PowerShell examples:
 
 ```powershell
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1" -Check
-$env:MY_HARNESS_REF = "v1.4.0"
+$env:MY_HARNESS_REF = "v1.4.1"
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
 ```
 
@@ -206,6 +215,16 @@ Use it to create or strengthen the first project-facing governance surface:
 - a final handoff to `my-harness-next-action`
 
 Keep this separate from implementation work. The initializer must not invent a stack, create secrets, or build the app unless the user explicitly asks for implementation.
+
+If a blank, mostly blank, or not-started target project explicitly asks to use the `my-harness` framework/process, the first harness handoff must be step 1 Superpowers `brainstorming`. Use it to clarify the target user, problem, constraints, success criteria, smallest worthwhile slice, non-goals, risks, and candidate approaches before design artifacts, implementation plans, QA, or autopilot. Initialization can still add `README.md` / `AGENTS.md`, but it does not replace the first brainstorm gate.
+
+For target projects that already use `my-harness`, `.my-harness/` may be created as a quick execution index:
+
+- `.my-harness/index.md` for the current 15-step status, phase, evidence links, and next prompt
+- `.my-harness/status.md` for a short live summary when useful
+- `.my-harness/runs/<date-or-slice>.md` for per-slice notes, decisions, verification commands, and review-loop counts
+
+Do not move third-party artifacts into `.my-harness/`. Superpowers plans stay in `docs/superpowers/` or `IMPLEMENTATION_PLAN.md`; gstack reports stay in their report directories; Product Design, Pencil, screenshots, and visual targets stay in `design/`; deployment governance stays in `DEPLOY.md`; release notes stay in the project's release docs. `.my-harness/` only links and summarizes, and must not contain secrets or conflicting source-of-truth instructions.
 
 ## Project Deploy / Upgrade Workflow
 

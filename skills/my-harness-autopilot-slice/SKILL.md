@@ -24,11 +24,14 @@ Refuse to start unless all are true:
 Refuse if any are true:
 
 - The request is a large version, unclear product direction, broad redesign, multi-subsystem project, or ambiguous roadmap item.
+- The project is blank or has not started the `my-harness` loop, and the user explicitly asks to use the `my-harness` framework/process. The correct next action is step 1 Superpowers `brainstorming`, not autopilot.
 - The implementation likely needs frequent human decisions.
 - The task requires external credentials, production authorization, paid services, manual UI design approval, or unavailable tools before meaningful progress can continue.
 - The first required action is still Discovery / Brainstorm gate, product definition, opportunity validation, or open-ended design discovery.
 
 When refusing, state the blocking reason and recommend `my-harness-next-action` or the specific missing planning step.
+
+For the explicit blank/not-started `my-harness` case, recommend Superpowers `brainstorming` to clarify target user, problem, constraints, success criteria, smallest worthwhile slice, non-goals, risks, and candidate approaches.
 
 ## Workflow
 
@@ -41,9 +44,11 @@ When refusing, state the blocking reason and recommend `my-harness-next-action` 
 
 Do not skip gates. Adjacent steps may be executed as a documented phase work package only when `my-harness-next-action` recommends that package and the final evidence table still records each canonical step separately.
 
-If the Discovery / Brainstorm evidence came from Superpowers `brainstorming`, do not treat that as permission to start at `writing-plans` or implementation. The loop must still pass through `plan-design-review`, design artifact planning when needed, and `plan-eng-review` before `writing-plans`, unless the slice is extremely simple and the skip reasons for both review gates are explicit.
+If the Discovery / Brainstorm evidence came from Superpowers `brainstorming`, do not treat that as permission to start at `writing-plans` or implementation. The loop must still pass through Product Design planning review, `DESIGN.md`-governed design artifact planning when needed, and `plan-eng-review` before `writing-plans`, unless the slice is extremely simple and the skip reasons for both review gates are explicit.
 
-Product Design is the preferred frontend visual-target accelerator when available. Autopilot may use Product Design focused skills directly when the current UI slice needs a visual target, image/url-to-code help, or `design-qa.md` evidence. If Product Design is unavailable, do not require installation and continue with shadcn/ui design governance, existing references, screenshots, or optional Pencil for complex human alignment.
+Product Design focused skills replace gstack `/plan-design-review` and `/design-review` for UI design gates when available. Autopilot may use Product Design focused skills directly when the current UI slice needs planning review, at least three prototype/visual directions, image/url-to-code scaffolding, or visual-fidelity QA evidence. If Product Design is unavailable, do not require installation and continue with the selected design baseline, existing references, screenshots, or optional Pencil for complex human alignment.
+
+For projects already using `my-harness`, autopilot may create or update `.my-harness/` as a quick execution index while it runs. Keep third-party artifacts in native paths: Superpowers plans in `docs/superpowers/` or `IMPLEMENTATION_PLAN.md`, Product Design/Pencil evidence in `design/`, gstack reports in their report directories, deployment governance in `DEPLOY.md`, and release material in project release docs. `.my-harness/` may store links, short summaries, step status, decisions, verification commands, loop metrics, and handoff prompts, but not secrets, copied long reports, or conflicting source-of-truth instructions.
 
 ## Codex-Safe Gstack Gate Rule
 
@@ -66,9 +71,12 @@ If a gstack step needs a human decision, that Markdown decision gate is the auto
 
 If the next action requires a design artifact, visual target, optional Pencil prototype, or meaningful visual design:
 
-1. Use `my-harness-writing-design` to create or verify `DESIGN.md`, `design/`, and starter files.
-2. If Product Design is available and there is no visual target, use Product Design `get-context` -> `ideate` only to reach the next required human choice, such as selecting one of the generated visual options.
-3. Stop and hand off to the human for Product Design option selection, optional Pencil confirmation, or design approval.
+1. Use `my-harness-writing-design` to create or verify `DESIGN.md`, `design/`, and starter files before any UI planning, prototype generation, implementation, or design QA.
+2. Strictly apply `DESIGN.md` for typography, spacing, technology stack, components, chart libraries, tokens, responsive rules, states, and accessibility.
+3. If the target system lacks a clear app/product title, logo, or favicon, use Creative Production `logo-explorer` before finalizing prototypes. Use an existing project/product name as provisional title; in target/autopilot mode, derive a conservative title from the repo/project name when no title exists. Record selected logo direction, favicon/app-icon direction, title, rejected routes, caveats, and asset paths under `design/`.
+4. If Product Design is available and there is no visual target, use Product Design `get-context` -> `ideate` to generate at least three prototype/visual options and reach the next required human choice.
+5. In target/autopilot mode, choose the Product Design system-recommended option only when the user has allowed automatic selection, and record the selected option plus rationale under `design/`.
+6. Stop and hand off to the human for Creative Production route selection, Product Design option selection, optional Pencil confirmation, or design approval when automatic selection is not authorized.
 
 Do not blindly run Pencil CLI or MCP to produce real design work unless the user explicitly asks in this turn, the module is complex enough to need human alignment, and the scope is small enough for this skill.
 
@@ -78,12 +86,16 @@ For step 7:
 
 - Use `executing-plans` when the first vertical slice is strongly coupled or file boundaries are unclear.
 - Use `subagent-driven-development` only when `IMPLEMENTATION_PLAN.md` has clear independent tasks, ownership, and non-overlapping write scopes.
-- Use Product Design `image-to-code` or `url-to-code` only when `IMPLEMENTATION_PLAN.md` already exists, a selected visual target or source URL exists, and the work is limited to the first frontend vertical slice.
+- Before any implementation work, re-read and obey `AGENTS.md`, `CLAUDE.md`, README, `DESIGN.md`, `DEPLOY.md`, `IMPLEMENTATION_PLAN.md`, and relevant docs/runbooks. If local implementation pressure conflicts with governance, stop and resolve the conflict instead of drifting.
+- When using `subagent-driven-development`, every subagent brief must include the relevant governance documents, allowed file boundaries, no-drift requirements for UI/UX/stack/tests/release rules, and a requirement to report compliance plus deviations.
+- Before frontend implementation, read `DESIGN.md` and `design/`; do not implement UI that violates the recorded typography, spacing, stack, component, chart, token, responsive, state, or accessibility rules.
+- Use Product Design `image-to-code` or `url-to-code` to cut the selected prototype/visual target into a frontend frame when `IMPLEMENTATION_PLAN.md` already exists, a selected visual target or source URL exists, and the work is limited to the first frontend vertical slice.
+- If the selected prototype conflicts with shadcn/ui, Ant Design Pro, ECharts, or another project-approved third-party framework, use the framework's native components and `DESIGN.md` as implementation authority. Record accepted visual deviations instead of creating a parallel component system.
 - Implement only the first vertical slice. Do not expand into later slices just because the loop is running.
 
 ### Review Loops
 
-For `design-review`, `qa`, and `review`, loop until findings are cleared or a stop condition fires:
+For Product Design visual QA / `design-review`, `qa`, and `review`, loop until findings are cleared or a stop condition fires:
 
 1. Run the review/QA.
 2. If findings exist, fix only in-scope findings.
@@ -98,6 +110,8 @@ If iteration 10 still has unresolved findings, stop and hand off to the human wi
 - attempted fixes
 - likely blocker/root cause
 - suggested next manual decision
+
+For Product Design visual QA / design review, compare the rendered implementation against the selected prototype/visual target and `DESIGN.md` on every iteration. Fix meaningful visual, spacing, typography, component, chart, responsive, and state deviations until the result is highly faithful or the deviation is explicitly accepted.
 
 Track review-loop metrics for each family:
 
@@ -127,7 +141,7 @@ Stop immediately and hand off when:
 
 - Discovery / Brainstorm evidence is missing
 - scope is too large or ambiguous
-- Product Design visual-option selection, Pencil/design confirmation, or other UI approval is needed
+- Product Design visual-option selection, prototype selection, Pencil/design confirmation, or other UI approval is needed
 - a gstack step reaches a decision point that would normally use `AskUserQuestion`
 - a required tool/credential/service is unavailable
 - the next action requires explicit user authorization
@@ -185,15 +199,15 @@ Use this format:
 | 状态 | 步骤 | Harness 动作 | 判断 | 证据/原因 |
 |---|---:|---|---|---|
 | ✅ | 1 | Discovery / Brainstorm gate | 前置已完成 | 范围已通过 ... 锁定为 ...；无循环。 |
-| ⏭️ | 2 | gstack `/plan-design-review` | 前置无需进行 | 当前切片不涉及新增产品/交互方向，按已批准范围执行。 |
+| ⏭️ | 2 | Product Design planning review, fallback gstack `/plan-design-review` | 前置无需进行 | 当前切片不涉及新增产品/交互方向，按已批准范围执行。 |
 | ⏭️ | 3 | Design artifact / visual target | 前置无需进行 | 当前切片不涉及 UI；无需新增设计制品。 |
-| ⏭️ | 4 | gstack `/plan-design-review` on selected design artifact | 前置无需进行 | 未创建新设计制品，因此无需设计制品复审。 |
+| ⏭️ | 4 | Product Design review of selected design artifact, fallback gstack `/plan-design-review` | 前置无需进行 | 未创建新设计制品，因此无需设计制品复审。 |
 | ✅ | 5 | gstack `/plan-eng-review` | 前置已完成 | 工程边界和测试策略已在 ... 锁定。 |
 | ✅ | 6 | Superpowers `writing-plans` | 前置已完成 | `IMPLEMENTATION_PLAN.md` 覆盖文件路径、任务、测试和完成标准。 |
 | ✅ | 7 | Superpowers `executing-plans` or `subagent-driven-development` | 前置已完成 | 已完成第一个 vertical slice，未扩展后续切片。 |
 | ✅ | 8 | Superpowers `verification-before-completion` | 前置已完成 | 已运行 ...，结果通过。 |
 | ✅ | 9 | gstack `/browse` verification, optional `open-gstack-browser`, Playwright fallback | 前置已完成 | 已运行 ...，覆盖主路径和关键状态。 |
-| ✅ | 10 | gstack `/design-review` | 前置已完成 | 循环 1 次，发现 0 个阻塞问题，无需修复。 |
+| ✅ | 10 | Product Design visual QA / design review, fallback gstack `/design-review` | 前置已完成 | 循环 1 次，发现 0 个阻塞问题，无需修复。 |
 | ✅ | 11 | gstack `/qa` | 前置已完成 | 循环 1 次，发现 2 个问题，已修复 2 个，无遗留。 |
 | 🎯 | 12 | gstack `/review` | 当前下一步 | 循环 10 次后仍有 1 个高风险 finding，需要人工判断是否接受。 |
 | ⏳ | 13 | Git closeout / `/ship` preflight | 待执行 | 停止点之后，未执行。 |
@@ -230,10 +244,18 @@ The slice is complete only when:
 ## Common Mistakes
 
 - Starting before the Discovery / Brainstorm gate has fixed the target.
+- Starting autopilot on a blank or not-started project where the user explicitly asked to use the `my-harness` framework; that must begin with Superpowers `brainstorming`.
 - Running autopilot on a large, unclear version.
 - Treating starter design files or blank Pencil files as approved design.
+- Starting frontend work before `DESIGN.md` exists for UI work.
+- Skipping Creative Production `logo-explorer` when design planning/prototype work lacks title, logo, or favicon.
 - Requiring Product Design installation or blocking the SOP when Product Design is unavailable.
-- Letting Product Design bypass `IMPLEMENTATION_PLAN.md`, design review, QA, or code review.
+- Letting Product Design bypass `DESIGN.md`, `IMPLEMENTATION_PLAN.md`, visual QA, QA, or code review.
+- Ignoring `DESIGN.md` typography, spacing, technology stack, component, chart, token, responsive, state, or accessibility requirements.
+- Treating a prototype as stronger than shadcn/ui, Ant Design Pro, ECharts, or another selected third-party framework's component model.
+- Letting subagents work from narrow task prompts without `AGENTS.md`, `DESIGN.md`, `IMPLEMENTATION_PLAN.md`, allowed file boundaries, and no-drift instructions.
+- Moving Superpowers, gstack, Product Design, Pencil, deployment, or release artifacts into `.my-harness/` instead of keeping native paths and indexing them.
+- Treating `.my-harness/` as a replacement source of truth rather than an execution index.
 - Letting review/QA loops run indefinitely.
 - Entering Plan mode or using `AskUserQuestion` / `request_user_input` during a gstack gate in Codex.
 - Continuing past a Markdown decision gate before the user chooses a `D1` / `D2` / `D3` option.

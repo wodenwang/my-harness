@@ -41,15 +41,15 @@ Phase packages are recommendation conveniences only. Status reports must keep al
 | Step | Harness action |
 |---:|---|
 | 1 | Discovery / Brainstorm gate: gstack `/office-hours` or Superpowers `brainstorming` |
-| 2 | gstack `/plan-design-review` |
+| 2 | Product Design planning review, fallback gstack `/plan-design-review` |
 | 3 | Design artifact / visual target |
-| 4 | gstack `/plan-design-review` on selected design artifact |
+| 4 | Product Design review of selected design artifact, fallback gstack `/plan-design-review` |
 | 5 | gstack `/plan-eng-review` |
 | 6 | Superpowers `writing-plans` |
 | 7 | Superpowers `executing-plans` or `subagent-driven-development` |
 | 8 | Superpowers `verification-before-completion` |
 | 9 | gstack `/browse`, optional `open-gstack-browser`, Playwright fallback |
-| 10 | gstack `/design-review` |
+| 10 | Product Design visual QA / design review, fallback gstack `/design-review` |
 | 11 | gstack `/qa` |
 | 12 | gstack `/review` |
 | 13 | Git closeout / `/ship` preflight |
@@ -58,15 +58,16 @@ Phase packages are recommendation conveniences only. Status reports must keep al
 
 Optional after step 15: `my-harness-canary` can be invoked directly for post-deploy gstack `/canary` monitoring. It is not part of the required 15-step table and does not block SOP closure.
 
-Frontend design enhancement inside the existing 15 steps: Product Design focused skills can be used directly when installed and a UI slice needs a visual target, Product Design-assisted `image-to-code` / `url-to-code`, or `design-qa.md` evidence. It is not a new canonical step and does not block SOP closure when unavailable.
+Frontend design enhancement inside the existing 15 steps: Product Design focused skills replace gstack design gates when installed and a UI slice needs planning review, a visual target, Product Design-assisted `image-to-code` / `url-to-code`, or visual-fidelity QA evidence. It is not a new canonical step and does not block SOP closure when unavailable.
 
 ## Important Behavior Contracts
 
 - `my-harness-next-action` must inspect artifacts before recommending step 1.
 - Step 1 is a Discovery / Brainstorm gate: default to gstack `/office-hours` for new product, version, or opportunity discovery; accept Superpowers `brainstorming` evidence when value and target are already clear and the work needs candidate design/spec convergence.
-- Step 1 output is a candidate input for later review, not an approved design. `plan-design-review` and `plan-eng-review` still challenge the product, interaction, and engineering assumptions.
-- When step 1 used Superpowers `brainstorming`, the next action cannot jump directly to Superpowers `writing-plans`. The workflow must run `plan-design-review` for product/interaction/frontend planning, create or confirm a design artifact / visual target when needed, and run `plan-eng-review` for engineering planning before step 6, unless the request is extremely simple enough that both reviews are unnecessary.
-- Even if Superpowers `brainstorming` already produced frontend and backend implementation ideas, those ideas remain candidate inputs for `plan-design-review` and `plan-eng-review`, not approved plans.
+- When a blank, mostly blank, or not-started project explicitly asks to use the `my-harness` framework/process, the first harness action is step 1 Superpowers `brainstorming`. It must clarify target user, problem, constraints, success criteria, smallest worthwhile slice, non-goals, risks, and candidate approaches before planning, design artifact work, implementation, QA, or autopilot.
+- Step 1 output is a candidate input for later review, not an approved design. Product Design planning review and `plan-eng-review` still challenge the product, interaction, and engineering assumptions.
+- When step 1 used Superpowers `brainstorming`, the next action cannot jump directly to Superpowers `writing-plans`. The workflow must run Product Design planning review for product/interaction/frontend planning, create or confirm a `DESIGN.md`-governed design artifact / visual target when needed, and run `plan-eng-review` for engineering planning before step 6, unless the request is extremely simple enough that both reviews are unnecessary.
+- Even if Superpowers `brainstorming` already produced frontend and backend implementation ideas, those ideas remain candidate inputs for Product Design planning review and `plan-eng-review`, not approved plans.
 - From `v1.1.1`, all harness-generated gstack prompts must be Codex-safe: do not enter Plan mode, do not call `AskUserQuestion` or `request_user_input`, convert interaction points into Markdown decision gates, number decisions as `D1` / `D2` / `D3`, show options/recommendation/pros/cons/impact in tables, stop when the user must decide, and stay read-only unless the user explicitly asks for file edits.
 - If the SOP is already closed, it must say `当前 SOP 已闭环。` and provide the full status table instead of starting a new Discovery / Brainstorm loop.
 - The next-action table must include all 15 steps and use the agreed emoji status markers.
@@ -75,10 +76,15 @@ Frontend design enhancement inside the existing 15 steps: Product Design focused
 - Recommended prompts must be standalone fenced `text` blocks.
 - Recommended prompts must be self-chaining: after naming the immediate action, they must require the executor to output the `流程执行情况一览：` 15-step table and a new copyable final prompt after finishing, so the user can keep copying the last prompt without asking next-action again.
 - `my-harness-writing-design` creates design-governance scaffolding and may use Product Design, shadcn MCP, and optional Pencil tooling when available.
-- Product Design is optional but preferred for frontend visual targets when installed. If the host Codex does not have the Product Design plugin, `my-harness` must not require installation; continue with shadcn/ui design governance, existing UI references, screenshots, or optional Pencil for complex alignment.
-- When Product Design is available and no frontend visual target exists, the preferred design branch is `get-context` -> `ideate` -> user selects one option. The selected visual target must be recorded under `design/` and is first-class step 3 evidence.
-- Product Design `image-to-code` and `url-to-code` are allowed only inside step 7 after `IMPLEMENTATION_PLAN.md` exists and only for the first frontend vertical slice. They must not bypass Superpowers planning or expand scope.
-- Product Design `design-qa.md` may support step 10 as visual-fidelity evidence, but it does not replace step 8 verification, step 9 browser checks, step 10 `gstack /design-review`, step 11 QA, step 12 review, step 14 ship, or step 15 land/deploy.
+- If a target project has no `DESIGN.md`, any UI / frontend / chart / app work must first invoke or recommend `my-harness-writing-design` before design review, frontend planning, implementation, or visual QA.
+- Product Design is optional as an installation dependency, but when installed it replaces gstack `/plan-design-review` and `/design-review` for design-related gates. If the host Codex does not have the Product Design plugin, `my-harness` must not require installation; continue with selected design governance, existing UI references, screenshots, or optional Pencil for complex alignment.
+- When Product Design is available and no frontend visual target exists, the preferred design branch is `get-context` -> `ideate` -> at least three prototype/visual options -> user selects one option. In target/autopilot mode, the system-recommended direction may be selected when allowed, and the rationale must be recorded. The selected visual target must be recorded under `design/` and is first-class step 3 evidence.
+- During design planning and prototype design, if the target system lacks a clear app/product title, logo, or favicon, the flow must use Creative Production `logo-explorer` before finalizing prototypes. Use the project/product name as a provisional title when available; in target/autopilot mode, derive a conservative title from the repo/project name if no title exists. Record selected logo direction, favicon/app-icon direction, title, rejected routes, caveats, and asset paths under `design/`.
+- Product Design `image-to-code` and `url-to-code` are used inside step 7 after `IMPLEMENTATION_PLAN.md` exists to cut the selected prototype into a frontend frame for the first vertical slice. They must not bypass Superpowers planning or expand scope.
+- Product Design visual QA / `design-qa.md` supports step 10 as visual-fidelity evidence. It must compare the rendered implementation to the selected prototype and `DESIGN.md`, record differences, and drive fixes until the result is highly faithful or deviations are explicitly accepted.
+- All design-related stages must strictly follow `DESIGN.md` and `design/`, including typography, spacing, technology stack, components, chart libraries, color tokens, responsive rules, states, and accessibility.
+- When shadcn/ui, Ant Design Pro, ECharts, or another selected third-party framework conflicts with a prototype, the framework's native components, project components, and `DESIGN.md` take precedence. The prototype remains a visual and information-architecture reference.
+- During step 7 `executing-plans` or `subagent-driven-development`, Codex must continuously follow `AGENTS.md`, `CLAUDE.md`, README, `DESIGN.md`, `DEPLOY.md`, `IMPLEMENTATION_PLAN.md`, and relevant docs/runbooks. Subagent briefs must include these governance constraints, allowed file boundaries, no-drift requirements for UI/UX/stack/tests/release rules, and deviation reporting.
 - From `v1.1.0`, `my-harness-writing-design` no longer uses the Ant Design template. New Admin Console design baselines use shadcn/ui with tweakcn as the default style reference.
 - `my-harness-writing-design` now chooses frontend design baseline by product scenario. Admin Console remains shadcn/ui + tweakcn; BI chart analysis, analytics dashboards, and data cockpits use React + Ant Design Pro + ECharts; C-end websites/apps do not lock a framework and use Product Design output as input for later engineering review.
 - If the product scenario is unclear, `my-harness-writing-design` must stop and ask the user to choose Admin Console, BI dashboard/data cockpit, or C-end website/app before writing files.
@@ -90,12 +96,14 @@ Frontend design enhancement inside the existing 15 steps: Product Design focused
 - Button rules are part of the design baseline: list pages or genuinely narrow compact layouts may use icon-only buttons; icon-only buttons require accessible labels and tooltip/title; all other buttons use icon + text; button labels must not wrap.
 - Theme colors, websites, logos, screenshots, or brand assets must be parsed into safe admin-console theme tokens instead of copied as marketing-page visuals.
 - `my-harness-autopilot-slice` is only for small, bounded work after the Discovery / Brainstorm gate is finalized.
+- `my-harness-autopilot-slice` refuses blank or not-started projects that explicitly ask for the `my-harness` framework, because those must begin with Superpowers `brainstorming`.
 - Autopilot loops `design-review`, `qa`, and `review` until clear, accepted, blocked, or 10 iterations.
 - Autopilot must summarize completion, refusal, handoff, blocker, and authorization-required exits with the same `流程执行情况一览` table style as `my-harness-next-action`: all 15 steps, fixed emoji statuses, and loop metrics folded into `证据/原因` instead of separate numeric columns; skipped steps must still be listed with `⏭️ 前置无需进行` and the skip reason.
 - `my-harness-upgrade` must distinguish current version, target ref, target version, and version iteration before applying updates.
 - Plugin updates use `scripts/upgrade.sh` on macOS/Linux and `scripts/upgrade.ps1` on Windows; the skill coordinates checks, applies user-requested updates, and verifies manifest plus `~/.codex/skills/my-harness*` entries afterward.
 - Stable updates default to the latest GitHub Release/tag. Updating from `main` requires explicit `MY_HARNESS_REF=main` or an equivalent user instruction.
 - `my-harness-initialize-project` is for new or mostly empty target repositories. It creates or strengthens `README.md`, `AGENTS.md`, links to design/deployment governance when relevant, and hands off to `my-harness-next-action`; it must not invent stack decisions or implement the app unless the user explicitly asks.
+- For projects already using `my-harness`, `.my-harness/` is an optional quick execution index, not a new artifact root. It may store step status, decisions, evidence links, verification commands, review loop counts, and next prompts. Superpowers, gstack, Product Design, Pencil, deployment, and release artifacts remain in their native or project-standard directories such as `docs/superpowers/`, `IMPLEMENTATION_PLAN.md`, `.gstack/`, `design/`, `DEPLOY.md`, and release docs.
 - `my-harness-writing-deployment` governs target project deployment, not plugin updates. Like `my-harness-writing-design`, it writes a standalone project document: `DEPLOY.md`, then links it from `AGENTS.md` and `CLAUDE.md`. It requires production deployment to be version-granular: Docker image tags are pinned to release versions, Docker Compose is the runtime, `install.sh` handles first install, `upgrade.sh` handles only explicit version-to-version upgrades, and DB/config changes are part of the same upgrade gate.
 - When a Compose deployment includes a DB container, first install must include DB initialization SQL and later releases must provide DB DDL/data migrations or use a mature migration framework with an explicit release-to-release path.
 - The generated `DEPLOY.md` contract applies during project development and final deployment. Missing `install.sh` / `upgrade.sh` scripts must be developed, and every version upgrade or release must validate both install and upgrade logic.

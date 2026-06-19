@@ -11,6 +11,16 @@
 5. 现有实现代码或品牌资产
 6. 通用 C 端产品体验最佳实践
 
+硬性执行规则：
+
+- 任何设计、前端规划、实现和 design review 都必须严格遵守本 `DESIGN.md`，包括字体、间距、技术栈决策边界、组件体系、颜色 token、响应式、状态设计和可访问性。
+- Product Design 默认至少提供三套原型/视觉方案供选择；目标模式下可以选择系统推荐方案，但必须记录推荐理由。
+- 进入设计规划和原型图设计时，如果系统没有明确标题、logo 或 favicon，必须先使用 Creative Production plugin 的 `logo-explorer` 构建 logo / favicon / app icon 方向，并把选中方向、拒绝方案、标题和资产路径记录到 `design/`。
+- 做前端开发时，如已有 Product Design 选中原型或视觉目标，先使用 `image-to-code` / `url-to-code` 做原型切割形成前端框架，再按后续工程评审选定的技术栈开发。
+- 执行 `IMPLEMENTATION_PLAN.md` 时，Codex 和所有 subagent 必须持续遵守 `AGENTS.md`、`CLAUDE.md`、README、本 `DESIGN.md`、`DEPLOY.md`、`IMPLEMENTATION_PLAN.md` 和相关 docs/runbooks；subagent brief 必须写明治理约束、允许改动边界和偏差回报要求。
+- design review 阶段要严格比对成品和原型图之间的差异，持续修复直到高度还原或偏差被明确接受。
+- 如果原型与后续选定框架、组件库或项目已有组件不一致，以框架组件、项目已有组件和本 `DESIGN.md` 为准；原型仅作视觉和信息架构参考。
+
 ## 1. 场景和技术栈
 
 产品场景：`{{PRODUCT_SCENARIO}}`
@@ -20,6 +30,7 @@
 Product Design 必须先产出：
 
 - 目标用户和核心任务
+- 产品标题、logo 和 favicon / app icon 方向；缺失时先通过 Creative Production `logo-explorer` 补齐
 - 品牌与视觉方向
 - 信息架构
 - 核心页面 / 流程
@@ -42,10 +53,12 @@ Product Design 必须先产出：
 没有明确视觉目标时，默认使用：
 
 1. Product Design `get-context`
-2. Product Design `ideate`
+2. Product Design `ideate` 生成至少三套原型/视觉方案
 3. 用户选择一个方向
 4. 将选中图、说明、截图或链接记录到 `design/`
-5. 后续 `plan-design-review` 审查选中设计制品
+5. 后续 Product Design 设计制品评审审查选中设计制品
+
+目标模式或自动闭环模式下，可以选择 Product Design 系统推荐方案，但必须把推荐依据、被选方案和接受/放弃的偏差记录到 `design/`。
 
 如果已有 URL、截图、Figma、品牌资产或现有 UI，可直接作为 Product Design 输入。
 
@@ -130,13 +143,19 @@ Product Design 视觉目标必须明确：
 - 表单校验和失败恢复
 - Console / Network 是否有明显问题
 - 如有源视觉目标，使用 Product Design `design-qa` 生成或更新 `design-qa.md`
+- `design-qa.md` 必须记录成品和原型图差异、严重程度、修复建议和已接受偏差，并驱动修复直到高度还原或偏差被明确接受
+- 如原型与后续选定框架或项目已有组件不一致，以框架组件和本文件为准，并记录偏差
 
 ## 8. 完成定义
 
 前端设计可进入实现前，必须满足：
 
 1. Product Design brief 已确认，或已有可用视觉来源。
-2. 选中的视觉目标、截图、URL、Figma 或说明已记录到 `design/`。
+2. 至少三套 Product Design 原型/视觉方案，以及选中的视觉目标、截图、URL、Figma 或说明已记录到 `design/`。
 3. 页面范围、核心路径、状态和响应式要求明确。
 4. 技术框架尚未被设计阶段硬编码，除非用户或现有项目已经明确指定。
 5. 后续 `plan-eng-review` 会基于视觉目标和工程约束做最终技术选型。
+6. 如系统缺少标题、logo 或 favicon，Creative Production `logo-explorer` 的选中方向、拒绝方案、标题和资产路径已记录到 `design/`，或已明确记录延期原因。
+7. 前端实现会先用 Product Design `image-to-code` / `url-to-code` 切割选中原型形成页面骨架，或记录为什么无需切割。
+8. `executing-plans` 或 `subagent-driven-development` 已明确要求遵守 `AGENTS.md`、本文件、`IMPLEMENTATION_PLAN.md` 和相关治理文档。
+9. 如原型与后续选定框架或项目已有组件不一致，以框架组件和本文件为准并记录偏差。

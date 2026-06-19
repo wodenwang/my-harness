@@ -262,10 +262,15 @@ UI 框架：{framework_label}
 - {design_direction}
 - 如用户提供官网、logo、截图、主题色或品牌素材，先解析主色、辅助色、背景倾向、对比度、饱和度和品牌气质，再选择合适主题模板。
 - 按钮默认使用 icon + 文字；仅列表页或空间较窄的紧凑区域可使用纯 icon 按钮，并补充可访问标签和必要 tooltip；按钮文字不得换行。
-- 如宿主机安装了 Product Design，默认可用其 get-context -> ideate 分支生成 3 个视觉方向并等待用户选择；选中视觉目标后记录到 design/。
+- 如宿主机安装了 Product Design，默认可用其 get-context -> ideate 分支生成至少 3 个原型/视觉方向并等待用户选择；目标模式下可选择系统推荐方案，但必须记录推荐依据；选中视觉目标后记录到 design/。
+- 如果系统没有明确标题、logo 或 favicon，先使用 Creative Production plugin 的 logo-explorer 构建 logo / favicon / app icon 方向；已有项目名时可作为临时标题，目标模式下可从 repo/project name 推导保守标题；选中方向、拒绝方案、标题和资产路径记录到 design/。
 - 如 Product Design 未安装，不要求安装；使用当前场景设计基线、已有 UI 参考、截图或设计说明继续推进。
 - 只有复杂前端模块、跨人协作或多页面/多状态交互需要明确对齐时，才使用 Pencil 产出 .pen 原型和导出截图。
 - {framework_note}
+- 如已有 Product Design 选中原型或视觉目标，前端开发时先用 image-to-code / url-to-code 做原型切割形成前端框架，再结合项目代码和组件体系开发。
+- 执行 IMPLEMENTATION_PLAN.md 时，Codex 和所有 subagent 必须持续遵守 AGENTS.md、CLAUDE.md、README、DESIGN.md、DEPLOY.md、IMPLEMENTATION_PLAN.md 和相关 docs/runbooks；subagent brief 必须写明治理约束、允许改动边界和偏差回报要求。
+- 设计 review 阶段必须比对成品和原型图差异，持续修复直到高度还原或偏差被明确接受。
+- 如果原型与 shadcn/ui、Ant Design Pro、ECharts 或其他选定第三方框架的已有组件不一致，以前端框架组件和 DESIGN.md 为准，原型仅作视觉和信息架构参考。
 - 默认遵循 8px spacing system，不使用随机颜色，不无故使用渐变或玻璃拟态，不随意创建自定义基础组件。
 
 ## 2. 页面范围
@@ -298,6 +303,7 @@ UI 框架：{framework_label}
 - Brand/material interpretation
 - Implementation notes
 - Product Design visual target reference, if used
+- Creative Production logo/favicon/title route, if used
 - Framework/component source and fallback decision
 """
     path.write_text(content, encoding="utf-8")
@@ -313,7 +319,22 @@ def ensure_design_doc_with_framework(root: Path, project_name: str, stage: str, 
 
 
 def ensure_agents_link(path: Path) -> bool:
-    section = """\n## 设计规范\n\n- 项目级 UI/UX 规则见 `DESIGN.md`。\n- 设计制品、视觉目标、截图和设计说明统一放在 `design/`。\n- 前端框架按产品场景选择：Admin Console 使用 shadcn/ui + tweakcn；BI 图表分析 / 数据驾驶舱使用 React + Ant Design Pro + ECharts；C 端网站 / App 不锁定框架，由 Product Design 产出视觉方向后再在工程评审中决策。\n- 如果使用 Product Design 生成视觉目标或 `design-qa.md`，对应图片、链接或说明也必须记录到 `design/`；未安装 Product Design 时使用当前场景的设计基线、已有 UI 参考、截图或必要时 Pencil 协同制品继续推进。\n- 开始前端实现前，必须先检查 `DESIGN.md` 和 `design/`。\n- 已确认视觉目标或设计说明优先于临场自由重设计；如需偏离，先说明原因并获得确认。\n"""
+    section = """
+## 设计规范
+
+- 项目级 UI/UX 规则见 `DESIGN.md`。
+- 设计制品、视觉目标、截图和设计说明统一放在 `design/`。
+- 如果项目还没有 `DESIGN.md`，任何 UI / 前端 / 图表 / App 工作开始前都必须先用 `my-harness-writing-design` 创建。
+- 前端框架按产品场景选择：Admin Console 使用 shadcn/ui + tweakcn；BI 图表分析 / 数据驾驶舱使用 React + Ant Design Pro + ECharts；C 端网站 / App 不锁定框架，由 Product Design 产出视觉方向后再在工程评审中决策。
+- 所有设计、前端规划、实现和 design review 必须严格遵守 `DESIGN.md`，包括字体、间距、技术栈、组件体系、图表库、颜色 token、响应式、状态设计和可访问性。
+- 如果使用 Product Design 生成视觉目标，默认至少提供三套原型/视觉方案供选择；目标模式下可选择系统推荐方案，但必须记录推荐理由。对应图片、链接或说明也必须记录到 `design/`。
+- 进入设计规划和原型图设计时，如果系统没有明确标题、logo 或 favicon，必须先使用 Creative Production plugin 的 `logo-explorer` 构建 logo / favicon / app icon 方向；已有项目名时可作为临时标题，目标模式下可从 repo/project name 推导保守标题。选中方向、拒绝方案、标题和资产路径记录到 `design/`。
+- 做前端开发时，如已有 Product Design 选中原型或视觉目标，先使用 `image-to-code` / `url-to-code` 做原型切割形成前端框架，再按项目代码和组件体系开发。
+- 进入 `executing-plans` 或 `subagent-driven-development` 后，Codex 和所有 subagent 必须持续遵守 `AGENTS.md`、`CLAUDE.md`、README、`DESIGN.md`、`DEPLOY.md`、`IMPLEMENTATION_PLAN.md` 和相关 docs/runbooks；subagent brief 必须写明治理约束、允许改动边界和偏差回报要求。
+- design review 阶段要严格比对成品和原型图之间的差异，持续修复直到高度还原或偏差被明确接受；`design-qa.md` 记录差异、修复和接受项。
+- 若选定 shadcn/ui、Ant Design Pro、ECharts 或其他第三方框架，且原型与已有组件不一致，以前端框架组件和 `DESIGN.md` 为准，原型仅作参考。
+- 未安装 Product Design 时使用当前场景的设计基线、已有 UI 参考、截图或必要时 Pencil 协同制品继续推进。
+"""
 
     if path.exists():
         text = path.read_text(encoding="utf-8", errors="ignore")

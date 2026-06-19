@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.4.1 - 2026-06-19
+
+- Required UI / frontend / chart / app work to create or verify `DESIGN.md` through `my-harness-writing-design` before design review, frontend planning, implementation, or visual QA.
+- Updated Product Design guidance so Product Design focused skills replace gstack `/plan-design-review` and `/design-review` for design-related gates when available.
+- Required Product Design planning and frontend work to provide at least three prototype/visual options, with target/autopilot mode allowed to choose the system-recommended option only with recorded rationale.
+- Required frontend slices with a selected Product Design prototype to use `image-to-code` / `url-to-code` for prototype slicing after `IMPLEMENTATION_PLAN.md` exists.
+- Required design review to compare the implemented UI against the selected prototype and `DESIGN.md`, then keep fixing until highly faithful or deviations are explicitly accepted.
+- Clarified that shadcn/ui, Ant Design Pro, ECharts, and other selected framework components take precedence when a prototype conflicts with the framework's component model.
+- Required Creative Production `logo-explorer` during design planning/prototype design when a target system lacks an app/product title, logo, or favicon.
+- Required `executing-plans` and `subagent-driven-development` prompts to keep Codex and subagents continuously aligned with `AGENTS.md`, `DESIGN.md`, `IMPLEMENTATION_PLAN.md`, and related governance docs.
+- Required blank or not-started projects that explicitly ask for the `my-harness` framework/process to begin at step 1 with Superpowers `brainstorming`.
+- Added optional `.my-harness/` execution indexing for projects already using `my-harness`, while keeping Superpowers, gstack, Product Design, Pencil, deployment, and release artifacts in their native directories.
+- Updated installer defaults to `v1.4.1`.
+
 ## 1.4.0 - 2026-06-18
 
 - Added a six-phase user-facing view over the canonical 15-step SOP while preserving all step numbers as the evidence ledger.
