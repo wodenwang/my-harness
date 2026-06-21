@@ -60,7 +60,7 @@
 
 1. Discovery / Brainstorm gate：默认使用 gstack `/office-hours`；如果项目价值和目标已经明确、需要方案或 spec 收敛，可使用 Superpowers `brainstorming`；如果空白项目或尚未开始使用 my-harness 流程且用户显式指定 my-harness 框架，必须先引导进入 Superpowers `brainstorming` 沟通清楚需求
 2. Product Design planning review；仅当 Product Design 不可用或项目治理明确要求时 fallback 到 gstack `/plan-design-review`
-3. Design artifact / visual target：UI / 前端 / 图表 / App 工作必须先确保 `DESIGN.md` 存在；如果系统缺少明确标题、logo 或 favicon，先使用 Creative Production `logo-explorer` 构建 logo / favicon / app icon 方向；默认优先使用 Product Design `get-context` -> `ideate` -> 用户选择，至少生成三套原型/视觉方案；目标模式下可选择系统推荐方案但必须记录理由；已有截图、URL、Figma、现有 UI 或设计说明时可直接作为视觉目标；只有复杂前端模块或需要人类协同对齐时才使用 Pencil prototype
+3. Design artifact / approved visual target：UI / 前端 / 图表 / App 工作必须先确保 `DESIGN.md` 存在；显式执行 `my-harness-writing-design` 时，即使老项目已有 `DESIGN.md`，也必须保守合并 my-harness 最新设计治理补强并保留项目个性化内容；如果系统缺少明确标题、logo 或 favicon，先使用 Creative Production `logo-explorer` 构建 logo / favicon / app icon 方向；默认优先使用 Product Design `get-context` -> `ideate` -> 用户选择，至少生成三套原型/视觉方案；最终必须留下 approved / selected / system-recommended accepted visual target，而不只是设计方向；approved target 必须记录来源、选择理由、target mockup 或引用、implementation spec extraction、布局结构、交互状态、响应式、关键页面、组件清单、shadcn component/block mapping、Tailwind token / CSS variable mapping、8px spacing、状态覆盖和非 shadcn UI 框架排除说明；已有截图、URL、Figma、现有 UI 或设计说明时可直接作为视觉目标，但仍要补齐 implementation spec extraction；只有复杂前端模块或需要人类协同对齐时才使用 Pencil prototype
 4. Product Design review on selected design artifact；仅当 Product Design 不可用时 fallback 到 gstack `/plan-design-review`
 5. gstack `/plan-eng-review`
 6. Superpowers `writing-plans`
@@ -76,23 +76,25 @@
 
 可选独立步骤：15 步完成后，如果用户需要线上金丝雀测试，直接调用 `my-harness-canary`。这不是必做的第 16 步，不阻塞 SOP 闭环；发现问题只登记到当前项目 GitHub issues，不在 canary 步骤中修复。
 
-前端设计默认增强：如果项目还没有 `DESIGN.md`，任何 UI / 前端 / 图表 / App 工作开始前必须先调用 `my-harness-writing-design` 创建 UI/UX 和前端规范。所有设计、前端规划、实现和 design review 都必须严格遵循 `DESIGN.md` 和 `design/`，包括字体、间距、技术栈、组件体系、图表库、颜色 token、响应式、状态设计和可访问性。
+前端设计默认增强：如果项目还没有 `DESIGN.md`，任何 UI / 前端 / 图表 / App 工作开始前必须先调用 `my-harness-writing-design` 创建 UI/UX 和前端规范。如果用户显式执行 `my-harness-writing-design` 且项目已有 `DESIGN.md`，必须把 my-harness 最新要求合并进 `DESIGN.md` 的 harness-owned 补强段，同时保留用户个性化内容、业务规则、品牌决策、历史说明和已接受偏差。所有设计、前端规划、实现和 design review 都必须严格遵循 `DESIGN.md` 和 `design/`，包括字体、间距、技术栈、组件体系、图表库、颜色 token、响应式、状态设计和可访问性。
 
-Product Design 默认替代设计类 gstack 门禁：如果宿主机安装了 Product Design 插件，Step 2 / Step 4 / Step 10 使用 Product Design focused skills 完成设计规划评审、设计制品评审和视觉还原 QA；仅在 Product Design 不可用或项目治理明确要求时 fallback 到 gstack `/plan-design-review` 或 `/design-review`。没有视觉目标时，设计阶段默认走 Product Design `get-context` -> `ideate` -> 用户选择，至少提供三套原型/视觉方案；目标模式下可选择系统推荐方案但必须记录理由。选中结果记录到 `design/`。
+Product Design 默认替代设计类 gstack 门禁：如果宿主机安装了 Product Design 插件，Step 2 / Step 4 / Step 10 使用 Product Design focused skills 完成设计规划评审、设计制品评审和视觉还原 QA；仅在 Product Design 不可用或项目治理明确要求时 fallback 到 gstack `/plan-design-review` 或 `/design-review`。没有视觉目标时，设计阶段默认走 Product Design `get-context` -> `ideate` -> 用户选择，至少提供三套原型/视觉方案；目标模式下可选择系统推荐方案但必须记录理由。选中结果必须作为 approved visual target 记录到 `design/`，并抽取 implementation spec，供后续 Step 6A / Step 10A 验收使用。
 
-前端实现阶段：只有在 `IMPLEMENTATION_PLAN.md` 已存在后，才允许使用 Product Design `image-to-code` / `url-to-code` 作为第一个 frontend vertical slice 的实现辅助；如已有 Product Design 选中原型或视觉目标，必须先做原型切割形成前端框架，再按项目代码和组件体系开发。Step 10 必须严格比对成品和原型图差异，持续修复直到高度还原或偏差被明确接受，并把差异、修复和接受项记录到 `design-qa.md` 或设计评审记录。Product Design 不是 `my-harness` 必需依赖；未安装时不要求安装，改用当前场景设计基线、已有 UI 参考、截图或必要时 Pencil 协同制品继续推进。
+前端高保真先行规则：对 CRM、Portal、Admin Console、dashboard、App 等 UI 密集项目，Step 6-11 默认拆成两轮执行证据，但不新增 canonical step 编号。第一轮是 Step 6A-11A Frontend Fidelity Loop：Step 6A 前端计划必须引用 Step 3 approved visual target 并抽取 implementation spec；Step 7A 使用 mock 数据先打通界面、布局、交互、空/错/加载状态和响应式，优先高保真还原，代码洁癖后置但最终必须回到 shadcn/ui、项目已有组件和 Tailwind tokens；Step 8A 运行前端验证；Step 9A 必须提前做浏览器截图和交互检查，因为没有截图就没有 Step 10A 证据；Step 10A 是 Product Design 高保真硬门禁，必须包含 target mockup、截图、差异、修复、before/after、accepted deviations；Step 11A 做 mock 模式功能 QA。第二轮是 Step 6B-11B Backend Integration Loop：后端/API/真实数据接入后重新跑 integration verification、browser verification、视觉回归和功能 QA，防止真实数据把布局和交互打坏。Step 12-15 不变。
+
+前端实现阶段：只有在 `IMPLEMENTATION_PLAN.md` 已存在后，才允许使用 Product Design `image-to-code` / `url-to-code` 作为第一个 frontend vertical slice 的实现辅助；如已有 Product Design 选中原型或视觉目标，必须先做原型切割形成前端框架，再按项目代码和组件体系开发。Product Design 生成代码只作为 scaffold，不是最终实现；Admin Console 完成前必须改造成 shadcn/ui primitives、项目已有组件和 Tailwind tokens。Step 10A / Step 10B 必须严格比对成品和原型图差异，持续修复直到高度还原或偏差被明确接受，并把差异、修复、before/after 和接受项记录到 `design-qa.md` 或设计评审记录。Product Design 不是 `my-harness` 必需依赖；未安装时不要求安装，改用当前场景设计基线、已有 UI 参考、截图或必要时 Pencil 协同制品继续推进。
 
 品牌资产补齐规则：进入设计规划和原型图设计时，如果系统没有明确标题、logo 或 favicon，必须先使用 Creative Production plugin 的 `logo-explorer` 构建 logo / favicon / app icon 方向。已有项目名时可作为临时标题；目标模式下可从 repo/project name 推导保守标题。选中方向、拒绝方案、标题、 caveat 和资产路径必须记录到 `design/`，再继续 Product Design 原型。
 
 执行阶段不偏离规则：进入 `executing-plans` 或 `subagent-driven-development` 后，Codex 和所有 subagent 必须持续遵守 `AGENTS.md`、`CLAUDE.md`、README、`DESIGN.md`、`DEPLOY.md`、`IMPLEMENTATION_PLAN.md` 和相关 docs/runbooks。subagent brief 必须写明治理约束、允许改动边界、禁止偏离 UI/UX/技术栈/测试/发布规则，并要求回报规范遵循情况和任何偏差。
 
-框架组件优先规则：当 shadcn/ui、Ant Design Pro、ECharts 或其他选定第三方框架的已有组件与原型不一致时，以前端框架组件、项目已有组件和 `DESIGN.md` 为准，原型仅作视觉和信息架构参考，不得因此创建平行组件体系。
+框架组件优先规则：当 shadcn/ui、Ant Design Pro、ECharts 或其他选定第三方框架的已有组件与原型不一致时，以前端框架组件、项目已有组件和 `DESIGN.md` 为准，原型仅作视觉和信息架构参考，不得因此创建平行组件体系。Admin Console 的 shadcn MCP 是可选工具，但 shadcn/ui + tweakcn 不是可选基线；Product Design 原型和实现计划必须提供 shadcn 组件 / blocks、Tailwind tokens、spacing、状态和非 shadcn UI 框架排除证据。
 
 显式启动 my-harness 规则：当目标项目为空白、基本空白或没有 my-harness 执行证据，而用户明确要求使用 my-harness 框架/流程时，不要直接进入初始化之外的设计、计划、实现、QA 或 autopilot；第一步必须是 Superpowers `brainstorming`，用于澄清目标用户、核心问题、约束、成功标准、最小值得做切片、非目标、风险和候选方案。缺少 `README.md`、`AGENTS.md` 等治理文件时，可以并行或随后使用 `my-harness-initialize-project` 补齐，但 harness 流程的第一个门禁仍是 brainstorming。
 
 `.my-harness` 执行索引规则：已经使用 my-harness 的项目，可以在项目根目录建立 `.my-harness/` 保存执行过程快速索引，例如 `.my-harness/index.md`、`.my-harness/status.md`、`.my-harness/runs/<date-or-slice>.md`。该目录只记录步骤状态、阶段、关键决策、证据链接、验证命令、循环次数和下一步提示词。Superpowers、gstack、Product Design、Pencil 等第三方技能创建的文档仍保持在第三方或项目规范目录中，例如 `docs/superpowers/`、`IMPLEMENTATION_PLAN.md`、`.gstack/`、`design/`、`DEPLOY.md`、`CHANGELOG.md`；`.my-harness/` 只做索引和短摘要，不存 secret、不复制长报告、不制造第二套事实源。
 
-shadcn MCP 是前端开发的重要可选工具：Step 3 可用于组件映射，Step 5 评审 MCP/CLI/registry 策略和 fallback，Step 6 写入 `IMPLEMENTATION_PLAN.md`，Step 7 用于浏览、搜索和引入组件，Step 10 检查 shadcn composition、8px spacing、token 颜色和自定义组件边界。未配置 shadcn MCP 时不阻塞流程，改用 shadcn CLI、官方文档和项目已有组件。
+shadcn MCP 是前端开发的重要可选工具：Step 3 可用于组件映射，Step 5 评审 MCP/CLI/registry 策略和 fallback，Step 6 写入 `IMPLEMENTATION_PLAN.md`，Step 7 用于浏览、搜索和引入组件，Step 10 检查 shadcn composition、8px spacing、token 颜色和自定义组件边界。未配置 shadcn MCP 时不阻塞流程，改用 shadcn CLI、官方文档和项目已有组件；这只表示 MCP 可选，不表示 Admin Console 可以不用 shadcn/ui。
 
 `my-harness-writing-design` 必须先确认产品场景再写文件。场景不明确时不得初始化，必须反向询问用户选择 Admin Console、BI 图表分析 / 数据驾驶舱或 C 端网站 / App。Admin Console 使用 shadcn/ui + tweakcn；BI 图表分析 / 数据驾驶舱使用 React + Ant Design Pro + ECharts；C 端网站 / App 不在 writing-design 中锁定框架，由 Product Design 产出视觉和框架选择输入，并在后续 `plan-eng-review` 中决策。
 

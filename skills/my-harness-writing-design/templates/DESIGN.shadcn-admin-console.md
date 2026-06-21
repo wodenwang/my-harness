@@ -16,11 +16,23 @@
 
 - 任何设计、前端规划、实现和 design review 都必须严格遵守本 `DESIGN.md`，包括字体、间距、技术栈、组件体系、颜色 token、响应式、状态设计和可访问性。
 - 如使用 Product Design 生成视觉目标，默认至少提供三套原型/视觉方案供选择；目标模式下可以选择系统推荐方案，但必须记录推荐理由。
+- Step 3 必须留下 approved visual target，不只是“设计方向”。记录 approved / selected / system-recommended accepted 状态、target mockup 或引用、选择理由和 implementation spec extraction。
+- Product Design 原型 / 视觉目标必须附带 shadcn/ui 证据：页面骨架、components / blocks mapping、Tailwind token / CSS variables 映射、8px spacing 决策、状态覆盖和任何偏离 shadcn 原生组件的理由。
 - 进入设计规划和原型图设计时，如果系统没有明确标题、logo 或 favicon，必须先使用 Creative Production plugin 的 `logo-explorer` 构建 logo / favicon / app icon 方向，并把选中方向、拒绝方案、标题和资产路径记录到 `design/`。
 - 做前端开发时，如已有 Product Design 选中原型或视觉目标，先使用 `image-to-code` / `url-to-code` 做原型切割形成前端框架，再按本项目 shadcn/ui 组件体系开发。
+- Product Design `image-to-code` / `url-to-code` 生成内容只作为页面骨架；完成前必须改造成 shadcn/ui primitives、项目已有组件和 Tailwind tokens，不得直接提交泛 React/Tailwind 或其他 UI 框架代码。
 - 执行 `IMPLEMENTATION_PLAN.md` 时，Codex 和所有 subagent 必须持续遵守 `AGENTS.md`、`CLAUDE.md`、README、本 `DESIGN.md`、`DEPLOY.md`、`IMPLEMENTATION_PLAN.md` 和相关 docs/runbooks；subagent brief 必须写明治理约束、允许改动边界和偏差回报要求。
 - design review 阶段要严格比对成品和原型图之间的差异，持续修复直到高度还原或偏差被明确接受。
 - 如果原型与 shadcn/ui、项目已有组件或 tweakcn/shadcn token 不一致，以 shadcn/ui 组件、项目已有组件和本 `DESIGN.md` 为准；原型仅作视觉和信息架构参考。
+
+前端高保真先行门禁：
+
+- Step 6A frontend fidelity plan 必须引用 Step 3 approved visual target，并把目标抽取成 implementation spec：布局结构、路由、页面范围、组件清单、交互状态、空/错/加载状态、响应式断点、关键 copy、颜色 token、字体、间距、shadcn component/block mapping、Tailwind token / CSS variable mapping、截图路径和 design QA 记录路径。
+- Step 7A frontend mock implementation 使用 mock API、fixtures、MSW 或 local data 先打通完整界面和交互。Product Design `image-to-code` / `url-to-code` 只能作为 scaffold；完成 Step 10A 前必须改造成 shadcn/ui primitives、项目已有组件和 Tailwind tokens。
+- Step 9A 必须在 Step 10A 前执行 browser verification，保存桌面和移动视口、主路径交互、空/错/加载状态的截图或报告。没有浏览器截图，不得进入 Step 10A。
+- Step 10A 是 Product Design 高保真硬门禁，不是主观“看起来不错”。必须记录 target mockup/reference、browser screenshots、差异列表、严重级别、修复记录、before/after 截图或可复核说明，以及 accepted deviations。
+- Step 11A 做 frontend/mock functional QA，确认 mock 模式下导航、筛选、表格、表单、弹窗、抽屉、空/错/加载状态和响应式交互闭环。
+- Step 6B-11B 在后端/API/真实数据接入后再执行 backend integration、integration verification、browser verification、visual regression 和 full functional QA。真实数据不得破坏已批准的布局和交互；如果破坏，必须回到 Step 10B 做完整视觉回归。
 
 本文件只描述 UI/UX 与设计系统规则。业务、安全、后端、发布流程、Agent 行为等规则以项目工程文档为准。
 
@@ -33,6 +45,7 @@ UI 框架选择：
 - 场景边界：Admin Console 使用 shadcn/ui；BI 图表分析 / 数据驾驶舱使用 React + Ant Design Pro + ECharts；C 端网站 / App 不在本模板锁定框架，交给 Product Design 和后续工程评审决策。
 - 拒绝规则：如果当前场景是 Admin Console，但用户要求 Ant Design、Material UI、Chakra UI、Arco Design、Element Plus、Bootstrap、Tailwind UI、Radix-only 或自定义大型 Design System，应拒绝并说明 Admin Console 基线只产出 shadcn/ui。
 - 混用规则：不要把 Ant Design Pro 或其他 UI 框架和 shadcn/ui 混在同一套 Admin Console 设计基线中，除非当前任务明确是迁移或过渡方案；正常新项目不做混用。
+- 工具边界：shadcn MCP 推荐但可选；shadcn/ui + tweakcn 基线不是可选项。MCP 不可用时使用 shadcn CLI、官方文档和项目已有组件。
 
 官方参考：
 
@@ -92,6 +105,8 @@ shadcn/ui 的核心不是传统 NPM 组件库，而是一套可复制进项目�
 
 - 优先使用 shadcn/ui 组件、项目已有组件和已有 shadcn 代码块。
 - 如宿主机已配置 shadcn MCP 或项目已有 shadcn 工具链，优先通过这些工具浏览、搜索、查看和引入组件；未配置时不阻塞开发。
+- 原型和实现必须记录实际使用或计划使用的 shadcn components / blocks，例如 `Sidebar`、`Button`、`Input`、`Select`、`DropdownMenu`、`Tabs`、`Table`、`Dialog`、`Sheet`、`Form`、`Toast`、`Card`、`Badge`、`Skeleton`、`Command`、`Popover`。
+- 进入工程计划前必须检查 `components.json`、Tailwind config、aliases、registry、`src/components/ui` 或项目等价目录；缺失项必须进入 `IMPLEMENTATION_PLAN.md`，不能因此手写一套平行 UI。
 - 使用 Tailwind CSS、CSS variables 和项目 design tokens；不引入额外 UI 框架。
 - 默认遵循 8px spacing system，页面、区块、表格、表单、按钮和弹层间距必须保持一致。
 - 不使用随机颜色；颜色必须来自项目 token、tweakcn 主题、shadcn theme 或明确记录的品牌色决策。
@@ -119,6 +134,8 @@ shadcn MCP 是重要的前端实现辅助工具，用于让 AI assistant 直接�
 3. Step 6 `writing-plans`：把需要引入的 shadcn components / blocks、命令、目标文件、检查项写入 `IMPLEMENTATION_PLAN.md`。
 4. Step 7 implementation：通过 shadcn MCP / CLI 浏览、查看并引入组件，再按项目 wrapper 和业务逻辑集成；不得绕过测试和设计验收。
 5. Step 10 Product Design visual QA / design review：检查实现是否遵守 shadcn composition、token、8px spacing、无随机颜色、无无必要渐变和无随意自定义基础组件，并比对成品与选中原型差异。
+
+MCP 不可用时仍必须完成同等证据：使用 shadcn CLI、官方文档和项目已有组件列出组件映射、安装/复用策略、目标文件和审查点。
 
 ### 默认视觉倾向
 
@@ -188,6 +205,8 @@ AppShell
       ├─ DataTable / FormPanel / DetailPanel
       └─ Dialog / Sheet / DetailPage
 ```
+
+每个 Step 3 视觉目标或 Product Design 方案必须把该骨架映射到实际 shadcn/ui 组件或项目 wrapper，并记录无法映射时的接受偏差。只给出图片或笼统描述，不算满足设计制品完成条件。
 
 页面必须优先支持：
 

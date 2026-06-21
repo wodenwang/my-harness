@@ -48,6 +48,8 @@ If the Discovery / Brainstorm evidence came from Superpowers `brainstorming`, do
 
 Product Design focused skills replace gstack `/plan-design-review` and `/design-review` for UI design gates when available. Autopilot may use Product Design focused skills directly when the current UI slice needs planning review, at least three prototype/visual directions, image/url-to-code scaffolding, or visual-fidelity QA evidence. If Product Design is unavailable, do not require installation and continue with the selected design baseline, existing references, screenshots, or optional Pencil for complex human alignment.
 
+For UI-heavy slices such as CRM, Portal, Admin Console, dashboards, or apps, autopilot must preserve the Frontend Fidelity First loop inside the canonical 15 steps. Step 3 must leave an approved visual target with implementation spec extraction. Step 6A-11A run the frontend/mock fidelity loop: frontend plan, mock implementation, verification, browser screenshots, Product Design hard fidelity gate, and mock QA. Step 6B-11B then run backend/API/real-data integration, verification, browser checks, visual regression, and functional QA. These are evidence sub-loops, not new canonical step numbers.
+
 For projects already using `my-harness`, autopilot may create or update `.my-harness/` as a quick execution index while it runs. Keep third-party artifacts in native paths: Superpowers plans in `docs/superpowers/` or `IMPLEMENTATION_PLAN.md`, Product Design/Pencil evidence in `design/`, gstack reports in their report directories, deployment governance in `DEPLOY.md`, and release material in project release docs. `.my-harness/` may store links, short summaries, step status, decisions, verification commands, loop metrics, and handoff prompts, but not secrets, copied long reports, or conflicting source-of-truth instructions.
 
 ## Codex-Safe Gstack Gate Rule
@@ -76,7 +78,8 @@ If the next action requires a design artifact, visual target, optional Pencil pr
 3. If the target system lacks a clear app/product title, logo, or favicon, use Creative Production `logo-explorer` before finalizing prototypes. Use an existing project/product name as provisional title; in target/autopilot mode, derive a conservative title from the repo/project name when no title exists. Record selected logo direction, favicon/app-icon direction, title, rejected routes, caveats, and asset paths under `design/`.
 4. If Product Design is available and there is no visual target, use Product Design `get-context` -> `ideate` to generate at least three prototype/visual options and reach the next required human choice.
 5. In target/autopilot mode, choose the Product Design system-recommended option only when the user has allowed automatic selection, and record the selected option plus rationale under `design/`.
-6. Stop and hand off to the human for Creative Production route selection, Product Design option selection, optional Pencil confirmation, or design approval when automatic selection is not authorized.
+6. For UI-heavy work, the selected output must be recorded as an approved visual target, not a loose direction. Record approved / selected / system-recommended accepted status, target mockup/reference, choice rationale, and implementation spec extraction covering layout, components, states, responsive behavior, token mapping, screenshot plan, and accepted deviations.
+7. Stop and hand off to the human for Creative Production route selection, Product Design option selection, optional Pencil confirmation, or design approval when automatic selection is not authorized.
 
 Do not blindly run Pencil CLI or MCP to produce real design work unless the user explicitly asks in this turn, the module is complex enough to need human alignment, and the scope is small enough for this skill.
 
@@ -90,6 +93,8 @@ For step 7:
 - When using `subagent-driven-development`, every subagent brief must include the relevant governance documents, allowed file boundaries, no-drift requirements for UI/UX/stack/tests/release rules, and a requirement to report compliance plus deviations.
 - Before frontend implementation, read `DESIGN.md` and `design/`; do not implement UI that violates the recorded typography, spacing, stack, component, chart, token, responsive, state, or accessibility rules.
 - Use Product Design `image-to-code` or `url-to-code` to cut the selected prototype/visual target into a frontend frame when `IMPLEMENTATION_PLAN.md` already exists, a selected visual target or source URL exists, and the work is limited to the first frontend vertical slice.
+- For UI-heavy Step 7A frontend mock implementation, prioritize fidelity to the approved visual target before code cleanup, use mock API/fixtures/MSW/local data to cover layout, interaction, empty/error/loading states, and responsive behavior, then refit final code to shadcn/ui or the selected project component system before design QA.
+- For Step 7B backend/API integration, protect the UI that passed Step 10A. Do not rewrite approved layout or interactions unless the change is recorded as a visual regression risk for Step 9B/10B.
 - If the selected prototype conflicts with shadcn/ui, Ant Design Pro, ECharts, or another project-approved third-party framework, use the framework's native components and `DESIGN.md` as implementation authority. Record accepted visual deviations instead of creating a parallel component system.
 - Implement only the first vertical slice. Do not expand into later slices just because the loop is running.
 
@@ -111,7 +116,7 @@ If iteration 10 still has unresolved findings, stop and hand off to the human wi
 - likely blocker/root cause
 - suggested next manual decision
 
-For Product Design visual QA / design review, compare the rendered implementation against the selected prototype/visual target and `DESIGN.md` on every iteration. Fix meaningful visual, spacing, typography, component, chart, responsive, and state deviations until the result is highly faithful or the deviation is explicitly accepted.
+For Product Design visual QA / design review, compare the rendered implementation against the selected prototype/visual target and `DESIGN.md` on every iteration. Fix meaningful visual, spacing, typography, component, chart, responsive, and state deviations until the result is highly faithful or the deviation is explicitly accepted. For UI-heavy Step 10A, require target mockup/reference, browser screenshots from Step 9A, differences, fixes, before/after evidence, and accepted deviations before marking the gate complete. For Step 10B, rerun visual regression after backend integration and run the full gate again if real data changes layout, density, state, or interaction.
 
 Track review-loop metrics for each family:
 
@@ -124,7 +129,7 @@ Track review-loop metrics for each family:
 
 ### Verification And Browser Step
 
-Use `gstack /browse` first for browser verification. Use `open-gstack-browser` when visible real-time browser control or human observation is useful. Use Playwright when scripted regression coverage is needed.
+Use `gstack /browse` first for browser verification. Use `open-gstack-browser` when visible real-time browser control or human observation is useful. Use Playwright when scripted regression coverage is needed. For UI-heavy Step 9A, browser screenshots must run before Step 10A; without screenshots, do not mark Step 9A or Step 10A complete. For Step 9B, rerun browser checks against real backend/data to catch layout overflow, broken interaction paths, permission/error states, and data-density regressions.
 
 ### Git, Ship, Land, Deploy
 
@@ -200,7 +205,7 @@ Use this format:
 |---|---:|---|---|---|
 | ✅ | 1 | Discovery / Brainstorm gate | 前置已完成 | 范围已通过 ... 锁定为 ...；无循环。 |
 | ⏭️ | 2 | Product Design planning review, fallback gstack `/plan-design-review` | 前置无需进行 | 当前切片不涉及新增产品/交互方向，按已批准范围执行。 |
-| ⏭️ | 3 | Design artifact / visual target | 前置无需进行 | 当前切片不涉及 UI；无需新增设计制品。 |
+| ⏭️ | 3 | Design artifact / approved visual target | 前置无需进行 | 当前切片不涉及 UI；无需新增设计制品。 |
 | ⏭️ | 4 | Product Design review of selected design artifact, fallback gstack `/plan-design-review` | 前置无需进行 | 未创建新设计制品，因此无需设计制品复审。 |
 | ✅ | 5 | gstack `/plan-eng-review` | 前置已完成 | 工程边界和测试策略已在 ... 锁定。 |
 | ✅ | 6 | Superpowers `writing-plans` | 前置已完成 | `IMPLEMENTATION_PLAN.md` 覆盖文件路径、任务、测试和完成标准。 |
@@ -247,6 +252,9 @@ The slice is complete only when:
 - Starting autopilot on a blank or not-started project where the user explicitly asked to use the `my-harness` framework; that must begin with Superpowers `brainstorming`.
 - Running autopilot on a large, unclear version.
 - Treating starter design files or blank Pencil files as approved design.
+- Treating Product Design output as a loose direction instead of an approved visual target with implementation spec extraction.
+- Letting a UI-heavy slice skip Step 9A screenshots or Step 10A hard Product Design fidelity evidence.
+- Starting backend integration before the frontend/mock UI has passed the frontend fidelity loop when the slice is UI-heavy.
 - Starting frontend work before `DESIGN.md` exists for UI work.
 - Skipping Creative Production `logo-explorer` when design planning/prototype work lacks title, logo, or favicon.
 - Requiring Product Design installation or blocking the SOP when Product Design is unavailable.

@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.5.0 - 2026-06-21
+
+- Added Frontend Fidelity First guidance for UI-heavy projects: Step 3 must leave an approved visual target, Step 6A-11A run a frontend/mock high-fidelity loop with early screenshots and Product Design hard gate evidence, and Step 6B-11B rerun backend integration, browser verification, visual regression, and functional QA without changing the canonical 15-step ledger.
+- Updated `my-harness-writing-design` so explicit runs against existing projects refresh a my-harness-owned latest design-governance section in `DESIGN.md` while preserving project-specific content.
+- Strengthened Admin Console design artifacts to require shadcn/ui evidence: component/block mapping, Tailwind token/CSS variable mapping, tweakcn theme rationale, 8px spacing, state coverage, and exclusion of unapproved non-shadcn UI frameworks.
+- Strengthened Step 6 and Step 7 guidance so Admin Console implementations must use shadcn/ui + tweakcn as the baseline; Product Design `image-to-code` / `url-to-code` output is only a scaffold that must be refit to shadcn/ui primitives and project Tailwind tokens.
+- Clarified that shadcn MCP is optional tooling, not an optional replacement for the Admin Console shadcn/ui baseline.
+- Updated installer defaults to `v1.5.0`.
+
 ## 1.4.1 - 2026-06-19
 
 - Required UI / frontend / chart / app work to create or verify `DESIGN.md` through `my-harness-writing-design` before design review, frontend planning, implementation, or visual QA.

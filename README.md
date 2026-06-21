@@ -8,7 +8,7 @@
 - 当空白项目或尚未开始使用流程的项目显式要求使用 `my-harness` 框架时，引导进入第 1 步 Superpowers `brainstorming`，先沟通清楚需求。
 - 判断项目现在推进到哪一步，下一步该做什么。
 - 为已经使用 `my-harness` 的项目维护可选 `.my-harness/` 执行索引；第三方技能文档仍保留在各自规范目录中。
-- 初始化 UI/产品项目的设计治理和 `design/` 设计制品目录；如果项目还没有 `DESIGN.md`，任何 UI / 前端 / 图表 / App 工作前先调用 `my-harness-writing-design`；系统缺标题、logo 或 favicon 时用 Creative Production `logo-explorer` 补齐品牌资产方向；在 shadcn MCP 可用时辅助组件检索/安装，在 Product Design 可用时用至少三套原型/视觉方案生成视觉目标、辅助 frontend slice 原型切割实现或产出 `design-qa.md` 证据；Pencil 仅作为复杂协同场景的可选制品。
+- 初始化或刷新 UI/产品项目的设计治理和 `design/` 设计制品目录；如果项目还没有 `DESIGN.md`，任何 UI / 前端 / 图表 / App 工作前先调用 `my-harness-writing-design`；如果老项目显式执行 `writing-design`，会把 my-harness 最新设计治理补强合入已有 `DESIGN.md`，同时保留项目个性化内容；系统缺标题、logo 或 favicon 时用 Creative Production `logo-explorer` 补齐品牌资产方向；在 shadcn MCP 可用时辅助组件检索/安装，在 Product Design 可用时用至少三套原型/视觉方案生成 approved visual target、抽取 implementation spec、辅助 frontend slice 原型切割实现或产出带截图、差异、修复、before/after 的 `design-qa.md` 证据；Pencil 仅作为复杂协同场景的可选制品。
 - 为业务项目生成 `DEPLOY.md` 部署治理文档，并链接到 `AGENTS.md` / `CLAUDE.md`。
 - 在部署完成后对线上 URL 做可选金丝雀测试，并把发现的问题登记到当前项目 GitHub issues。
 - 在线检查、安装或更新本机 `my-harness` 插件。
@@ -18,13 +18,13 @@
 macOS / Linux:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wodenwang/my-harness/v1.4.1/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/wodenwang/my-harness/v1.5.0/scripts/install.sh | bash
 ```
 
 Windows PowerShell:
 
 ```powershell
-irm https://raw.githubusercontent.com/wodenwang/my-harness/v1.4.1/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/wodenwang/my-harness/v1.5.0/scripts/install.ps1 | iex
 ```
 
 默认安装到：
@@ -71,11 +71,11 @@ irm https://raw.githubusercontent.com/wodenwang/my-harness/main/scripts/install.
 更新到指定 ref:
 
 ```bash
-MY_HARNESS_REF=v1.4.1 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
+MY_HARNESS_REF=v1.5.0 ~/.codex/plugins/local/my-harness/plugins/my-harness/scripts/upgrade.sh
 ```
 
 ```powershell
-$env:MY_HARNESS_REF = "v1.4.1"
+$env:MY_HARNESS_REF = "v1.5.0"
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
 ```
 
@@ -88,7 +88,7 @@ $env:MY_HARNESS_REF = "v1.4.1"
 | `my-harness` | 路由入口，判断该使用哪个 harness helper。 |
 | `my-harness-initialize-project` | 初始化新项目或空白仓库的基础治理：`README.md`、`AGENTS.md`、设计/部署链接和第一步 harness handoff；如果用户在空白/未开始项目里显式指定 my-harness 框架，下一步必须交给第 1 步 Superpowers `brainstorming`。 |
 | `my-harness-next-action` | 读取项目证据，输出 15 步 SOP 状态表和下一步提示词；提示词会要求执行完成后继续输出进度表和下一步提示词，便于只复制末尾提示词持续推进；第 1 步支持 `office-hours` 或 Superpowers `brainstorming`，空白/未开始项目显式指定 my-harness 时先用 `brainstorming`，但 `brainstorming` 后默认仍需经过 Product Design planning review 和 `plan-eng-review` 才能进入 `writing-plans`。 |
-| `my-harness-writing-design` | 初始化 `DESIGN.md`、`design/` 和设计制品规则；先确认产品场景，Admin Console 使用 shadcn/ui + tweakcn，BI / 数据驾驶舱使用 React + Ant Design Pro + ECharts，C 端网站/App 不锁定框架并交给 Product Design 产出至少三套原型/视觉方案和决策输入。 |
+| `my-harness-writing-design` | 初始化或刷新 `DESIGN.md`、`design/` 和设计制品规则；先确认产品场景，Admin Console 使用 shadcn/ui + tweakcn，BI / 数据驾驶舱使用 React + Ant Design Pro + ECharts，C 端网站/App 不锁定框架并交给 Product Design 产出至少三套原型/视觉方案和决策输入；老项目已有 `DESIGN.md` 时保守合并最新 harness 规则，不覆盖个性化内容。 |
 | `my-harness-autopilot-slice` | 在 Discovery / Brainstorm gate 已定稿后推进一个小切片，并在人工门禁处停止。 |
 | `my-harness-upgrade` | 检查或更新已安装插件，并回读版本、备份和 skill 入口。 |
 | `my-harness-writing-deployment` | 生成项目级 `DEPLOY.md`，并链接到 `AGENTS.md` / `CLAUDE.md`；约束版本化 Docker Compose 生产部署、`install.sh` 首次安装、`upgrade.sh` 版本间升级、DB 初始化 SQL、DB DDL/数据迁移、配置迁移和版本门禁。 |
@@ -108,6 +108,8 @@ $env:MY_HARNESS_REF = "v1.4.1"
 | 6. 代码审查、发布、部署 | 12-15 | 完成代码 review、Git closeout / `/ship` preflight、`/ship` 和授权后的 `/land-and-deploy`。 |
 
 `my-harness-next-action` 可以推荐一个阶段工作包，但最终 `流程执行情况一览：` 仍然必须包含全部 15 行。
+
+前端高保真先行规则：对 CRM、Portal、Admin Console、dashboard、App 等 UI 密集项目，Step 6-11 默认拆成两轮执行证据，但不新增 canonical step 编号。Step 6A-11A 是 Frontend Fidelity Loop：前端计划引用 Step 3 approved visual target 并抽取 implementation spec，用 mock 数据先还原布局、交互、状态和响应式，提前跑浏览器截图，再通过 Product Design 高保真门禁，记录 target mockup、截图、差异、修复、before/after 和 accepted deviations。Step 6B-11B 是 Backend Integration Loop：后端/API/真实数据接入后重新跑验证、浏览器检查、视觉回归和功能 QA，防止真实数据破坏已批准的布局与交互。Step 12-15 保持不变。
 
 显式启动规则：如果当前是空白项目，或者尚未开始使用 `my-harness` 流程，并且用户明确指定使用 `my-harness` 框架，第一步应使用 Superpowers `brainstorming` 沟通清楚目标用户、核心问题、约束、成功标准、最小值得做切片、非目标、风险和候选方案。不要直接跳到 `writing-plans`、设计制品、实现、QA 或 autopilot。
 
@@ -144,11 +146,11 @@ Codex 当前不能稳定承接 gstack 部分 skill 内部的 `AskUserQuestion`�
 ```
 
 ```text
-为当前项目初始化设计治理。开始前先确认产品场景；如果我没有明确说明场景，不要初始化文件，先反向询问我是 Admin Console、BI 图表分析 / 数据驾驶舱，还是 C 端网站 / App。
+为当前项目初始化或刷新设计治理。开始前先确认产品场景；如果我没有明确说明场景，不要初始化文件，先反向询问我是 Admin Console、BI 图表分析 / 数据驾驶舱，还是 C 端网站 / App。如果项目已有 DESIGN.md，请保守合并 my-harness 最新设计治理补强，同时保留项目个性化内容、品牌规则、历史设计决策和已接受偏差。
 ```
 
 ```text
-请为当前 frontend slice 产出 shadcn/ui 视觉目标：如果项目还没有 DESIGN.md，先使用 my-harness-writing-design 创建设计规范；如果系统没有明确标题、logo 或 favicon，先用 Creative Production logo-explorer 构建 logo / favicon / app icon 方向并记录到 design/；如果 Product Design 可用，使用 get-context -> ideate 生成至少 3 个原型/视觉方向并等待选择；目标模式下可选择系统推荐方案但要记录理由；如果不可用，使用现有 UI 参考、截图或设计说明继续推进。只有复杂协同场景才使用 Pencil。
+请为当前 frontend slice 产出 shadcn/ui 视觉目标：如果项目还没有 DESIGN.md，先使用 my-harness-writing-design 创建设计规范；如果已有 DESIGN.md，先确认它已经合入 my-harness 最新设计治理补强；如果系统没有明确标题、logo 或 favicon，先用 Creative Production logo-explorer 构建 logo / favicon / app icon 方向并记录到 design/；如果 Product Design 可用，使用 get-context -> ideate 生成至少 3 个原型/视觉方向并等待选择。每套 Admin Console 方案必须带 shadcn component/block mapping、Tailwind token 映射、tweakcn 主题依据、8px spacing、状态覆盖和非 shadcn UI 框架排除说明。目标模式下可选择系统推荐方案但要记录理由；如果不可用，使用现有 UI 参考、截图或设计说明继续推进。只有复杂协同场景才使用 Pencil。
 ```
 
 ```text
@@ -206,6 +208,15 @@ Codex 当前不能稳定承接 gstack 部分 skill 内部的 `AskUserQuestion`�
 远端 push、tag、GitHub Release 或发布动作必须有明确授权。
 
 ## 版本历史
+
+### v1.5.0
+
+- UI 密集项目新增 Frontend Fidelity First 执行规则：在不改变 15 个 canonical step 的前提下，Step 6-11 可按 Step 6A-11A 前端 mock 高保真闭环和 Step 6B-11B 后端集成闭环推进；Step 3 必须留下 approved visual target，Step 9A 必须提前产出浏览器截图，Step 10A 必须用 target/screenshot/diff/fix/before-after/accepted-deviation 作为硬门禁证据。
+- `my-harness-writing-design` 现在会在用户显式执行时刷新已有 `DESIGN.md` 的 my-harness-owned 最新设计治理补强段，同时保留项目个性化内容、品牌规则、历史设计决策和已接受偏差。
+- Admin Console 的 Product Design 原型 / 视觉目标必须提供 shadcn/ui 证据，包括 components / blocks mapping、Tailwind token / CSS variables 映射、tweakcn 主题依据、8px spacing、状态覆盖和非 shadcn UI 框架排除说明。
+- Step 6 / Step 7 强化为：Admin Console 必须以 shadcn/ui + tweakcn 为实现基线；Product Design `image-to-code` / `url-to-code` 只作为骨架，完成前必须改造成 shadcn/ui primitives、项目已有组件和 Tailwind tokens。
+- 明确 shadcn MCP 可选不等于 shadcn/ui 可选；MCP 缺失时使用 shadcn CLI、官方文档和项目已有组件。
+- `scripts/install.sh` 和 `scripts/install.ps1` 默认稳定版本更新为 `v1.5.0`。
 
 ### v1.4.1
 

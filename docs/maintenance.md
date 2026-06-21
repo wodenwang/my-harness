@@ -44,6 +44,8 @@ Then run:
 
 Step numbers are the evidence ledger. If a change introduces user-facing phase grouping or work-package language, keep the 15 canonical step rows intact and update the phase view in the same files. Do not remove or renumber steps just because adjacent steps can be executed together.
 
+For UI-heavy projects, preserve the Frontend Fidelity First interpretation of Step 6-11: Step 6A-11A is the frontend/mock high-fidelity loop, and Step 6B-11B is the backend/API/real-data integration loop. These are evidence sub-loops inside existing steps, not new canonical step numbers. Future SOP changes must keep Step 3 as an approved visual target with implementation spec extraction, Step 9A screenshots before Step 10A, and Step 10A as a hard Product Design fidelity gate with target, screenshots, differences, fixes, before/after evidence, and accepted deviations.
+
 ## Product Design Frontend Guidance
 
 Product Design integration is maintained directly inside the core harness skills. There is no separate bridge skill.
@@ -53,8 +55,12 @@ Rules:
 - Do not add Product Design as a required dependency for `my-harness`.
 - If Product Design is unavailable, the framework must fall back to shadcn/ui design governance, existing UI references, screenshots, or optional Pencil for complex alignment.
 - If a UI / frontend / chart / app project has no `DESIGN.md`, the flow must first use or recommend `my-harness-writing-design` before design review, frontend planning, implementation, or visual QA.
+- If a user explicitly runs `my-harness-writing-design` in an existing project that already has `DESIGN.md`, the script must refresh the my-harness-owned latest governance section while preserving project-specific content, brand decisions, accepted deviations, and history outside that section.
 - When Product Design is available, it replaces gstack `/plan-design-review` and `/design-review` for design-related gates; keep gstack only as fallback.
 - Product Design `ideate` must provide at least three prototype/visual options for planning design and frontend work. Target/autopilot mode may choose the system-recommended option only when allowed and with recorded rationale.
+- Product Design output for UI-heavy projects must converge into an approved visual target, not only design directions. Record target mockup/reference, choice rationale, and implementation spec extraction under `design/`.
+- Admin Console Product Design outputs must prove shadcn/ui grounding with component/block mapping, Tailwind token/CSS variable mapping, 8px spacing, state coverage, and explicit exclusion of unapproved non-shadcn UI frameworks.
+- Step 6A frontend plans must reference the approved visual target and define mock data/API strategy plus screenshot/design-QA evidence. Step 7A may prioritize fidelity before code cleanup, but completion must return to shadcn/ui or the selected component system. Step 9A must run before Step 10A. Backend integration waits for the frontend fidelity gate, then reruns Step 9B/10B/11B.
 - Keep the 15-step SOP unchanged; Product Design is used directly inside design, implementation, or visual QA stages.
 - Keep Pencil optional unless a target project explicitly records a `.pen` requirement or the UI module needs human alignment.
 - Step 3 is `Design artifact / visual target`, not mandatory Pencil work.
@@ -64,6 +70,7 @@ Rules:
 - Step 7 prompts must require Codex and any subagents to continuously follow `AGENTS.md`, `CLAUDE.md`, README, `DESIGN.md`, `DEPLOY.md`, `IMPLEMENTATION_PLAN.md`, and relevant docs/runbooks. Subagent briefs must include governance constraints, allowed file boundaries, no-drift requirements, and deviation reporting.
 - Every design-related stage must strictly follow `DESIGN.md`, including typography, spacing, technology stack, components, chart libraries, colors, responsive rules, states, and accessibility.
 - When shadcn/ui, Ant Design Pro, ECharts, or another selected third-party framework conflicts with a prototype, framework components and `DESIGN.md` take precedence; the prototype is only a reference.
+- For Admin Console work, Product Design `image-to-code` / `url-to-code` output is only a scaffold. Step 7 must refit it to shadcn/ui primitives, project components, Tailwind tokens, and the selected theme before completion.
 
 When changing Product Design guidance, update:
 
@@ -120,9 +127,11 @@ Rules:
 
 - Do not block the `my-harness` SOP when shadcn MCP is unavailable.
 - Fall back to shadcn CLI, official shadcn docs, and existing project components.
+- Keep the distinction explicit: shadcn MCP is optional tooling, but the Admin Console shadcn/ui + tweakcn baseline is mandatory unless the project has an explicit migration/interop decision.
 - Do not silently edit global Codex MCP configuration; adding shadcn MCP to `~/.codex/config.toml` requires explicit user authorization.
 - Keep component discovery and install work behind the normal gates: design component mapping, `plan-eng-review`, `IMPLEMENTATION_PLAN.md`, implementation, and design review.
 - Generated or installed registry code must still be inspected for dependencies, tokens, accessibility, responsive behavior, and project conventions.
+- Step 6 plans for Admin Console work must check `components.json`, Tailwind config, aliases, registry settings, `src/components/ui` or an equivalent component directory, and must record missing setup as implementation work rather than hand-rolling UI.
 
 When changing shadcn MCP guidance, update:
 
@@ -192,7 +201,7 @@ Windows PowerShell examples:
 
 ```powershell
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1" -Check
-$env:MY_HARNESS_REF = "v1.4.1"
+$env:MY_HARNESS_REF = "v1.5.0"
 & "$HOME\.codex\plugins\local\my-harness\plugins\my-harness\scripts\upgrade.ps1"
 ```
 
